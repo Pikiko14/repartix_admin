@@ -1,0 +1,8 @@
+// app global css in SCSS form
+@use './pages/_auth';
+@use './pages/_register';
+
+h1,h2,h3,h4,h5,h6,p {
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,25 @@
+// This is just an example,
+// so you can safely delete all default props below
+
+export default {
+  requiredField: 'El campo requerido',
+  passwordStrong: 'La contraseña de ser fuerte.',
+  username: 'Usuario',
+  password: 'Contraseña',
+  dontHaveAccount: `¿No posees una cuenta?, Clic aqui y regístrate.`,
+  signIn: 'Iniciar Sesión',
+  forgotPassword: '¿Olvidaste tu contraseña?',
+  email: 'Correo electrónico',
+  invalidEmail: 'Correo electrónico inválido',
+  password_confirmation: 'Confirmar contraseña',
+  dontMatchPassword: `Las contraseñas no coinciden`,
+  signUp: 'Registrarse',
+  readyHaveAccount: '¿Ya posees una cuenta? Inicia sesión aquí.',
+  successSignUp: 'Registro completado correctamente.',
+  recoveryPassword: 'Recuperar contraseña',
+  close: 'Cerrar',
+  recoveryPasswordProccessInit:
+    'Se ha enviado un correo electrónico con un token de verificación para poder continuar con el proceso',
+  changePassword: 'Cambiar contraseña',
+  changePasswordSuccess: 'Contraseña cambiada correctamente'
+}

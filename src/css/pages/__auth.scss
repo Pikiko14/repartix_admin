@@ -1,0 +1,50 @@
+.auth-page {
+  overflow: hidden;
+
+  &__logo {
+    width: 120px;
+    border-radius: 8px;
+  }
+
+  &__img-bg {
+    width: 100%;
+    height: calc(100vh - 0px);
+    object-fit: cover;
+  }
+
+  &__form-wrapper {
+    padding: 24px 32px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    &--form {
+      width: 100%;
+
+      label {
+        font-size: 12pt;
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__recovery-card {
+    border-radius: 8px !important;
+    width: 460px;
+
+    h2 {
+      font-size: 18pt;
+      font-weight: 600;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .q-btn {
+        height: 30px;
+        width: 30px;
+      }
+    }
+  }
+}

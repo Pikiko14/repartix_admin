@@ -1,0 +1,33 @@
+.register-page {
+    overflow: hidden;
+  
+    &__logo {
+      width: 120px;
+      border-radius: 8px;
+    }
+  
+    &__img-bg {
+      width: 100%;
+      height: calc(100vh - 0px);
+      object-fit: cover;
+    }
+  
+    &__form-wrapper {
+      padding: 24px 32px;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      overflow: auto !important;
+  
+      &--form {
+        width: 100%;
+  
+        label {
+          font-size: 12pt;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  

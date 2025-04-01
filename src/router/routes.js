@@ -7,6 +7,13 @@ const routes = [
       { path: '/register', component: () => import('pages/RegisterPage.vue') }
     ]
   },
+  {
+    path: '/dashboard',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: {
+      auth: true,
+    },
+  },
 
   // Always leave this as last one,
   // but you can also remove it

@@ -21,5 +21,15 @@ export default {
   recoveryPasswordProccessInit:
     'Se ha enviado un correo electrónico con un token de verificación para poder continuar con el proceso',
   changePassword: 'Cambiar contraseña',
-  changePasswordSuccess: 'Contraseña cambiada correctamente'
+  changePasswordSuccess: 'Contraseña cambiada correctamente',
+  profile: 'Perfil',
+  notification: 'Notificación',
+  logout: 'Cerrar sesión',
+  dashboard: 'Dashboard',
+  orders: 'Domicilios',
+  shippingList: 'Relación de envíos',
+  sender: 'Remitentes',
+  client: 'Clientes',
+  track: 'Track rutas',
+  reports: 'Reportes'
 }

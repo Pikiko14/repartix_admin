@@ -3,9 +3,7 @@ import { LocalStorage } from 'quasar'
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
-    user: LocalStorage.getItem('user')
-      ? JSON.parse(LocalStorage.getItem('user'))
-      : {},
+    user: LocalStorage.getItem('user') ? JSON.parse(LocalStorage.getItem('user')) : {},
   }),
   getters: {
     getUser: (state) => state.user,

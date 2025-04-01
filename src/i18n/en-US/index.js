@@ -20,5 +20,15 @@ export default {
   close: 'Close',
   recoveryPasswordProccessInit: 'An email has been sent to your account, with a verification token',
   changePassword: 'Change password',
-  changePasswordSuccess: 'Password change success'
+  changePasswordSuccess: 'Password change success',
+  profile: 'Profile',
+  notification: 'Notification',
+  logout: 'Log out',
+  dashboard: 'Dashboard',
+  orders: 'Deliveries',
+  shippingList: 'Shipping list',
+  sender: 'Senders',
+  client: 'Clients',
+  track: 'Route tracking',
+  reports: 'Reportes'
 }

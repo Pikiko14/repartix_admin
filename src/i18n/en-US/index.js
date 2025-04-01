@@ -30,5 +30,8 @@ export default {
   sender: 'Senders',
   client: 'Clients',
   track: 'Route tracking',
-  reports: 'Reportes'
+  reports: 'Reportes',
+  closeSessionTitle: 'Log out',
+  sureCloseSesion: '¿Are you sure you want to log out?',
+  planCardTitle: 'List of plans',
 }

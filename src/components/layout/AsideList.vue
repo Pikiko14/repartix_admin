@@ -83,7 +83,7 @@
 
 
     <!--logout btn-->
-    <q-list class="logout-list">
+    <q-list class="logout-list" @click="handlerLogout">
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
@@ -102,9 +102,27 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
+import { useQuasar } from 'quasar';
 
 // references
+const q = useQuasar();
 const { t } = useI18n();
+const router = useRouter();
+const authStore = useAuthStore();
+
+// methods
+const handlerLogout = () => {
+  q.dialog({
+    title: t('closeSessionTitle'),
+    message: t('sureCloseSesion'),
+    cancel: true,
+  }).onOk(() => {
+    authStore.doLogout();
+    router.push('/');
+  });
+}
 </script>
 
 <style class="scss" lang="scss">

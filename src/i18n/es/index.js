@@ -30,6 +30,9 @@ export default {
   shippingList: 'Relación de envíos',
   sender: 'Remitentes',
   client: 'Clientes',
-  track: 'Track rutas',
-  reports: 'Reportes'
+  track: 'Rutas',
+  reports: 'Reportes',
+  closeSessionTitle: 'Cerrar Sesión',
+  sureCloseSesion: '¿Estas seguro de querer cerrar tu sesión?',
+  planCardTitle: 'Listado de planes',
 }

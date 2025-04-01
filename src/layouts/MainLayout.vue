@@ -3,7 +3,7 @@
     <!--Header-->
     <q-header v-if="route.path !== '/' && route.path !== '/register'">
       <q-toolbar class="bg-primary">
-        <q-btn flat dense round color="white" icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
+        <q-btn flat dense round color="white" icon="menu" aria-label="Menu" @click="toggleDrawer" />
 
         <q-toolbar-title class="text-white text-bold">
           RepartiX
@@ -38,33 +38,57 @@
     </q-drawer>
     <!--End drawer-->
 
+    <!--Plan dialog-->
+    <q-dialog v-model="showPlanModal" persistent>
+      <PlansCard />
+    </q-dialog>
+    <!--End plan dialog-->
+
+    <!--Main content-->
     <q-page-container>
       <router-view />
     </q-page-container>
+    <!--End main content-->
   </q-layout>
 </template>
 
 <script setup>
 // imports
-import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import { computed, onBeforeMount, ref } from 'vue';
+import { useAuthStore } from 'src/stores/authStore';
 import AsideList from 'src/components/layout/AsideList.vue';
+import PlansCard from 'src/components/layout/PlansCard.vue';
 import NotificationList from 'src/components/layout/NotificationList.vue';
-import { useQuasar } from 'quasar';
 
 // references
 const q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
 const miniMode = ref(true);
+const authStore = useAuthStore();
+const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer() {
+// computed
+const user = computed(() => authStore.getUser);
+
+
+// methods
+function toggleDrawer() {
   if (q.screen.lt.md) {
     leftDrawerOpen.value = !leftDrawerOpen.value;
   } else {
     miniMode.value = !miniMode.value;
   }
 }
+
+// hook
+onBeforeMount(() => {
+  if (route.path.includes('/dashboard') && !user.value.subscription) {
+    showPlanModal.value = true;
+  };
+});
 </script>

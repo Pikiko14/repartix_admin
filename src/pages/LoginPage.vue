@@ -27,7 +27,7 @@
               </q-btn>
             </div>
             <div class="col-12 q-mt-xl">
-              <q-btn no-caps type="submit" :loading="loading" size="lg" unelevated color="primary" rounded
+              <q-btn no-caps type="submit" :loading="loadingLogin" size="lg" unelevated color="primary" rounded
                 class="full-width" :label="t('signIn')"></q-btn>
             </div>
             <div class="col-12 text-center q-mt-md">
@@ -137,19 +137,20 @@ const { t } = useI18n();
 const route = useRoute();
 const loading = ref(false);
 const router = useRouter();
+const loadingLogin = ref(false);
 const recoveryPassword = ref(false);
 const { doLogin, doRecoveryPassword, doChangePassword } = authContent();
 
 // methods
 const handlerDoLogin = async () => {
-  loading.value = true;
+  loadingLogin.value = true;
   try {
     const response = await doLogin(login.value);
     if (response?.user) {
       router.push('/dashboard');
     }
   } finally {
-    loading.value = false;
+    loadingLogin.value = false;
   }
 }
 

@@ -6,7 +6,7 @@ const notification = (typeAlert, text, colorAlert) => {
     message: text,
     type: typeAlert,
     color: colorAlert,
-    position: 'top-right',
+    position: 'bottom-right',
     actions: [
       { icon: 'close', color: 'white', round: true, handler: () => { /* ... */ } }
     ]

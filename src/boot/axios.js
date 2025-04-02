@@ -3,7 +3,7 @@ import { defineBoot } from '#q-app/wrappers'
 import { notification } from './notification'
 import { LocalStorage } from 'quasar'
 
-const token = LocalStorage.getItem('auth_token')
+const token = LocalStorage.getItem('token')
 
 // prepare headers
 let headers = {

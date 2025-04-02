@@ -39,8 +39,8 @@
     <!--End drawer-->
 
     <!--Plan dialog-->
-    <q-dialog v-model="showPlanModal" persistent @before-hide="authStore.openModalPlan(false)">
-      <PlansCard />
+    <q-dialog v-model="showPlanModal" persistent @before-hide="closePlanModal">
+      <PlansCard @close-modal="closePlanModal" />
     </q-dialog>
     <!--End plan dialog-->
 
@@ -91,6 +91,11 @@ function toggleDrawer() {
   } else {
     miniMode.value = !miniMode.value;
   }
+}
+
+const closePlanModal = () => {
+  showPlanModal.value = false;
+  authStore.openModalPlan(false);
 }
 
 // hook

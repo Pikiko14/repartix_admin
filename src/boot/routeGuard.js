@@ -33,6 +33,13 @@ export default boot(async ({ router, app }) => {
       return
     }
 
+    if (
+      to.fullPath.includes('/dashboard') && !store.getHaveSubscription ||
+      to.fullPath.includes('/dashboard') && userData.value.subscription && !userData.value.subscription.is_active
+    ) {
+      store.openModalPlan(true)
+    }
+
     if (to.matched.some((record) => record.meta.available)) {
       const available = to.meta.available
       let hasPermission = false

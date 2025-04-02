@@ -4,9 +4,12 @@ import { LocalStorage } from 'quasar'
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
     user: LocalStorage.getItem('user') ? JSON.parse(LocalStorage.getItem('user')) : {},
+    modalPlan: false,
   }),
   getters: {
     getUser: (state) => state.user,
+    getHaveSubscription: (state) => state.user?.subscription,
+    getOpenModalPlan: (state) => state.modalPlan,
   },
   actions: {
     setUser(userData) {
@@ -21,6 +24,9 @@ export const useAuthStore = defineStore('authStore', {
     setToken(token) {
       LocalStorage.removeItem('token')
       LocalStorage.setItem('token', token)
+    },
+    openModalPlan(status) {
+      this.modalPlan = status
     },
   },
 })

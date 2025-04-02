@@ -39,7 +39,7 @@
     <!--End drawer-->
 
     <!--Plan dialog-->
-    <q-dialog v-model="showPlanModal" persistent>
+    <q-dialog v-model="showPlanModal" persistent @before-hide="authStore.openModalPlan(false)">
       <PlansCard />
     </q-dialog>
     <!--End plan dialog-->
@@ -57,7 +57,7 @@
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
@@ -74,7 +74,15 @@ const leftDrawerOpen = ref(false);
 
 // computed
 const user = computed(() => authStore.getUser);
+const openModalPlan = computed(() => authStore.modalPlan);
 
+// watch
+watch(
+  openModalPlan,
+  (newVal) => {
+    showPlanModal.value = newVal;
+  }
+);
 
 // methods
 function toggleDrawer() {
@@ -87,7 +95,10 @@ function toggleDrawer() {
 
 // hook
 onBeforeMount(() => {
-  if (route.path.includes('/dashboard') && !user.value.subscription) {
+  if (
+    route.path.includes('/dashboard') && !user.value.subscription ||
+    route.path.includes('/dashboard') && user.value.subscription && !user.value.subscription.is_active
+  ) {
     showPlanModal.value = true;
   };
 });

@@ -49,4 +49,6 @@ export default {
   subscriptionTitle: 'Suscripción',
   subscriptionDescription:'¿Deseas suscribirte al plan',
   success_subscription: 'Te has suscrito correctamente al plan',
+  user: 'Usuarios',
+  validatingSubscription: 'Validando tu suscripción',
 }

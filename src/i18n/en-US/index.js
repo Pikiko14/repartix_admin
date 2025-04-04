@@ -48,4 +48,6 @@ export default {
   subscriptionTitle: 'Subscription',
   subscriptionDescription:'¿Do you want to subscribe to the plan',
   success_subscription: 'You have successfully subscribed to the plan',
+  user: 'Users',
+  validatingSubscription: 'Validating your subscription',
 }

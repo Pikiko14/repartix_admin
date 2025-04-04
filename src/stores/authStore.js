@@ -28,5 +28,10 @@ export const useAuthStore = defineStore('authStore', {
     openModalPlan(status) {
       this.modalPlan = status
     },
+    setSubscription(subscription) {
+      LocalStorage.removeItem('user')
+      this.user.subscription = subscription
+      LocalStorage.setItem('user', JSON.stringify(this.user))
+    },
   },
 })

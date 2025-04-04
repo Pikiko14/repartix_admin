@@ -3,14 +3,9 @@ import { defineBoot } from '#q-app/wrappers'
 import { notification } from './notification'
 import { LocalStorage } from 'quasar'
 
-const token = LocalStorage.getItem('token')
-
 // prepare headers
 let headers = {
   'Content-Type': 'application/json',
-}
-if (token) {
-  headers['Authorization'] = `Bearer ${token}`
 }
 const api = axios.create({
   baseURL: `${process.env.API_URL}/api`,
@@ -18,7 +13,18 @@ const api = axios.create({
 })
 
 export default defineBoot(() => {
-  // prepare interceptor axios
+  // prepare interceptor axios request
+  api.interceptors.request.use((config) => {
+    const token = LocalStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  }, (error) => {
+    return Promise.reject(error)
+  })
+
+  // prepare interceptor axios response
   api.interceptors.response.use(undefined, async (error) => {
     if (error.response) {
       if (error.response.status === 422) {

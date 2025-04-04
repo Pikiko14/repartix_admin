@@ -2,8 +2,11 @@
   <q-card class="plans-card">
     <!--Header-->
     <q-card-section>
-      <p class="text-bold text-h5">
+      <p class="text-bold text-h5" v-if="!isValidatinSubscription">
         {{ t('planCardTitle') }}
+      </p>
+      <p class="text-bold text-h5" v-if="isValidatinSubscription">
+        {{ t('validatingSubscription') }}...
       </p>
       <q-btn v-close-popup icon="close" class="text-red close-btn absolute-top-right" flat dense rounded>
         <q-tooltip class="bg-red">
@@ -14,7 +17,7 @@
     <!--End header-->
 
     <!--plans grids-->
-    <q-card-section style="margin-top: -10px">
+    <q-card-section style="margin-top: -10px" v-if="!isValidatinSubscription">
       <div class="row">
         <div class="col-12 col-sm-4" v-for="(plan, idx) in plans" :key="idx"
           :class="{ 'q-pr-sm': $q.screen.gt.xs && idx === 0, 'q-px-sm': $q.screen.gt.xs && idx === 1, 'q-pl-sm': $q.screen.gt.xs && idx === 2, 'q-mt-lg': $q.screen.lt.sm && idx > 0 }">
@@ -24,7 +27,7 @@
                 <div class="col">
                   <div class="text-h6 text-primary">{{ t(plan.name) }}</div>
                   <div class="text-subtitle2" :title="t(plan.description)">
-                    <p>{{ t(plan.description) }}</p>
+                    <p>{{ t(plan.description) }}123</p>
                   </div>
                 </div>
               </div>
@@ -57,7 +60,7 @@
                 <q-tab-panel name="month" class="q-pa-xs bg-transparent">
                   <span class="text-bold text-h6 text-primary">{{ t('price') }} ${{ plan.price }}</span>
                 </q-tab-panel>
-        
+
                 <q-tab-panel name="year" class="q-pa-xs bg-transparent">
                   <span class="text-bold text-h6 text-primary">{{ t('price') }} ${{ plan.price_year }}</span>
                 </q-tab-panel>
@@ -73,30 +76,43 @@
       </div>
     </q-card-section>
     <!--End plans grid-->
+
+    <!--Validating subscription spinner-->
+    <q-card-section style="margin-top: -10px" v-if="isValidatinSubscription" class="text-center">
+      <q-spinner-rings color="primary" size="72pt" />
+    </q-card-section>
+    <!--End validatin subscription spinner-->
   </q-card>
 </template>
 
 <script setup>
 //imports
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import { useQuasar, Loading } from 'quasar';
 import { computed, onBeforeMount, ref } from 'vue';
+import { usePlanStore } from 'src/stores/planStore';
 import { useAuthStore } from 'src/stores/authStore';
-import { usePlansContent } from 'src/composables/plansContent';
 import { notification } from 'src/boot/notification';
+import { usePlansContent } from 'src/composables/plansContent';
 
 // references
 const q = useQuasar();
 const { t } = useI18n();
+const route = useRoute();
 const period = ref('month');
 const store = useAuthStore();
-const { plans, loadPlans, doSubscription } = usePlansContent();
+const planStore = usePlanStore()
+const isValidatinSubscription = ref(false);
+const { loadPlans, doSubscription, validateSubscription } = usePlansContent();
+
+// emits
+const emit = defineEmits(['close-modal']);
 
 // computed
 const user = computed(() => store.getUser);
 
-// emits
-const emit = defineEmits(['close-modal']);
+const plans = computed(() => planStore.getPlans);
 
 // methods
 const handlerDoSubscription = (plan) => {
@@ -122,23 +138,40 @@ const confirmSubscription = async (plan) => {
   };
   try {
     Loading.show({
-      spinnerColor: 'primary',
+      spinnerColor: 'secondary',
       spinnerSize: 140,
-      backgroundColor: 'secondary',
+      backgroundColor: 'primary',
     });
     const response = await doSubscription(params);
     if (response.success) {
+      const { data } = response;
       notification('success', `${t('success_subscription')} ${t(plan.name)}`, 'primary');
-      emit('close-modal');
+      if (data?.paymentInstance) {
+        setTimeout(() => window.location.href = data?.paymentInstance, 2000)
+      }
     }
   } finally {
     Loading.hide();
   }
 }
 
+const handlerValidateSubscription = async () => {
+  isValidatinSubscription.value = true;
+  const response = await validateSubscription(user.value._id);
+  if (response.success && response?.data?.subscription && response?.data?.subscription?.is_active) {
+    setTimeout(() => emit('close-modal'), 1000);
+  }
+}
+
 // hook
 onBeforeMount(async () => {
-  await loadPlans();
+  if (route.query.subscription_id) {
+    await handlerValidateSubscription();
+    return;
+  }
+  if (plans.value.length === 0) {
+    await loadPlans();
+  }
 });
 </script>
 

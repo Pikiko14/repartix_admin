@@ -51,4 +51,10 @@ export default {
   success_subscription: 'Te has suscrito correctamente al plan',
   user: 'Usuarios',
   validatingSubscription: 'Validando tu suscripción',
+  configuration: 'Configuraciones',
+  map: 'Mapa',
+  access: 'Acceso',
+  brand: 'Marca',
+  save: 'Guardar',
+  changeCredentialSuccess:' Credenciales modificados correctamente.'
 }

@@ -50,4 +50,10 @@ export default {
   success_subscription: 'You have successfully subscribed to the plan',
   user: 'Users',
   validatingSubscription: 'Validating your subscription',
+  configuration: 'Configurations',
+  map: 'Map',
+  access: 'Acceso',
+  brand: 'Marca',
+  save: 'Guardar',
+  changeCredentialSuccess:' Credentials updated successfully.'
 }

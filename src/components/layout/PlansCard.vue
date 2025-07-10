@@ -102,7 +102,7 @@ const { t } = useI18n();
 const route = useRoute();
 const period = ref('month');
 const store = useAuthStore();
-const planStore = usePlanStore()
+const planStore = usePlanStore();
 const isValidatinSubscription = ref(false);
 const { loadPlans, doSubscription, validateSubscription } = usePlansContent();
 

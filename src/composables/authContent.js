@@ -5,6 +5,7 @@ import { useAuthStore } from 'src/stores/authStore'
 export const authContent = () => {
   // references
   const path = 'auth'
+  const userPath = 'users';
   const store = useAuthStore()
 
   // methods
@@ -50,11 +51,21 @@ export const authContent = () => {
     }
   }
 
+  const doUpdateCredentials = async (payload) => {
+    try {
+      const { data } = await api.put(`${userPath}/update-credentials`, payload)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doLogin,
     doSignUp,
     doChangePassword,
     doRecoveryPassword,
+    doUpdateCredentials,
   }
 }

@@ -10,6 +10,12 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'users',
+        component: () => import('src/pages/dashboard/users/MainPage.vue'),
+      },
+    ],
     meta: {
       auth: true,
     },

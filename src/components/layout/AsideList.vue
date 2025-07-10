@@ -68,7 +68,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple to="/dashboard/users">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('user') }}

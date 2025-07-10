@@ -21,7 +21,7 @@
         <!--End notifications-->
 
         <!--Perfil-->
-        <q-btn icon="person" flat dense rounded color="white">
+        <q-btn @click="showProfileModal = !showProfileModal" icon="person" flat dense rounded color="white">
           <q-tooltip class="bg-primary">
             {{ t('profile') }}
           </q-tooltip>
@@ -44,6 +44,12 @@
     </q-dialog>
     <!--End plan dialog-->
 
+    <!--Profile card-->
+    <q-dialog v-model="showProfileModal">
+      <ProfileCard />
+    </q-dialog>
+    <!--End profile card-->
+
     <!--Main content-->
     <q-page-container>
       <router-view />
@@ -57,10 +63,11 @@
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import { computed, onBeforeMount, ref, watch } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
+import ProfileCard from 'src/components/layout/ProfileCard.vue';
 import NotificationList from 'src/components/layout/NotificationList.vue';
 
 // references
@@ -71,6 +78,7 @@ const miniMode = ref(true);
 const authStore = useAuthStore();
 const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
+const showProfileModal = ref(false);
 
 // computed
 const user = computed(() => authStore.getUser);

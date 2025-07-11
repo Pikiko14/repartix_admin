@@ -79,10 +79,25 @@ export const authContent = () => {
     }
   }
 
+  const doUpdateBrand = async (payload) => {
+    try {
+      const { data } = await api.put(`${userPath}/update-brand`, payload)
+      if (data && data.success) {
+        const { subscription } = store.getUser;
+        data.user.subscription = subscription;
+        store.setUser(data?.user)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doLogin,
     doSignUp,
+    doUpdateBrand,
     doUpdateProfile,
     doChangePassword,
     doRecoveryPassword,

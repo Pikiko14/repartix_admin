@@ -64,4 +64,8 @@ export default {
   invalidPhone: 'Teléfono inválido',
   changeProfileSuccess: 'Perfil modificado correctamente.',
   setting: 'Configuraciones',
+  brandName: 'Nombre de la marca',
+  rut: 'Rut',
+  age: 'Edad',
+  changeBrandSuccess: 'Marca actualizada correctamente.',
 }

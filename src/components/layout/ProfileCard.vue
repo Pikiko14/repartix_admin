@@ -88,11 +88,11 @@
                       <q-input dense :readonly="!edit" id="address" :rules="[
                         (val) => val.length > 0 || t('requiredField'),
 
-                      ]" outlined v-model="user.profile.address" placeholder="Jhon Doe"></q-input>
+                      ]" outlined v-model="user.profile.address" placeholder="Carrera 81"></q-input>
                     </div>
                     <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
                       <label class="text-dark" for="phone">{{ t('phone') }}</label>
-                      <q-input dense :readonly="!edit" id="phone" :rules="[
+                      <q-input mask="+## ##########" dense :readonly="!edit" id="phone" :rules="[
                         (val) => val.length > 0 || t('requiredField'),
                         (val) => /^\+\d{1,3} ?\d{7,12}$/.test(val) || t('invalidPhone'),
                       ]" outlined v-model="user.profile.phone" placeholder="3225361689">
@@ -124,6 +124,58 @@
                   </q-form>
                 </q-tab-panel>
                 <!--End tab profile-->
+
+                <!--Tab brand-->
+                <q-tab-panel name="brand">
+                  <q-form @submit="handlerSaveBrand" class="row">
+                    <div class="col-12 col-md-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="brandName">{{ t('brandName') }}</label>
+                      <q-input dense :readonly="!edit" id="brandName" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+
+                      ]" outlined v-model="user.brand.name" placeholder="RepartiX"></q-input>
+                    </div>
+                    <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="phone">{{ t('phone') }}</label>
+                      <q-input maxlength="60" dense :readonly="!edit" id="phone" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+                        (val) => /^\+\d{1,3} ?\d{7,12}$/.test(val) || t('invalidPhone'),
+                      ]" outlined v-model="user.brand.phone" placeholder="3225361689">
+                        <template #prepend>
+                          <span>
+                            {{ flagFromPhoneNumber }}
+                            <q-menu v-if="edit" max-height="130px">
+                              <q-list dense class="q-pa-none">
+                                <q-item clickable @click="setDial(country, 'brand')" v-for="(country, idx) in americanPhoneCodes" :key="idx">
+                                  {{ country.flag }}
+                                </q-item>
+                              </q-list>
+                            </q-menu>
+                          </span>
+                        </template>
+                      </q-input>
+                    </div>
+                    <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="rut">{{ t('rut') }}</label>
+                      <q-input dense :readonly="!edit" id="rut" type="string" outlined maxlength="20" v-model="user.brand.rut"
+                        placeholder="182536984-2"></q-input>
+                    </div>
+                    <div class="col-12 col-md-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="address">{{ t('address') }}</label>
+                      <q-input maxlength="90" dense :readonly="!edit" id="address" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+
+                      ]" outlined v-model="user.brand.address" placeholder="Carrera 81"></q-input>
+                    </div>
+                    <div class="col-12 text-right q-mt-md">
+                      <q-btn v-if="edit" :loading="loading" unelevated size="md" type="submit" no-caps rounded
+                        :label="t('save')" color="primary"></q-btn>
+                      <q-btn no-caps v-else unelevated size="md" rounded :label="t('edit')" color="primary"
+                        @click="edit = !edit"></q-btn>
+                    </div>
+                  </q-form>
+                </q-tab-panel>
+                <!--End tab brand-->
               </q-tab-panels>
               <!--End tab de perfil-->
             </q-tab-panel>
@@ -163,15 +215,32 @@ const profileTab = ref('access');
 
 // computed
 const user = computed(() => {
-  return store.getUser;
+  const userData = store.getUser;
+  if (!userData.profile) {
+    userData.profile = {};
+  }
+
+  if (!userData.brand) {
+    userData.brand = {};
+  }
+
+  return userData;
 });
 
 const flagFromPhoneNumber = computed(() => {
   let flag = '';
   if (user.value.profile && user.value.profile.phone) {
-    const dial = user.value.profile.phone.split(' ').shift();
+    let dial = user.value.profile.phone.split(' ').shift();
+    if (profileTab.value === 'brand' && user.value.brand && user.value.brand.phone) {
+      dial = user.value.brand.phone.split(' ').shift();
+    }
+
+    if (!dial) selectedFlag;
+
     const country = americanPhoneCodes.find((el) => el.code === dial);
-    flag = country.flag || '';
+    if (country) {
+      flag = country.flag || '';
+    }
   } 
 
   return flag || selectedFlag.value;
@@ -202,11 +271,13 @@ const handlerSaveAccess = async () => {
   }
 }
 
-const setDial = (country) => {
+const setDial = (country, type = 'profile') => {
   selectedDial.value = country.code;
   selectedFlag.value = country.flag;
   const phone = user.value.profile.phone.split(' ').pop() || '';
-  user.value.profile.phone = `${country.code} ${phone}`;
+  type === 'profule' ?
+    user.value.profile.phone = `${country.code} ${phone}` :
+    user.value.brand.phone = `${country.code} ${phone}`;
 }
 
 const handlerSaveProfile = async () => {
@@ -218,11 +289,31 @@ const handlerSaveProfile = async () => {
       address,
       phone,
     }
-    if (age) params.age = age;
+    if (age) params.age = parseInt(age);
     const response = await authApi.doUpdateProfile(params);
     if (response && response.success) {
       edit.value = !edit.value;
       notification('success', t('changeProfileSuccess'), 'primary');
+    }
+  } finally {
+    loading.value = false;
+  }
+}
+
+const handlerSaveBrand = async () => {
+  loading.value = true;
+  const { name, rut, phone, address } = user.value.brand;
+  try {
+    let params = {
+      name,
+      address,
+      phone,
+      rut,
+    }
+    const response = await authApi.doUpdateBrand(params);
+    if (response && response.success) {
+      edit.value = !edit.value;
+      notification('success', t('changeBrandSuccess'), 'primary');
     }
   } finally {
     loading.value = false;

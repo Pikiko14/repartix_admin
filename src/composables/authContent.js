@@ -54,6 +54,25 @@ export const authContent = () => {
   const doUpdateCredentials = async (payload) => {
     try {
       const { data } = await api.put(`${userPath}/update-credentials`, payload)
+      if (data && data.success) {
+        const { subscription } = store.getUser;
+        data.user.subscription = subscription;
+        store.setUser(data?.user)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const doUpdateProfile = async (payload) => {
+    try {
+      const { data } = await api.put(`${userPath}/update-profile`, payload)
+      if (data && data.success) {
+        const { subscription } = store.getUser;
+        data.user.subscription = subscription;
+        store.setUser(data?.user)
+      }
       return data
     } catch (error) {
       console.error(error)
@@ -64,6 +83,7 @@ export const authContent = () => {
   return {
     doLogin,
     doSignUp,
+    doUpdateProfile,
     doChangePassword,
     doRecoveryPassword,
     doUpdateCredentials,

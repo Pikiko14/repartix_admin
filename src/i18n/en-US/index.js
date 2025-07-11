@@ -55,5 +55,11 @@ export default {
   access: 'Acceso',
   brand: 'Marca',
   save: 'Guardar',
-  changeCredentialSuccess:' Credentials updated successfully.'
+  changeCredentialSuccess:' Credentials updated successfully.',
+  edit: 'Edit',
+  fullName: 'Full name',
+  address: 'Address',
+  phone: 'Phone',
+  invalidPhone: 'Invalid phone',
+  changeProfileSuccess: 'Profile updated successfully.',
 }

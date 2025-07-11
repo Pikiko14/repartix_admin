@@ -15,7 +15,7 @@
 
     <!--Body-->
     <q-card-section style="margin-top: -10px">
-      <q-splitter disable v-model="splitterModel" style="height: 350px">
+      <q-splitter disable v-model="splitterModel" style="height: 390px">
         <!--Tabs-->
         <template v-slot:before>
           <q-tabs v-model="tab" no-caps vertical class="text-primary">
@@ -34,39 +34,96 @@
               <q-tabs class="q-pa-none" no-caps v-model="profileTab">
                 <q-tab name="access" :label="t('access')" />
                 <q-tab name="profile" :label="t('profile')" />
-                <q-tab name="brand" :label="t('brand')" />
+                <q-tab v-if="utils.validateRole('update-brand')" name="brand" :label="t('brand')" />
               </q-tabs>
 
               <!--Tab de perfil-->
               <q-tab-panels v-model="profileTab" animated swipeable vertical transition-prev="jump-up">
                 <!--Tab de acceso-->
                 <q-tab-panel name="access">
+                  <!--Formulario de acceso-->
                   <q-form @submit="handlerSaveAccess" class="row">
                     <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
                       <label class="text-dark" for="username">{{ t('username') }}</label>
-                      <q-input id="username" :rules="[
+                      <q-input dense :readonly="!edit" id="username" :rules="[
                         (val) => val.length > 0 || t('requiredField'),
 
                       ]" outlined v-model="user.username" placeholder="jhondoe"></q-input>
                     </div>
                     <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
                       <label class="text-dark" for="password">{{ t('password') }}</label>
-                      <q-input id="password" type="password" outlined v-model="user.password"
+                      <q-input dense :readonly="!edit" id="password" type="password" outlined v-model="user.password"
                         placeholder="*********"></q-input>
                     </div>
-                    <div class="col-12" :class="{'q-mt-md': $q.screen.lt.md}">
+                    <div class="col-12" :class="{ 'q-mt-md': $q.screen.lt.md }">
                       <label class="text-dark" for="password">{{ t('email') }}</label>
-                      <q-input id="email" :rules="[
+                      <q-input dense :readonly="!edit" id="email" :rules="[
                         (val) => val.length > 0 || t('requiredField'),
                         (val) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/.test(val) || t('invalidEmail')
                       ]" outlined v-model="user.email" placeholder="jhon@doe.com"></q-input>
                     </div>
                     <div class="col-12 text-right q-mt-md">
-                      <q-btn :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')" color="primary"></q-btn>
+                      <q-btn v-if="edit" :loading="loading" unelevated size="md" type="submit" no-caps rounded
+                        :label="t('save')" color="primary"></q-btn>
+                      <q-btn no-caps v-else unelevated size="md" rounded :label="t('edit')" color="primary"
+                        @click="edit = !edit"></q-btn>
+                    </div>
+                  </q-form>
+                  <!--End formulario acceso-->
+                </q-tab-panel>
+                <!--End tab de acceso-->
+
+                <!--Tab profile-->
+                <q-tab-panel name="profile">
+                  <q-form @submit="handlerSaveProfile" class="row">
+                    <div class="col-12 col-md-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="full_name">{{ t('fullName') }}</label>
+                      <q-input dense :readonly="!edit" id="full_name" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+
+                      ]" outlined v-model="user.profile.full_name" placeholder="Jhon Doe"></q-input>
+                    </div>
+                    <div class="col-12 col-md-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="address">{{ t('address') }}</label>
+                      <q-input dense :readonly="!edit" id="address" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+
+                      ]" outlined v-model="user.profile.address" placeholder="Jhon Doe"></q-input>
+                    </div>
+                    <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="phone">{{ t('phone') }}</label>
+                      <q-input dense :readonly="!edit" id="phone" :rules="[
+                        (val) => val.length > 0 || t('requiredField'),
+                        (val) => /^\+\d{1,3} ?\d{7,12}$/.test(val) || t('invalidPhone'),
+                      ]" outlined v-model="user.profile.phone" placeholder="3225361689">
+                        <template #prepend>
+                          <span>
+                            {{ flagFromPhoneNumber }}
+                            <q-menu v-if="edit" max-height="130px">
+                              <q-list dense class="q-pa-none">
+                                <q-item clickable @click="setDial(country)" v-for="(country, idx) in americanPhoneCodes" :key="idx">
+                                  {{ country.flag }}
+                                </q-item>
+                              </q-list>
+                            </q-menu>
+                          </span>
+                        </template>
+                      </q-input>
+                    </div>
+                    <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+                      <label class="text-dark" for="age">{{ t('age') }}</label>
+                      <q-input dense :readonly="!edit" id="age" type="number" outlined maxlength="99" v-model="user.profile.age"
+                        placeholder="18"></q-input>
+                    </div>
+                    <div class="col-12 text-right q-mt-md">
+                      <q-btn v-if="edit" :loading="loading" unelevated size="md" type="submit" no-caps rounded
+                        :label="t('save')" color="primary"></q-btn>
+                      <q-btn no-caps v-else unelevated size="md" rounded :label="t('edit')" color="primary"
+                        @click="edit = !edit"></q-btn>
                     </div>
                   </q-form>
                 </q-tab-panel>
-                <!--End tab de acceso-->
+                <!--End tab profile-->
               </q-tab-panels>
               <!--End tab de perfil-->
             </q-tab-panel>
@@ -83,23 +140,46 @@
 <script setup>
 // improts
 import { useI18n } from 'vue-i18n';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { Utils } from 'src/utils/utils';
 import { useAuthStore } from 'src/stores/authStore';
-import { authContent } from 'src/composables/authContent';
 import { notification } from 'src/boot/notification';
+import { americanPhoneCodes } from 'src/utils/constant';
+import { authContent } from 'src/composables/authContent';
 
 // references
+const edit = ref(false);
 const { t } = useI18n();
+const utils = new Utils();
 const loading = ref(false);
 const tab = ref('profile');
 const store = useAuthStore();
 const splitterModel = ref(25);
 const authApi = authContent();
+const selectedFlag = ref('🇨🇴');
+const selectedDial = ref('+57');
 const profileTab = ref('access');
+
 
 // computed
 const user = computed(() => {
   return store.getUser;
+});
+
+const flagFromPhoneNumber = computed(() => {
+  let flag = '';
+  if (user.value.profile && user.value.profile.phone) {
+    const dial = user.value.profile.phone.split(' ').shift();
+    const country = americanPhoneCodes.find((el) => el.code === dial);
+    flag = country.flag || '';
+  } 
+
+  return flag || selectedFlag.value;
+}); 
+
+// watch
+watch(profileTab, () => {
+  if (edit.value) edit.value = false;
 });
 
 // methods
@@ -114,9 +194,37 @@ const handlerSaveAccess = async () => {
     if (password) params.password = password;
     const response = await authApi.doUpdateCredentials(params);
     if (response && response.success) {
+      edit.value = !edit.value;
       notification('success', t('changeCredentialSuccess'), 'primary');
     }
-  } finally{
+  } finally {
+    loading.value = false;
+  }
+}
+
+const setDial = (country) => {
+  selectedDial.value = country.code;
+  selectedFlag.value = country.flag;
+  const phone = user.value.profile.phone.split(' ').pop() || '';
+  user.value.profile.phone = `${country.code} ${phone}`;
+}
+
+const handlerSaveProfile = async () => {
+  loading.value = true;
+  const { full_name, address, phone, age } = user.value.profile;
+  try {
+    let params = {
+      full_name,
+      address,
+      phone,
+    }
+    if (age) params.age = age;
+    const response = await authApi.doUpdateProfile(params);
+    if (response && response.success) {
+      edit.value = !edit.value;
+      notification('success', t('changeProfileSuccess'), 'primary');
+    }
+  } finally {
     loading.value = false;
   }
 }

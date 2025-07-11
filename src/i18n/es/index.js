@@ -56,5 +56,11 @@ export default {
   access: 'Acceso',
   brand: 'Marca',
   save: 'Guardar',
-  changeCredentialSuccess:' Credenciales modificados correctamente.'
+  changeCredentialSuccess:' Credenciales modificados correctamente.',
+  edit: 'Editar',
+  fullName: 'Nombre completo',
+  address: 'Dirección',
+  phone: 'Teléfono',
+  invalidPhone: 'Teléfono inválido',
+  changeProfileSuccess: 'Perfil modificado correctamente.',
 }

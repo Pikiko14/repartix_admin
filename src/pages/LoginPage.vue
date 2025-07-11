@@ -9,14 +9,14 @@
             </div>
             <div class="col-12 q-mt-md">
               <label class="text-dark" for="username">{{ t('username') }}</label>
-              <q-input id="username" :rules="[
+              <q-input dense id="username" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
 
               ]" outlined v-model="login.username" placeholder="jhondoe"></q-input>
             </div>
             <div class="col-12 q-mt-md">
               <label class="text-dark" for="password">{{ t('password') }}</label>
-              <q-input id="password" :rules="[
+              <q-input dense id="password" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
                 (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong')
               ]" type="password" outlined v-model="login.password" placeholder="*********"></q-input>
@@ -26,9 +26,9 @@
                 {{ t('forgotPassword') }}
               </q-btn>
             </div>
-            <div class="col-12 q-mt-xl">
-              <q-btn no-caps type="submit" :loading="loadingLogin" size="lg" unelevated color="primary" rounded
-                class="full-width" :label="t('signIn')"></q-btn>
+            <div class="col-12 text-center q-mt-xl">
+              <q-btn no-caps type="submit" :loading="loadingLogin" size="md" unelevated color="primary" rounded
+                :label="t('signIn')"></q-btn>
             </div>
             <div class="col-12 text-center q-mt-md">
               <q-btn no-caps color="dark" flat to="/register">
@@ -49,7 +49,7 @@
           <h2>
             <span v-if="!changePassword.token">{{ t('recoveryPassword') }}</span>
             <span v-else>{{ t('changePassword') }}</span>
-            <q-btn v-close-popup flat dense icon="close" color="red" size="lg" rounded class="float-right">
+            <q-btn v-close-popup flat dense icon="close" color="red" size="md" rounded class="float-right">
               <q-tooltip class="bg-red">
                 {{ t('close') }}
               </q-tooltip>
@@ -62,13 +62,13 @@
           <q-form class="auth-page__form-wrapper--form" @submit="handlerRecoveryPassword" v-if="!changePassword.token">
             <div class="col-12">
               <label class="text-dark" for="email">{{ t('email') }}</label>
-              <q-input id="email" :rules="[
+              <q-input dense id="email" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
                 (val) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/.test(val) || t('invalidEmail')
               ]" outlined v-model="recovery.email" placeholder="jhon@doe.com"></q-input>
             </div>
             <div class="col-12 q-mt-md q-pb-md">
-              <q-btn no-caps type="submit" :loading="loading" size="lg" unelevated color="primary" rounded
+              <q-btn no-caps type="submit" :loading="loading" size="md" unelevated color="primary" rounded
                 class="full-width" :label="t('recoveryPassword')"></q-btn>
             </div>
           </q-form>
@@ -78,21 +78,21 @@
           <q-form class="auth-page__form-wrapper--form" @submit="handlerChangePassword" v-else>
             <div class="col-12">
               <label class="text-dark" for="email">{{ t('email') }}</label>
-              <q-input id="email" :rules="[
+              <q-input dense id="email" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
                 (val) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/.test(val) || t('invalidEmail')
               ]" outlined v-model="changePassword.email" placeholder="jhon@doe.com"></q-input>
             </div>
             <div class="col-12 q-mt-md">
               <label class="text-dark" for="passwordChange">{{ t('password') }}</label>
-              <q-input id="passwordChange" :rules="[
+              <q-input dense id="passwordChange" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
                 (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong')
               ]" type="password" outlined v-model="changePassword.password" placeholder="*********"></q-input>
             </div>
             <div class="col-12 q-mt-md">
               <label class="text-dark" for="password_confirm">{{ t('password_confirmation') }}</label>
-              <q-input id="password_confirm" :rules="[
+              <q-input dense id="password_confirm" :rules="[
                 (val) => val.length > 0 || t('requiredField'),
                 (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong'),
                 (val) => val === changePassword.password || t('dontMatchPassword')
@@ -100,7 +100,7 @@
                 placeholder="*********"></q-input>
             </div>
             <div class="col-12 q-mt-md q-pb-md">
-              <q-btn no-caps type="submit" :loading="loading" size="lg" unelevated color="primary" rounded
+              <q-btn no-caps type="submit" :loading="loading" size="md" unelevated color="primary" rounded
                 class="full-width" :label="t('changePassword')"></q-btn>
             </div>
           </q-form>

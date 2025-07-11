@@ -21,9 +21,9 @@
         <!--End notifications-->
 
         <!--Perfil-->
-        <q-btn @click="showProfileModal = !showProfileModal" icon="person" flat dense rounded color="white">
+        <q-btn @click="showProfileModal = !showProfileModal" icon="settings" flat dense rounded color="white">
           <q-tooltip class="bg-primary">
-            {{ t('profile') }}
+            {{ t('setting') }}
           </q-tooltip>
         </q-btn>
         <!--Perfil-->

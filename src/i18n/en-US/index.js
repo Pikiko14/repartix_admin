@@ -62,4 +62,5 @@ export default {
   phone: 'Phone',
   invalidPhone: 'Invalid phone',
   changeProfileSuccess: 'Profile updated successfully.',
+  setting: 'Settings',
 }

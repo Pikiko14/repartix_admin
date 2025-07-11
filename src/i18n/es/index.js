@@ -63,4 +63,5 @@ export default {
   phone: 'Teléfono',
   invalidPhone: 'Teléfono inválido',
   changeProfileSuccess: 'Perfil modificado correctamente.',
+  setting: 'Configuraciones',
 }

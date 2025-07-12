@@ -5,7 +5,7 @@ import { useAuthStore } from 'src/stores/authStore'
 export const authContent = () => {
   // references
   const path = 'auth'
-  const userPath = 'users';
+  const userPath = 'users'
   const store = useAuthStore()
 
   // methods
@@ -55,8 +55,8 @@ export const authContent = () => {
     try {
       const { data } = await api.put(`${userPath}/update-credentials`, payload)
       if (data && data.success) {
-        const { subscription } = store.getUser;
-        data.user.subscription = subscription;
+        const { subscription } = store.getUser
+        data.user.subscription = subscription
         store.setUser(data?.user)
       }
       return data
@@ -69,8 +69,8 @@ export const authContent = () => {
     try {
       const { data } = await api.put(`${userPath}/update-profile`, payload)
       if (data && data.success) {
-        const { subscription } = store.getUser;
-        data.user.subscription = subscription;
+        const { subscription } = store.getUser
+        data.user.subscription = subscription
         store.setUser(data?.user)
       }
       return data
@@ -83,8 +83,23 @@ export const authContent = () => {
     try {
       const { data } = await api.put(`${userPath}/update-brand`, payload)
       if (data && data.success) {
-        const { subscription } = store.getUser;
-        data.user.subscription = subscription;
+        const { subscription } = store.getUser
+        data.user.subscription = subscription
+        store.setUser(data?.user)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const doUpdateBrandConfiguration = async (payload) => {
+    try {
+      console.log(payload)
+      const { data } = await api.put(`${userPath}/update-brand-configuration`, payload)
+      if (data && data.success) {
+        const { subscription } = store.getUser
+        data.user.subscription = subscription
         store.setUser(data?.user)
       }
       return data
@@ -102,5 +117,6 @@ export const authContent = () => {
     doChangePassword,
     doRecoveryPassword,
     doUpdateCredentials,
+    doUpdateBrandConfiguration,
   }
 }

@@ -180,6 +180,12 @@
               <!--End tab de perfil-->
             </q-tab-panel>
             <!--End profile tab-->
+
+            <!--Map tab-->
+            <q-tab-panel class="q-pa-none q-px-md" name="map">
+              <MapConfiguration />
+            </q-tab-panel>
+            <!--End map tab-->
           </q-tab-panels>
         </template>
         <!--End body tabs-->
@@ -192,12 +198,13 @@
 <script setup>
 // improts
 import { useI18n } from 'vue-i18n';
-import { computed, ref, watch } from 'vue';
 import { Utils } from 'src/utils/utils';
+import { computed, ref, watch } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { americanPhoneCodes } from 'src/utils/constant';
 import { authContent } from 'src/composables/authContent';
+import MapConfiguration from './configurations/MapConfiguration.vue';
 
 // references
 const edit = ref(false);

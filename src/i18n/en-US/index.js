@@ -67,4 +67,13 @@ export default {
   rut: 'ID.',
   age: 'Age',
   changeBrandSuccess: 'Brand updated successfully.',
+  enableGoogleMap: '¿Do you want enable Google Map in your operation?',
+  unableGoogleMap: '¿Do you want disable Google Map in your operation?',
+  gMapKey: 'Google Maps API Key',
+  changeBrandConfigurationSuccess: 'Configuration updated successfully',
+  noNavigator: 'Geolocation is not supported by this browser',
+  navigatorDeneid: 'Permission denied to access location',
+  navigatorUnavailable: 'Location information is unavailable',
+  navigatorTimeOut: 'Location request timed out',
+  navigatorUnknowError: 'An unknown error occurred while retrieving location',
 }

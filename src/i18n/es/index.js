@@ -68,4 +68,13 @@ export default {
   rut: 'Rut',
   age: 'Edad',
   changeBrandSuccess: 'Marca actualizada correctamente.',
+  enableGoogleMap: '¿Deseas activar google map en tu operación?',
+  unableGoogleMap: '¿Deseas desactivar google map en tu operación?',
+  gMapKey: 'Google Maps API Key',
+  changeBrandConfigurationSuccess: 'Configuración modificada correctamente',
+  noNavigator: 'Geolocalización no es compatible con este navegador',
+  navigatorDeneid: 'Permiso denegado para obtener ubicación',
+  navigatorUnavailable: 'Ubicación no disponible',
+  navigatorTimeOut: 'Tiempo de espera agotado al obtener ubicación',
+  navigatorUnknowError: 'Error desconocido al obtener ubicación',
 }

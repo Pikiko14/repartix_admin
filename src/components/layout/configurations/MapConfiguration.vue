@@ -5,20 +5,20 @@
         <q-toggle left-label :label="gMapConfig.enable_google_map ? t('unableGoogleMap') : t('enableGoogleMap')"
           v-model="gMapConfig.enable_google_map" checked-icon="check" color="primary" unchecked-icon="clear" />
       </div>
-      <div class="col-12" v-if="gMapConfig.enable_google_map" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+      <div class="col-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
         <label class="text-dark" for="gMapKey">{{ t('gMapKey') }}</label>
         <q-input dense id="gMapKey" :rules="[
           (val) => val.length > 0 || t('requiredField'),
 
         ]" outlined v-model="gMapConfig.gmap_api__key" placeholder="gma-12536877459985474595"></q-input>
       </div>
-      <div class="col-12" v-if="gMapConfig.gmap_api__key">
+      <div class="col-12" v-if="gMapConfig.gmap_api__key && gMapConfig.enable_google_map">
         <GoogleMap :api-key="gMapConfig.gmap_api__key" mapId="map_preview_1" style="width: 100%; height: 200px"
           :center="center" :zoom="15">
           <Marker v-if="center.lat > 0" :options="markerOptions" />
         </GoogleMap>
       </div>
-      <div class="col-12 text-right q-mt-md" v-if="gMapConfig.enable_google_map">
+      <div class="col-12 text-right q-mt-md">
         <q-btn :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')"
           color="primary"></q-btn>
       </div>

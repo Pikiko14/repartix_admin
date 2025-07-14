@@ -80,4 +80,7 @@ export default {
   selectOneOption: 'Select one options',
   currency: 'Currency',
   priceByKm: 'Enable price by Km',
+  cityAndZones: 'City & Zone',
+  usersTitle: 'Users',
+  add: 'Add new'
 }

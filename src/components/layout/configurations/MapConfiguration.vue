@@ -55,6 +55,11 @@ const user = computed(() => {
 // methods
 const handlerSaveMapConfiguration = async () => {
   const params = gMapConfig.value;
+  params.country = user.value.brand.configuration.country || '';
+  params.currency = user.value.brand.configuration.currency || '';
+  params.price_by_km = user.value.brand.configuration.price_by_km || 0;
+  params.route_price_by_km = user.value.brand.configuration.route_price_by_km || false;
+
   loading.value = true;
   try {
     const response = await authApi.doUpdateBrandConfiguration(params);

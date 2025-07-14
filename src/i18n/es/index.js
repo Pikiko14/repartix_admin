@@ -81,4 +81,7 @@ export default {
   selectOneOption: 'Selecciona una opción',
   currency: 'Moneda',
   priceByKm: 'Activar precio x Kilometro',
+  cityAndZones: 'Ciudades & Zonas',
+  usersTitle: 'Usuarios',
+  add: 'Agregar',
 }

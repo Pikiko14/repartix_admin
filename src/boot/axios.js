@@ -12,7 +12,7 @@ const api = axios.create({
   headers: headers,
 })
 
-export default defineBoot(() => {
+export default defineBoot(({ router }) => {
   // prepare interceptor axios request
   api.interceptors.request.use((config) => {
     const token = LocalStorage.getItem('token')
@@ -44,6 +44,13 @@ export default defineBoot(() => {
             notification('negative', data.message, 'red')
           }
         }
+      } else if (error.response.status === 401) {
+        const { data } = error.response
+        if (data && data.message) {
+          notification('negative', data.message, 'red')
+        }
+        LocalStorage.clear();
+        router.push('/');
       } else {
         const { data } = error.response
         if (data && data.message) {

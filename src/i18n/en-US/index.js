@@ -76,4 +76,8 @@ export default {
   navigatorUnavailable: 'Location information is unavailable',
   navigatorTimeOut: 'Location request timed out',
   navigatorUnknowError: 'An unknown error occurred while retrieving location',
+  country: 'Country',
+  selectOneOption: 'Select one options',
+  currency: 'Currency',
+  priceByKm: 'Enable price by Km',
 }

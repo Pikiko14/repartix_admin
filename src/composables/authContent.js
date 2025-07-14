@@ -95,7 +95,6 @@ export const authContent = () => {
 
   const doUpdateBrandConfiguration = async (payload) => {
     try {
-      console.log(payload)
       const { data } = await api.put(`${userPath}/update-brand-configuration`, payload)
       if (data && data.success) {
         const { subscription } = store.getUser

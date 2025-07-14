@@ -77,4 +77,8 @@ export default {
   navigatorUnavailable: 'Ubicación no disponible',
   navigatorTimeOut: 'Tiempo de espera agotado al obtener ubicación',
   navigatorUnknowError: 'Error desconocido al obtener ubicación',
+  country: 'País',
+  selectOneOption: 'Selecciona una opción',
+  currency: 'Moneda',
+  priceByKm: 'Activar precio x Kilometro',
 }

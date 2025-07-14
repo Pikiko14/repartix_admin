@@ -186,6 +186,12 @@
               <MapConfiguration />
             </q-tab-panel>
             <!--End map tab-->
+
+            <!--Configuration tab-->
+            <q-tab-panel class="q-pa-none q-px-md" name="configuration">
+              <ConfigComponent />
+            </q-tab-panel>
+            <!--End Configuration tab-->
           </q-tab-panels>
         </template>
         <!--End body tabs-->
@@ -204,6 +210,7 @@ import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { americanPhoneCodes } from 'src/utils/constant';
 import { authContent } from 'src/composables/authContent';
+import ConfigComponent from './configurations/ConfigComponent.vue';
 import MapConfiguration from './configurations/MapConfiguration.vue';
 
 // references

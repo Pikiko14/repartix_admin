@@ -2,10 +2,10 @@
   <section class="map-section">
     <q-form @submit="handlerSaveMapConfiguration" class="row">
       <div class="col-12">
-        <q-toggle left-label :label="gMapConfig.enable_google_map ? t('unableGoogleMap') : t('enableGoogleMap')"
+        <q-toggle @update:model-value="clearKey" left-label :label="gMapConfig.enable_google_map ? t('unableGoogleMap') : t('enableGoogleMap')"
           v-model="gMapConfig.enable_google_map" checked-icon="check" color="primary" unchecked-icon="clear" />
       </div>
-      <div class="col-12" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+      <div class="col-12" v-if="gMapConfig.enable_google_map">
         <label class="text-dark" for="gMapKey">{{ t('gMapKey') }}</label>
         <q-input dense id="gMapKey" :rules="[
           (val) => val.length > 0 || t('requiredField'),
@@ -31,8 +31,8 @@
 import { useI18n } from 'vue-i18n';
 import { computed, onBeforeMount, ref } from 'vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
-import { notification } from 'src/boot/notification';
 import { useAuthStore } from 'src/stores/authStore';
+import { notification } from 'src/boot/notification';
 import { authContent } from 'src/composables/authContent';
 
 // references
@@ -110,6 +110,12 @@ const getCoords = async () => {
     markerOptions.value.position = center.value;
   }
 };
+
+const clearKey = (e) => {
+  if (!e) {
+    gMapConfig.value.gmap_api__key = '';
+  }
+}
 
 
 // life cicly

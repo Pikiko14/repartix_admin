@@ -107,10 +107,21 @@ export const authContent = () => {
     }
   }
 
+  const doCreateUser = async (payload) => {
+    try {
+      delete payload.confirmation_password;
+      const { data } = await api.post(`${userPath}`, payload)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doLogin,
     doSignUp,
+    doCreateUser,
     doUpdateBrand,
     doUpdateProfile,
     doChangePassword,

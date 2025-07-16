@@ -84,4 +84,12 @@ export default {
   cityAndZones: 'Ciudades & Zonas',
   usersTitle: 'Usuarios',
   add: 'Agregar',
+  addUser: 'Agregar usuario',
+  listUser: 'Listar usuario',
+  createUser: 'Crear usuario',
+  updateUser: 'Modificar usuario',
+  deleteUser: 'Borrar usuario',
+  updateBrand: 'Modificar marca',
+  scopes: 'Permisos',
+  userCreateSuccess: 'Usuario creado correctamente',
 }

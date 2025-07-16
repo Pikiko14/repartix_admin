@@ -82,5 +82,13 @@ export default {
   priceByKm: 'Enable price by Km',
   cityAndZones: 'City & Zone',
   usersTitle: 'Users',
-  add: 'Add new'
+  add: 'Add new',
+  addUser: 'Add user',
+  listUser: 'List users',
+  createUser: 'Create users',
+  updateUser: 'Update users',
+  deleteUser: 'Delete users',
+  updateBrand: 'Update brand',
+  scopes: 'Permissions',
+  userCreateSuccess: 'User created success',
 }

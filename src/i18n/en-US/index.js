@@ -91,4 +91,7 @@ export default {
   updateBrand: 'Update brand',
   scopes: 'Permissions',
   userCreateSuccess: 'User created success',
+  name: 'Name',
+  typeUser: 'User Type', 
+  options: 'Options',
 }

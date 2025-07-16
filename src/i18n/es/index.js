@@ -92,4 +92,7 @@ export default {
   updateBrand: 'Modificar marca',
   scopes: 'Permisos',
   userCreateSuccess: 'Usuario creado correctamente',
+  name: 'Nombre',
+  typeUser: 'Tipo de usuario',
+  options: 'Opciones',
 }

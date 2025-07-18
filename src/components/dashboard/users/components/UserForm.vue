@@ -58,7 +58,7 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { notification } from 'src/boot/notification';
-import { authContent } from 'src/composables/authContent';
+import { usersContent } from 'src/composables/usersContent';
 
 // references
 const user = ref({
@@ -90,7 +90,7 @@ const scopes = [
   },
 ];
 const loading = ref(false);
-const authApi = authContent();
+const content = usersContent();
 
 // emits
 const emit = defineEmits(['close-modal']);
@@ -98,7 +98,7 @@ const emit = defineEmits(['close-modal']);
 // methods
 const handlerSaveUser = async () => {
   try {
-    const response = await authApi.doCreateUser(user.value);
+    const response = await content.doCreateUser(user.value);
     if (response && response.success) {
       notification('success', t('userCreateSuccess'), 'primary');
       emit('close-modal');

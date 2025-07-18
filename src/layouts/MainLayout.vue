@@ -52,7 +52,7 @@
 
     <!--Main content-->
     <q-page-container>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </q-page-container>
     <!--End main content-->
   </q-layout>

@@ -95,4 +95,5 @@ export default {
   name: 'Nombre',
   typeUser: 'Tipo de usuario',
   options: 'Opciones',
+  delete: 'Eliminar',
 }

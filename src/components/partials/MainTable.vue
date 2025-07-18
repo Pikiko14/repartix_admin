@@ -1,19 +1,30 @@
 <template>
-  <q-table
-    :rows="rows"
-    class="shadow-0"
-    :columns="columns"
-    row-key="_id"
-  >
+  <q-table @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns" row-key="_id" :pagination="pagination">
+    <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        {{ props }}
+        <q-btn v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded color="primary">
+          <q-tooltip class="bg-primary">
+            {{ t('edit') }}
+          </q-tooltip>
+        </q-btn>
+        <q-btn v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
+          <q-tooltip class="bg-red">
+            {{ t('delete') }}
+          </q-tooltip>
+        </q-btn>
       </q-td>
     </template>
+    <!--End option td-->
   </q-table>
 </template>
 
 <script setup>
+// import
+import { useI18n } from 'vue-i18n';
+import { Utils } from 'src/utils/utils';
+import { useRouter, useRoute } from 'vue-router';
+
 // props
 defineProps({
   rows: {
@@ -24,5 +35,31 @@ defineProps({
     type: Array,
     default: () => [],
   },
+  editScope: String,
+  deleteScope: String,
+  pagination: {
+    type: Object,
+    default: () => { }
+  }
 });
+
+// references
+const { t } = useI18n();
+const utils = new Utils();
+const router = useRouter();
+const route = useRoute();
+
+
+// methods
+const handlerPagination = (e) => {
+  const { pagination } = e;
+  router.push({
+    name: 'users',
+    query: {
+      page: pagination.page || 1,
+      perPage: pagination.rowsPerPage,
+      search: route.query.search || '',
+    }
+  });
+}
 </script>

@@ -1,11 +1,12 @@
 <template>
   <section class="users-main">
     <!--Header-->
-    <HeaderPage @add-new="showAddButton" :show-add-button="true" :title="t('usersTitle')" />
+    <HeaderPage @add-new="showAddButton" :scope="'create-user'" :show-add-button="true" :title="t('usersTitle')" />
     <!--End header-->
 
     <!--Table-->
-    <MainTable :columns="columns" />
+    <MainTable :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination" :columns="columns" :rows="users" edit-scope="update-user"
+      delete-scope="delete-user" />
     <!--End table-->
 
     <!--Modal user-->
@@ -22,23 +23,27 @@
 
 <script setup>
 // imports
-import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+import { computed, nextTick, ref } from 'vue';
 import UserForm from './components/UserForm.vue';
+import { usersContent } from 'src/composables/usersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
+import { useUsersStore } from 'src/stores/usersStore';
 
 // references
 const { t } = useI18n();
+const route = useRoute();
 const modalUser = ref(false);
 const columns = [
   {
     name: 'name',
     required: true,
-    label: t('name'),
+    label: t('username'),
     align: 'left',
-    field: row => row.name,
+    field: row => row.username,
     sortable: false
   },
   {
@@ -59,7 +64,7 @@ const columns = [
   {
     name: 'type',
     label: t('typeUser'),
-    align: 'left',
+    align: 'center',
     field: row => row.type_user,
     sortable: false
   },
@@ -69,11 +74,45 @@ const columns = [
     label: t('options'),
     align: 'center',
   },
-]
+];
+const pagination = ref({
+  sortBy: 'desc',
+  descending: false,
+  page: route.query.page || 1,
+  rowsPerPage: route.query.perPage || 10,
+  rowsNumber: 1,
+});
+const store = useUsersStore();
+const content = usersContent();
 
+// computed
+const users = computed(() => {
+  return store.getUsers;
+});
 
 // methods
 const showAddButton = () => {
   modalUser.value = !modalUser.value;
 }
+
+const handlerListUsers = async () => {
+  const page = route.query.page || 1;
+  const search = route.query.search || '';
+  const perPage = route.query.perPage || 10;
+
+  const query = `page=${page}&perPage=${perPage}&search=${search}`;
+
+  await content.doListUser(query);
+  pagination.value.rowsNumber = store.getTotalItems;
+  nextTick();
+}
+
+// hook
+if (route.query.page) {
+  pagination.value.page = parseInt(route.query.page);
+}
+if (route.query.perPage) {
+  pagination.value.rowsPerPage = parseInt(route.query.perPage);
+}
+handlerListUsers();
 </script>

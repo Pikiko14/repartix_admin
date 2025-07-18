@@ -58,7 +58,11 @@ const user = computed(() => {
 // methods
 const handlerSaveConfig = async () => {
   const params = JSON.parse(JSON.stringify(configuration.value));
-  params.price_by_km = parseFloat(oldValue.value) || 0;
+  if (params.price_by_km > 0) {
+    params.price_by_km = parseFloat(params.price_by_km) || parseFloat(oldValue);
+  } else {
+    params.price_by_km = parseFloat(oldValue.value) || 0;
+  }
   try {
     const response = await authApi.doUpdateBrandConfiguration(params);
     if (response && response.success) {

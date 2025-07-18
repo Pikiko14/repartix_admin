@@ -3,13 +3,17 @@
     <h2 class="text-primary page-title">
       {{ title }}
     </h2>
-    <q-btn v-if="showAddButton" @click="handlerAddNew" unelevated="" size="md" color="primary" rounded :label="t('add')"></q-btn>
+    <q-btn v-if="showAddButton && utils.validateRole(scope)" @click="handlerAddNew" unelevated="" size="md" color="primary" rounded :label="t('add')"></q-btn>
   </div>
 </template>
 
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
+import { Utils } from 'src/utils/utils';
+
+// references
+const utils = new Utils();
 
 // props
 defineProps({
@@ -20,7 +24,8 @@ defineProps({
   showAddButton: {
     type: Boolean,
     default: false
-  }
+  },
+  scope: String,
 });
 
 // emits

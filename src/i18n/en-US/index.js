@@ -94,4 +94,5 @@ export default {
   name: 'Name',
   typeUser: 'User Type', 
   options: 'Options',
+  delete: 'Delete',
 }

@@ -14,6 +14,7 @@ const routes = [
       {
         path: 'users',
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
+        name: 'users'
       },
     ],
     meta: {

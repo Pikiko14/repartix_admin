@@ -96,4 +96,5 @@ export default {
   typeUser: 'Tipo de usuario',
   options: 'Opciones',
   delete: 'Eliminar',
+  search: 'Buscar...',
 }

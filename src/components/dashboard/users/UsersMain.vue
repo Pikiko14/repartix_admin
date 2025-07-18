@@ -1,12 +1,13 @@
 <template>
   <section class="users-main">
     <!--Header-->
-    <HeaderPage @add-new="showAddButton" :scope="'create-user'" :show-add-button="true" :title="t('usersTitle')" />
+    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-user'" :show-add-button="true"
+      :title="t('usersTitle')" />
     <!--End header-->
 
     <!--Table-->
-    <MainTable :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination" :columns="columns" :rows="users" edit-scope="update-user"
-      delete-scope="delete-user" />
+    <MainTable :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination" :columns="columns"
+      :rows="users" edit-scope="update-user" delete-scope="delete-user" />
     <!--End table-->
 
     <!--Modal user-->
@@ -24,8 +25,8 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
-import { computed, nextTick, ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import UserForm from './components/UserForm.vue';
 import { usersContent } from 'src/composables/usersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
@@ -36,6 +37,7 @@ import { useUsersStore } from 'src/stores/usersStore';
 // references
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 const modalUser = ref(false);
 const columns = [
   {
@@ -104,7 +106,17 @@ const handlerListUsers = async () => {
 
   await content.doListUser(query);
   pagination.value.rowsNumber = store.getTotalItems;
-  nextTick();
+}
+
+const doHandlerSearch = (search) => {
+  router.push({
+    name: 'users',
+    query: {
+      page: route.query.page || 1,
+      perPage: route.query.perPage,
+      search: search || '',
+    }
+  });
 }
 
 // hook

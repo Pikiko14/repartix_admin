@@ -32,7 +32,7 @@
     <!--end Header-->
 
     <!--Drawer-->
-    <q-drawer :mini="miniMode" :width="240" v-if="route.path !== '/' && route.path !== '/register'"
+    <q-drawer :mini="miniMode" :width="230" v-if="route.path !== '/' && route.path !== '/register'"
       v-model="leftDrawerOpen" show-if-above bordered>
       <AsideList />
     </q-drawer>

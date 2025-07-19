@@ -38,6 +38,17 @@
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
+            {{ t('track') }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section avatar>
+          <q-icon color="primary" name="map"></q-icon>
+        </q-item-section>
+      </q-item>
+
+      <q-item clickable v-ripple>
+        <q-item-section>
+          <q-item-label class="text-primary">
             {{ t('sender') }}
           </q-item-label>
         </q-item-section>
@@ -49,22 +60,22 @@
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
-            {{ t('client') }}
+            {{ t('delivery') }}
           </q-item-label>
         </q-item-section>
         <q-item-section avatar>
-          <q-icon color="primary" name="groups_2"></q-icon>
+          <q-icon color="primary" name="motorcycle"></q-icon>
         </q-item-section>
       </q-item>
 
       <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
-            {{ t('track') }}
+            {{ t('client') }}
           </q-item-label>
         </q-item-section>
         <q-item-section avatar>
-          <q-icon color="primary" name="map"></q-icon>
+          <q-icon color="primary" name="groups_2"></q-icon>
         </q-item-section>
       </q-item>
 

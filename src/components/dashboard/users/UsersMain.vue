@@ -6,15 +6,16 @@
     <!--End header-->
 
     <!--Table-->
-    <MainTable :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination" :columns="columns"
-      :rows="users" edit-scope="update-user" delete-scope="delete-user" />
+    <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
+      :columns="columns" :rows="users" edit-scope="update-user" delete-scope="delete-user"
+      @edit-user="handlerUpdateUser" />
     <!--End table-->
 
     <!--Modal user-->
-    <q-dialog v-model="modalUser">
-      <ModalCard :title="t('addUser')">
+    <q-dialog v-model="modalUser" @before-hide="user = {}">
+      <ModalCard :title="!user._id ? t('addUser') : t('editUser')">
         <template #body>
-          <UserForm @close-modal="showAddButton" />
+          <UserForm :user-selected="user" @close-modal="showAddButton" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -35,6 +36,7 @@ import HeaderPage from 'src/components/partials/HeaderPage.vue';
 import { useUsersStore } from 'src/stores/usersStore';
 
 // references
+const user = ref({});
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -117,6 +119,12 @@ const doHandlerSearch = (search) => {
       search: search || '',
     }
   });
+}
+
+const handlerUpdateUser = (id) => {
+  const userObj = users.value.find((el) => el._id === id);
+  user.value = userObj;
+  showAddButton();
 }
 
 // hook

@@ -12,6 +12,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
+        path: '',
+        component: () => import('src/pages/dashboard/MainRepartix.vue'),
+        name: 'dahsboard'
+      },
+      {
         path: 'users',
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
         name: 'users'

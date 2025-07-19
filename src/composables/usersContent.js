@@ -33,9 +33,24 @@ export const usersContent = () => {
     }
   }
 
+  const doUpdateUser = async (payload) => {
+    try {
+      const params = JSON.parse(JSON.stringify(payload))
+      delete params.confirmation_password
+      const { data } = await api.put(`${path}/update/${payload._id}`, params)
+      if (data && data.data) {
+        store.updateUser(data.data)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doListUser,
     doCreateUser,
+    doUpdateUser,
   }
 }

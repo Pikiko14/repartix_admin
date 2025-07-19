@@ -1,9 +1,11 @@
 <template>
-  <q-table @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns" row-key="_id" :pagination="pagination">
+  <q-table @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns" row-key="_id"
+    :pagination="pagination">
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        <q-btn v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded color="primary">
+        <q-btn @click="emit('edit-user', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense
+          rounded color="primary">
           <q-tooltip class="bg-primary">
             {{ t('edit') }}
           </q-tooltip>
@@ -42,6 +44,10 @@ defineProps({
     default: () => { }
   }
 });
+
+// emits
+const emit = defineEmits(['edit-user']);
+
 
 // references
 const { t } = useI18n();

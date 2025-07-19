@@ -97,4 +97,7 @@ export default {
   options: 'Opciones',
   delete: 'Eliminar',
   search: 'Buscar...',
+  delivery: 'Domiciliarios',
+  editUser: 'Editar usuario',
+  userUpdateSuccess: 'Usuario modificado correctamente',
 }

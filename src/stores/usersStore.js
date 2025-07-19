@@ -16,5 +16,10 @@ export const useUsersStore = defineStore('usersStore', {
     setTotalItems(payload) {
       this.totalItems = payload
     },
+    updateUser(user) {
+      delete user.__v;
+      const index = this.users.findIndex((el) => el._id === user._id)
+      this.users[index] = user
+    },
   },
 })

@@ -96,4 +96,7 @@ export default {
   options: 'Options',
   delete: 'Delete',
   search: 'Search...',
+  delivery: 'Delivery',
+  editUser: 'Edit user',
+  userUpdateSuccess: 'User updated successfully',
 }

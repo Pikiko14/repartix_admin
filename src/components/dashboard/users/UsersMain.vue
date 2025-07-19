@@ -8,14 +8,14 @@
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
       :columns="columns" :rows="users" edit-scope="update-user" delete-scope="delete-user"
-      @edit-user="handlerUpdateUser" />
+      @edit-user="handlerUpdateUser" @delete-user="handlerDeleteUser" />
     <!--End table-->
 
     <!--Modal user-->
     <q-dialog v-model="modalUser" @before-hide="user = {}">
       <ModalCard :title="!user._id ? t('addUser') : t('editUser')">
         <template #body>
-          <UserForm :user-selected="user" @close-modal="showAddButton" />
+          <UserForm :user-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -34,6 +34,7 @@ import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
 import { useUsersStore } from 'src/stores/usersStore';
+import { notification } from 'src/boot/notification';
 
 // references
 const user = ref({});
@@ -125,6 +126,30 @@ const handlerUpdateUser = (id) => {
   const userObj = users.value.find((el) => el._id === id);
   user.value = userObj;
   showAddButton();
+}
+
+const handlerDeleteUser = async (id) => {
+  const data = await content.doDeleteUser(id);
+
+  if (data.success) {
+    notification('success', t('userDeleted'), 'primary')
+    pagination.value.rowsNumber = store.getTotalItems;
+  }
+
+  if (users.value.length === 0) {
+    router.push({
+      name: 'users',
+      query: {
+        page: parseInt(route.query.page) - 1 || 1,
+        perPage: route.query.perPage,
+        search: route.query.search || '',
+      }
+    });
+  }
+}
+
+const setTotalItems = () => {
+  pagination.value.rowsNumber = store.getTotalItems;
 }
 
 // hook

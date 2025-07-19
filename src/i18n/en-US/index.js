@@ -99,4 +99,5 @@ export default {
   delivery: 'Delivery',
   editUser: 'Edit user',
   userUpdateSuccess: 'User updated successfully',
+  userDeleted: 'User deleted successfully',
 }

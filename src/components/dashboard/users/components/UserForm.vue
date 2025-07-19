@@ -101,7 +101,7 @@ const loading = ref(false);
 const content = usersContent();
 
 // emits
-const emit = defineEmits(['close-modal']);
+const emit = defineEmits(['close-modal', 'up-total-item']);
 
 // methods
 const handlerSaveUser = async () => {
@@ -117,6 +117,7 @@ const handlerSaveUser = async () => {
     if (response && response.success) {
       notification('success', t('userCreateSuccess'), 'primary');
       emit('close-modal');
+      emit('up-total-item');
     }
   } finally {
     loading.value = false;

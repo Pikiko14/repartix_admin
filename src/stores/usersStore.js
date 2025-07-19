@@ -18,8 +18,19 @@ export const useUsersStore = defineStore('usersStore', {
     },
     updateUser(user) {
       delete user.__v;
-      const index = this.users.findIndex((el) => el._id === user._id)
+      const index = this.getIndex(user._id)
       this.users[index] = user
     },
+    deleteUser(id) {
+      const index = this.getIndex(id)
+      this.users.splice(index, 1)
+      this.totalItems--
+    },
+    getIndex(id) {
+      return this.users.findIndex((el) => el._id === id)
+    },
+    upTotalItems() {
+      this.totalItems++
+    }
   },
 })

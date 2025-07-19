@@ -10,7 +10,7 @@
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
+        <q-btn @click="emit('delete-user', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}
           </q-tooltip>
@@ -46,8 +46,7 @@ defineProps({
 });
 
 // emits
-const emit = defineEmits(['edit-user']);
-
+const emit = defineEmits(['edit-user', 'delete-user']);
 
 // references
 const { t } = useI18n();

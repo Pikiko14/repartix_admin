@@ -100,4 +100,5 @@ export default {
   delivery: 'Domiciliarios',
   editUser: 'Editar usuario',
   userUpdateSuccess: 'Usuario modificado correctamente',
+  userDeleted: 'Usuario eliminado correctamente',
 }

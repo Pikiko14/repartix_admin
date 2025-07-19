@@ -4,6 +4,7 @@
       style="width: 100%; height: calc(100vh - 200px);" :center="center" :zoom="15">
       <Marker v-if="center.lat > 0" :options="markerOptions" />
     </GoogleMap>
+    {{ config }}
   </section>
 </template>
 
@@ -23,7 +24,7 @@ const markerOptions = ref({ position: center.value, label: 'L', title: 'LADY LIB
 
 // computeds
 const config = computed(() => {
-  return store.getUser.brand.configuration || {};
+  return store.getUser?.brand?.configuration || {};
 });
 
 // methods

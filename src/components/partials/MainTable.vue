@@ -1,6 +1,16 @@
 <template>
   <q-table @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns" row-key="_id"
     :pagination="pagination">
+    <!--User type-->
+    <template v-slot:body-cell-typeUser="props">
+      <q-td :props="props">
+        <q-chip dense class="bg-primary text-white">
+          {{ typeUser[props.row.type_user] }}
+        </q-chip>
+      </q-td>
+    </template>
+    <!--End user type-->
+
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
@@ -50,9 +60,15 @@ const emit = defineEmits(['edit-user', 'delete-user']);
 
 // references
 const { t } = useI18n();
+const route = useRoute();
 const utils = new Utils();
 const router = useRouter();
-const route = useRoute();
+const typeUser = {
+  employe: t('employe'),
+  admin: t('admin'),
+  sender: t('sender'),
+  delivery: t('delivery'),
+}
 
 
 // methods

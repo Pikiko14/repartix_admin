@@ -8,7 +8,7 @@
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
       :columns="columns" :rows="users" edit-scope="update-user" delete-scope="delete-user"
-      @edit-user="handlerUpdateUser" @delete-user="handlerDeleteUser" />
+      @edit-user="handlerUpdateUser" @delete-user="doDeleteUser" />
     <!--End table-->
 
     <!--Modal user-->
@@ -35,9 +35,11 @@ import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
 import { useUsersStore } from 'src/stores/usersStore';
 import { notification } from 'src/boot/notification';
+import { useQuasar } from 'quasar';
 
 // references
 const user = ref({});
+const q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -67,7 +69,7 @@ const columns = [
     sortable: false
   },
   {
-    name: 'type',
+    name: 'typeUser',
     label: t('typeUser'),
     align: 'center',
     field: row => row.type_user,
@@ -126,6 +128,19 @@ const handlerUpdateUser = (id) => {
   const userObj = users.value.find((el) => el._id === id);
   user.value = userObj;
   showAddButton();
+}
+
+const doDeleteUser = (id) => {
+  const description = t('deleteUserDescription');
+  const user = users.value.find((el) => el._id === id);
+  const name = user.username;
+  q.dialog({
+    title: t('deleteUserTitle'),
+    message: description.replace('id', name),
+    cancel: true,
+  }).onOk(() => {
+    handlerDeleteUser(id);
+  });
 }
 
 const handlerDeleteUser = async (id) => {

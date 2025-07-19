@@ -101,4 +101,8 @@ export default {
   editUser: 'Editar usuario',
   userUpdateSuccess: 'Usuario modificado correctamente',
   userDeleted: 'Usuario eliminado correctamente',
+  deleteUserTitle: 'Eliminar usuario',
+  deleteUserDescription: '¿Estas seguro de querer eliminar este usuario id?',
+  employe: 'Empleado',
+  admin: 'Admin',
 }

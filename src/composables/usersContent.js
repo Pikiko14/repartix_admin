@@ -37,7 +37,7 @@ export const usersContent = () => {
     try {
       const params = JSON.parse(JSON.stringify(payload))
       delete params.confirmation_password
-      const { data } = await api.put(`${path}/update/${payload._id}`, params)
+      const { data } = await api.put(`${path}/${payload._id}`, params)
       if (data && data.data) {
         store.updateUser(data.data)
       }

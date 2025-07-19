@@ -53,7 +53,7 @@ export const authContent = () => {
 
   const doUpdateCredentials = async (payload) => {
     try {
-      const { data } = await api.put(`${userPath}/update-credentials`, payload)
+      const { data } = await api.put(`${userPath}/update/credentials`, payload)
       if (data && data.success) {
         const { subscription } = store.getUser
         data.user.subscription = subscription
@@ -67,7 +67,7 @@ export const authContent = () => {
 
   const doUpdateProfile = async (payload) => {
     try {
-      const { data } = await api.put(`${userPath}/update-profile`, payload)
+      const { data } = await api.put(`${userPath}/update/profile`, payload)
       if (data && data.success) {
         const { subscription } = store.getUser
         data.user.subscription = subscription
@@ -81,7 +81,7 @@ export const authContent = () => {
 
   const doUpdateBrand = async (payload) => {
     try {
-      const { data } = await api.put(`${userPath}/update-brand`, payload)
+      const { data } = await api.put(`${userPath}/update/brand`, payload)
       if (data && data.success) {
         const { subscription } = store.getUser
         data.user.subscription = subscription
@@ -95,7 +95,7 @@ export const authContent = () => {
 
   const doUpdateBrandConfiguration = async (payload) => {
     try {
-      const { data } = await api.put(`${userPath}/update-brand-configuration`, payload)
+      const { data } = await api.put(`${userPath}/update/brand-configuration`, payload)
       if (data && data.success) {
         const { subscription } = store.getUser
         data.user.subscription = subscription

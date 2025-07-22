@@ -111,4 +111,5 @@ export default {
   updateCouriers: 'Modificar repartidores',
   deleteCouriers: 'Borrar repartidores',
   next: 'Siguiente',
+  create_couriers: 'Crear repartidores',
 }

@@ -110,4 +110,5 @@ export default {
   updateCouriers: 'Update couriers',
   deleteCouriers: 'Delete couriers',
   next: 'next',
+  create_couriers: 'Create couriers',
 }

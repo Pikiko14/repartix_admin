@@ -1,53 +1,71 @@
 <template>
   <q-form @submit="handlerSaveUser" class="row">
-    <div class="col-12">
-      <label class="text-dark" for="username">{{ t('username') }}</label>
-      <q-input dense id="username" :rules="[
-        (val) => !!val || t('requiredField'),
+    <q-tabs v-model="tab" no-caps dense class="text-primary full-width q-pa-none">
+      <q-tab name="profile" :label="t('profile')" />
+      <q-tab name="scopes" :label="t('scopes')" />
+    </q-tabs>
+    <q-tab-panels class="full-width" v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">
+      <q-tab-panel class="q-pa-none q-px-md" name="profile">
+        <div class="row q-mt-md">
+          <div class="col-12">
+            <label class="text-dark" for="username">{{ t('username') }}</label>
+            <q-input dense id="username" :rules="[
+              (val) => !!val || t('requiredField'),
 
-      ]" outlined v-model="user.username" placeholder="jhondoe"></q-input>
-    </div>
+            ]" outlined v-model="user.username" placeholder="jhondoe"></q-input>
+          </div>
 
-    <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
-      <label class="text-dark" for="password">{{ t('password') }}</label>
-      <q-input dense id="password" :rules="user._id ? [] :[
-        (val) => !!val || t('requiredField'),
-        (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong')
-      ]" type="password" outlined v-model="user.password" placeholder="*********"></q-input>
-    </div>
+          <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+            <label class="text-dark" for="password">{{ t('password') }}</label>
+            <q-input dense id="password" :rules="user._id ? [] : [
+              (val) => !!val || t('requiredField'),
+              (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong')
+            ]" type="password" outlined v-model="user.password" placeholder="*********"></q-input>
+          </div>
 
-    <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
-      <label class="text-dark" for="password_confirm">{{ t('password_confirmation') }}</label>
-      <q-input dense id="password_confirm" :rules="user._id ? [] : [
-        (val) => !!val || t('requiredField'),
-        (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong'),
-        (val) => val === user.password || t('dontMatchPassword')
-      ]" type="password" outlined v-model="user.confirmation_password" placeholder="*********"></q-input>
-    </div>
+          <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+            <label class="text-dark" for="password_confirm">{{ t('password_confirmation') }}</label>
+            <q-input dense id="password_confirm" :rules="user._id ? [] : [
+              (val) => !!val || t('requiredField'),
+              (val) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/.test(val) || t('passwordStrong'),
+              (val) => val === user.password || t('dontMatchPassword')
+            ]" type="password" outlined v-model="user.confirmation_password" placeholder="*********"></q-input>
+          </div>
 
-    <div class="col-12" :class="{'q-mt-md': user._id}">
-      <label class="text-dark" for="email">{{ t('email') }}</label>
-      <q-input dense id="email" :rules="[
-        (val) => !!val || t('requiredField'),
-        (val) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/.test(val) || t('invalidEmail')
-      ]" outlined v-model="user.email" placeholder="jhon@doe.com"></q-input>
-    </div>
+          <div class="col-12" :class="{ 'q-mt-md': user._id }">
+            <label class="text-dark" for="email">{{ t('email') }}</label>
+            <q-input dense id="email" :rules="[
+              (val) => !!val || t('requiredField'),
+              (val) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/.test(val) || t('invalidEmail')
+            ]" outlined v-model="user.email" placeholder="jhon@doe.com"></q-input>
+          </div>
 
-    <div class="col-12">
-      <label class="text-dark" for="full_name">{{ t('fullName') }}</label>
-      <q-input dense id="full_name" :rules="[
-        (val) => !!val || t('requiredField'),
+          <div class="col-12">
+            <label class="text-dark" for="full_name">{{ t('fullName') }}</label>
+            <q-input dense id="full_name" :rules="[
+              (val) => !!val || t('requiredField'),
 
-      ]" outlined v-model="user.profile.full_name" placeholder="jhon Doe"></q-input>
-    </div>
+            ]" outlined v-model="user.profile.full_name" placeholder="jhon Doe"></q-input>
+          </div>
+        </div>
+      </q-tab-panel>
 
-    <div class="col-12">
-      <label class="text-dark" for="scopes">{{ t('scopes') }}</label>
-      <q-option-group v-model="user.scopes" type="checkbox" :options="scopes" color="primary" inline />
-    </div>
+      <q-tab-panel class="q-pa-none q-px-md" name="scopes">
+        <div class="row q-mt-md full-width">
+          <div class="col-12">
+            <q-input outlined dense :placeholder="t('search')" v-model="search"></q-input>
+          </div>
+          <div class="col-12 q-mt-md">
+            <q-option-group v-model="user.scopes" type="checkbox" :options="scopesOptions" color="primary" inline />
+          </div>
+        </div>
+      </q-tab-panel>
+    </q-tab-panels>
 
     <div class="col-12 text-right">
-      <q-btn :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')"
+      <q-btn v-if="tab === 'scopes'" :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')"
+        color="primary"></q-btn>
+      <q-btn v-else unelevated @click="tab = 'scopes'" size="md" no-caps rounded :label="t('next')"
         color="primary"></q-btn>
     </div>
   </q-form>
@@ -55,8 +73,8 @@
 
 <script setup>
 // imports
-import { onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { onBeforeMount, ref, computed } from 'vue';
 import { notification } from 'src/boot/notification';
 import { usersContent } from 'src/composables/usersContent';
 
@@ -64,9 +82,12 @@ import { usersContent } from 'src/composables/usersContent';
 const props = defineProps({
   userSelected: {
     type: Object,
-    default: () => {},
+    default: () => { },
   }
 });
+
+// emits
+const emit = defineEmits(['close-modal', 'up-total-item']);
 
 // references
 const user = ref({
@@ -74,6 +95,7 @@ const user = ref({
   scopes: [],
   profile: {},
 });
+const search = ref('');
 const { t } = useI18n();
 const scopes = [
   {
@@ -96,17 +118,40 @@ const scopes = [
     label: t('updateBrand'),
     value: 'update-brand',
   },
+  {
+    label: t('listCouriers'),
+    value: 'list-couriers',
+  },
+  {
+    label: t('createCouriers'),
+    value: 'create-couriers',
+  },
+  {
+    label: t('updateCouriers'),
+    value: 'update-couriers',
+  },
+  {
+    label: t('deleteCouriers'),
+    value: 'delete-couriers',
+  },
 ];
+const tab = ref('profile');
 const loading = ref(false);
 const content = usersContent();
 
-// emits
-const emit = defineEmits(['close-modal', 'up-total-item']);
+// computed
+const scopesOptions = computed(() => {
+  if (search.value) {
+    return scopes.filter(scope => scope.label.toLowerCase().includes(search.value.toLowerCase()));
+  }
+  return scopes;
+});
+
 
 // methods
 const handlerSaveUser = async () => {
   loading.value = true;
-  
+
   if (user.value._id) {
     await handlerUpdateUser();
     return;

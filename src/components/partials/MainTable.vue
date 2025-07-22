@@ -14,13 +14,13 @@
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        <q-btn @click="emit('edit-user', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense
+        <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense
           rounded color="primary">
           <q-tooltip class="bg-primary">
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn @click="emit('delete-user', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
+        <q-btn @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}
           </q-tooltip>
@@ -56,7 +56,7 @@ defineProps({
 });
 
 // emits
-const emit = defineEmits(['edit-user', 'delete-user']);
+const emit = defineEmits(['edit', 'delete']);
 
 // references
 const { t } = useI18n();

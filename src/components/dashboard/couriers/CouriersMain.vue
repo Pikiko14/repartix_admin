@@ -1,49 +1,48 @@
 <template>
   <section class="users-main">
     <!--Header-->
-    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-user'" :show-add-button="true"
-      :title="t('usersTitle')" />
+    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-couriers'" :show-add-button="true"
+      :title="t('delivery')" />
     <!--End header-->
 
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="users" edit-scope="update-user" delete-scope="delete-user"
-      @edit="handlerUpdateUser" @delete="doDeleteUser" />
+      :columns="columns" :rows="couriers" edit-scope="update-couriers" delete-scope="delete-couriers"
+      @edit="handlerUpdateCourier" @delete="doDeleteCourier" />
     <!--End table-->
 
-    <!--Modal user-->
-    <q-dialog v-model="modalUser" @before-hide="user = {}">
-      <ModalCard :title="!user._id ? t('addUser') : t('editUser')">
+    <!--Modal couriers-->
+    <q-dialog v-model="modalCouriers" @before-hide="user = {}">
+      <ModalCard :title="!courier._id ? t('addDelivery') : t('editDelivery')">
         <template #body>
-          <UserForm :user-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />
+          <!--<UserForm :user-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />-->
         </template>
       </ModalCard>
     </q-dialog>
-    <!--End modal user-->
+    <!--End modal couriers-->
   </section>
 </template>
 
 <script setup>
 // imports
+import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import UserForm from './components/UserForm.vue';
+import { notification } from 'src/boot/notification';
+import { useUsersStore } from 'src/stores/usersStore';
 import { usersContent } from 'src/composables/usersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
-import { useUsersStore } from 'src/stores/usersStore';
-import { notification } from 'src/boot/notification';
-import { useQuasar } from 'quasar';
 
 // references
-const user = ref({});
+const courier = ref({});
 const q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const modalUser = ref(false);
+const modalCouriers = ref(false);
 const columns = [
   {
     name: 'name',
@@ -54,14 +53,6 @@ const columns = [
     sortable: false
   },
   {
-    name: 'email',
-    required: true,
-    label: t('email'),
-    align: 'left',
-    field: row => row.email,
-    sortable: false
-  },
-  {
     name: 'fullName',
     label: t('fullName'),
     align: 'left',
@@ -69,10 +60,11 @@ const columns = [
     sortable: false
   },
   {
-    name: 'typeUser',
-    label: t('typeUser'),
-    align: 'center',
-    field: row => row.type_user,
+    name: 'email',
+    required: true,
+    label: t('email'),
+    align: 'left',
+    field: row => row.email,
     sortable: false
   },
   {
@@ -93,13 +85,13 @@ const store = useUsersStore();
 const content = usersContent();
 
 // computed
-const users = computed(() => {
+const couriers = computed(() => {
   return store.getUsers;
 });
 
 // methods
 const showAddButton = () => {
-  modalUser.value = !modalUser.value;
+  modalCouriers.value = !modalCouriers.value;
 }
 
 const handlerListUsers = async () => {
@@ -124,26 +116,26 @@ const doHandlerSearch = (search) => {
   });
 }
 
-const handlerUpdateUser = (id) => {
-  const userObj = users.value.find((el) => el._id === id);
-  user.value = userObj;
+const handlerUpdateCourier = (id) => {
+  const courierObj = couriers.value.find((el) => el._id === id);
+  courier.value = courierObj;
   showAddButton();
 }
 
-const doDeleteUser = (id) => {
+const doDeleteCourier = (id) => {
   const description = t('deleteUserDescription');
-  const user = users.value.find((el) => el._id === id);
-  const name = user.username;
+  const courier = couriers.value.find((el) => el._id === id);
+  const name = courier.username;
   q.dialog({
     title: t('deleteUserTitle'),
     message: description.replace('id', name),
     cancel: true,
   }).onOk(() => {
-    handlerDeleteUser(id);
+    handlerDeleteCourier(id);
   });
 }
 
-const handlerDeleteUser = async (id) => {
+const handlerDeleteCourier = async (id) => {
   const data = await content.doDeleteUser(id);
 
   if (data.success) {
@@ -151,9 +143,9 @@ const handlerDeleteUser = async (id) => {
     pagination.value.rowsNumber = store.getTotalItems;
   }
 
-  if (users.value.length === 0) {
+  if (couriers.value.length === 0) {
     router.push({
-      name: 'users',
+      name: 'couriers',
       query: {
         page: parseInt(route.query.page) - 1 || 1,
         perPage: route.query.perPage,
@@ -163,9 +155,9 @@ const handlerDeleteUser = async (id) => {
   }
 }
 
-const setTotalItems = () => {
-  pagination.value.rowsNumber = store.getTotalItems;
-}
+// const setTotalItems = () => {
+//   pagination.value.rowsNumber = store.getTotalItems;
+// }
 
 // hook
 if (route.query.page) {

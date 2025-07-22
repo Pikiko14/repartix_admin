@@ -21,6 +21,16 @@ const routes = [
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
         name: 'users'
       },
+      {
+        path: 'couriers',
+        component: () => import('src/pages/dashboard/couriers/MainPage.vue'),
+        name: 'couriers'
+      },
+      {
+        path: 'senders',
+        component: () => import('src/pages/dashboard/users/MainPage.vue'),
+        name: 'senders'
+      },
     ],
     meta: {
       auth: true,

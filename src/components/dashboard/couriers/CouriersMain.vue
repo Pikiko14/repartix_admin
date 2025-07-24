@@ -15,7 +15,7 @@
     <q-dialog v-model="modalCouriers" @before-hide="user = {}">
       <ModalCard :title="!courier._id ? t('addDelivery') : t('editDelivery')">
         <template #body>
-          <!--<UserForm :user-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />-->
+          <CourierForm :courier-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -31,6 +31,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'src/boot/notification';
 import { useUsersStore } from 'src/stores/usersStore';
+import CourierForm from './components/CourierForm.vue';
 import { usersContent } from 'src/composables/usersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
@@ -94,7 +95,7 @@ const showAddButton = () => {
   modalCouriers.value = !modalCouriers.value;
 }
 
-const handlerListUsers = async () => {
+const handlerListCouriers = async () => {
   const page = route.query.page || 1;
   const search = route.query.search || '';
   const perPage = route.query.perPage || 10;
@@ -107,7 +108,7 @@ const handlerListUsers = async () => {
 
 const doHandlerSearch = (search) => {
   router.push({
-    name: 'users',
+    name: 'couriers',
     query: {
       page: route.query.page || 1,
       perPage: route.query.perPage,
@@ -155,9 +156,9 @@ const handlerDeleteCourier = async (id) => {
   }
 }
 
-// const setTotalItems = () => {
-//   pagination.value.rowsNumber = store.getTotalItems;
-// }
+const setTotalItems = () => {
+  pagination.value.rowsNumber = store.getTotalItems;
+}
 
 // hook
 if (route.query.page) {
@@ -166,5 +167,5 @@ if (route.query.page) {
 if (route.query.perPage) {
   pagination.value.rowsPerPage = parseInt(route.query.perPage);
 }
-handlerListUsers();
+handlerListCouriers();
 </script>

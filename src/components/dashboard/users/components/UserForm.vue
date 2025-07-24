@@ -1,7 +1,7 @@
 <template>
   <q-form @submit="handlerSaveUser" class="row">
     <q-tabs v-model="tab" no-caps dense class="text-primary full-width q-pa-none">
-      <q-tab name="profile" :label="t('profile')" />
+      <q-tab name="profile" :label="t('access')" />
       <q-tab name="scopes" :label="t('scopes')" />
     </q-tabs>
     <q-tab-panels class="full-width" v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up">

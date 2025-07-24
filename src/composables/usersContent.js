@@ -7,7 +7,6 @@ export const usersContent = () => {
   const path = 'users'
   const store = useUsersStore();
 
-
   // methods
   const doCreateUser = async (payload) => {
     try {

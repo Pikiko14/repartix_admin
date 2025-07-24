@@ -166,14 +166,30 @@ const typeVehicles = [
     label: t('motorcycle'),
     value: 'motorcycle'
   },
+  {
+    label: t('car'),
+    value: 'car'
+  },
+  {
+    label: t('on_foot'),
+    value: 'on_foot'
+  },
+  {
+    label: t('scooter'),
+    value: 'scooter'
+  },
+  {
+    label: t('other'),
+    value: 'other'
+  },
 ];
 const contractTypes = [
   {
-    label: t('fixedContract'),
+    label: t('fixed'),
     value: 'fixed'
   },
   {
-    label: t('perDelivery'),
+    label: t('per_delivery'),
     value: 'per_delivery'
   },
 ]; 

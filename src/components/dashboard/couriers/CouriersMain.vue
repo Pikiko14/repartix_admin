@@ -69,6 +69,30 @@ const columns = [
     sortable: false
   },
   {
+    name: 'phone',
+    required: true,
+    label: t('phone'),
+    align: 'left',
+    field: row => row?.profile?.phone || '',
+    sortable: false
+  },
+  {
+    name: 'vehicleType',
+    required: true,
+    label: t('typeVehicle'),
+    align: 'left',
+    field: row => t(row?.courier_info?.vehicle_type) || '',
+    sortable: false
+  },
+  {
+    name: 'contractType',
+    required: true,
+    label: t('contractType'),
+    align: 'left',
+    field: row => t(row?.courier_info?.contract_type) || '',
+    sortable: false
+  },
+  {
     name: 'options',
     required: true,
     label: t('options'),

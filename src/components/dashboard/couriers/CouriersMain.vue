@@ -30,12 +30,12 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'src/boot/notification';
-import { useUsersStore } from 'src/stores/usersStore';
 import CourierForm from './components/CourierForm.vue';
-import { usersContent } from 'src/composables/usersContent';
+import { useCouriersStore } from 'src/stores/couriersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
+import { couriersContent } from 'src/composables/couriersContent';
 
 // references
 const courier = ref({});
@@ -82,12 +82,12 @@ const pagination = ref({
   rowsPerPage: route.query.perPage || 10,
   rowsNumber: 1,
 });
-const store = useUsersStore();
-const content = usersContent();
+const store = useCouriersStore();
+const content = couriersContent();
 
 // computed
 const couriers = computed(() => {
-  return store.getUsers;
+  return store.getCouriers;
 });
 
 // methods
@@ -102,13 +102,13 @@ const handlerListCouriers = async () => {
 
   const query = `page=${page}&perPage=${perPage}&search=${search}`;
 
-  await content.doListUser(query);
+  await content.doListCourier(query);
   pagination.value.rowsNumber = store.getTotalItems;
 }
 
 const doHandlerSearch = (search) => {
   router.push({
-    name: 'couriers',
+    name: route.name,
     query: {
       page: route.query.page || 1,
       perPage: route.query.perPage,

@@ -15,7 +15,7 @@ export const couriersContent = () => {
       const { data } = await api.post(`${path}`, params)
       if (data && data.user) {
         if (store.getCouriers.length < 10) {
-          store.setUsers([...store.getCouriers, data.user])
+          store.setCouriers([...store.getCouriers, data.user])
         }
         store.upTotalItems();
       }
@@ -25,8 +25,22 @@ export const couriersContent = () => {
     }
   }
 
+  const doListCourier = async (query) => {
+    try {
+      const { data } = await api.get(`${path}?${query}`)
+      if (data.success) {
+        store.setCouriers(data.users?.data || [])
+        store.setTotalItems(data.users?.totalItems || 0)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
+    doListCourier,
     doCreateCourier,
   }
 }

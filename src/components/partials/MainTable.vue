@@ -75,7 +75,7 @@ const typeUser = {
 const handlerPagination = (e) => {
   const { pagination } = e;
   router.push({
-    name: 'users',
+    name: route.name,
     query: {
       page: pagination.page || 1,
       perPage: pagination.rowsPerPage,

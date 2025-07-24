@@ -7,13 +7,17 @@ export const useCouriersStore = defineStore('couriersStore', {
   }),
   getters: {
     getCouriers: (state) => state.couriers,
+    getTotalItems: (state) => state.totalItems,
   },
   actions: {
-    setUsers(payload) {
-      this.users = payload
+    setCouriers(payload) {
+      this.couriers = payload
     },
     upTotalItems() {
       this.totalItems++
     },
+    setTotalItems(payload) {
+      this.totalItems = payload
+    }
   },
 })

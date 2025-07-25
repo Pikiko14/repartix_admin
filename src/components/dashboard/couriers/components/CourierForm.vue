@@ -90,7 +90,7 @@
           </div>
           <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
             <label class="text-dark" for="license_plate">{{ t('licensePlate') }}</label>
-            <q-input dense id="license_plate" mask="NNN-NNN" max="7" :rules="[
+            <q-input dense id="license_plate" mask="XXX-XXX" max="7" :rules="[
               (val) => !!val || t('requiredField'),
 
             ]" outlined v-model="courier.courier_info.license_plate" placeholder="123-QWE"></q-input>

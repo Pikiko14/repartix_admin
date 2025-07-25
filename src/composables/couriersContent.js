@@ -17,7 +17,7 @@ export const couriersContent = () => {
         if (store.getCouriers.length < 10) {
           store.setCouriers([...store.getCouriers, data.user])
         }
-        store.upTotalItems();
+        store.upTotalItems()
       }
       return data
     } catch (error) {
@@ -38,9 +38,22 @@ export const couriersContent = () => {
     }
   }
 
+  const doDeleteCouriers = async (id) => {
+    try {
+      const { data } = await api.delete(`${path}/${id}`)
+      if (data) {
+        store.deleteCourier(id)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doListCourier,
     doCreateCourier,
+    doDeleteCouriers,
   }
 }

@@ -136,7 +136,7 @@ const doDeleteUser = (id) => {
   const name = user.username;
   q.dialog({
     title: t('deleteUserTitle'),
-    message: description.replace('id', name),
+    message: description.replace('-id', name),
     cancel: true,
   }).onOk(() => {
     handlerDeleteUser(id);

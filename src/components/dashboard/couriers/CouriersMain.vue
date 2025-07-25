@@ -15,7 +15,7 @@
     <q-dialog v-model="modalCouriers" @before-hide="user = {}">
       <ModalCard :title="!courier._id ? t('addDelivery') : t('editDelivery')">
         <template #body>
-          <CourierForm :courier-selected="user" @close-modal="showAddButton" @up-total-item="setTotalItems" />
+          <CourierForm :courier-selected="courier" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -148,12 +148,12 @@ const handlerUpdateCourier = (id) => {
 }
 
 const doDeleteCourier = (id) => {
-  const description = t('deleteUserDescription');
+  const description = t('deleteCouriersDescription');
   const courier = couriers.value.find((el) => el._id === id);
   const name = courier.username;
   q.dialog({
-    title: t('deleteUserTitle'),
-    message: description.replace('id', name),
+    title: t('deleteCouriers'),
+    message: description.replace('-id', ` ${name}`),
     cancel: true,
   }).onOk(() => {
     handlerDeleteCourier(id);
@@ -161,10 +161,10 @@ const doDeleteCourier = (id) => {
 }
 
 const handlerDeleteCourier = async (id) => {
-  const data = await content.doDeleteUser(id);
+  const data = await content.doDeleteCouriers(id);
 
-  if (data.success) {
-    notification('success', t('userDeleted'), 'primary')
+  if (data?.success) {
+    notification('success', t('courierDeleted'), 'primary');
     pagination.value.rowsNumber = store.getTotalItems;
   }
 

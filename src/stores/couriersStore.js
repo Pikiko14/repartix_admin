@@ -18,6 +18,14 @@ export const useCouriersStore = defineStore('couriersStore', {
     },
     setTotalItems(payload) {
       this.totalItems = payload
-    }
+    },
+    deleteCourier(id) {
+      const index = this.getIndex(id)
+      this.couriers.splice(index, 1)
+      this.totalItems--
+    },
+    getIndex(id) {
+      return this.couriers.findIndex((el) => el._id === id)
+    },
   },
 })

@@ -130,4 +130,5 @@ export default {
   other: 'Other',
   deleteCouriersDescription: '¿Are you sure you want to delete this courier -id?',
   courierDeleted: 'Couriers deleted successfully',
+  courierUpdateSuccess: 'Couriers updated successfully',
 }

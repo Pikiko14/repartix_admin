@@ -131,4 +131,5 @@ export default {
   other: 'Otro',
   deleteCouriersDescription: '¿Estas seguro de querer eliminar este repartidor -id?',
   courierDeleted: 'Repartidor eliminado correctamente',
+  courierUpdateSuccess: 'Repartidor modificado correctamente',
 }

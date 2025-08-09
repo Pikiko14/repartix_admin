@@ -26,7 +26,7 @@
             ]" type="password" outlined v-model="courier.password" placeholder="*********"></q-input>
           </div>
 
-          <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+          <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm, 'q-mt-md': $q.screen.lt.md }">
             <label class="text-dark" for="password_confirm">{{ t('password_confirmation') }}</label>
             <q-input dense id="password_confirm" :rules="courier._id ? [] : [
               (val) => !!val || t('requiredField'),
@@ -222,10 +222,14 @@ const handlerSaveCouriers = async () => {
 }
 
 const handlerUpdateCourier = async () => {
+  if (courier.value?.courier_info.amount_by_delivery) {
+    courier.value.courier_info.amount_by_delivery = String(courier.value?.courier_info.amount_by_delivery);
+  }
+
   try {
-    const response = await content.doUpdateUser(courier.value);
+    const response = await content.doUpdateCourier(courier.value);
     if (response && response.success) {
-      notification('success', t('userUpdateSuccess'), 'primary');
+      notification('success', t('courierUpdateSuccess'), 'primary');
       emit('close-modal');
     }
   } finally {

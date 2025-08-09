@@ -27,5 +27,10 @@ export const useCouriersStore = defineStore('couriersStore', {
     getIndex(id) {
       return this.couriers.findIndex((el) => el._id === id)
     },
+    updateCourier(courier) {
+      delete courier.__v;
+      const index = this.getIndex(courier._id)
+      this.couriers[index] = courier
+    }, 
   },
 })

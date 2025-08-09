@@ -50,9 +50,25 @@ export const couriersContent = () => {
     }
   }
 
+  const doUpdateCourier = async (payload) => {
+    try {
+      const params = JSON.parse(JSON.stringify(payload))
+      delete params.confirmation_password
+      const { data } = await api.put(`${path}/${payload._id}`, params)
+      if (data && data.data) {
+        store.updateCourier(data.data)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
   // return
   return {
     doListCourier,
+    doUpdateCourier,
     doCreateCourier,
     doDeleteCouriers,
   }

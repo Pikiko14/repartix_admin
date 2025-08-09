@@ -134,6 +134,22 @@ const scopes = [
     label: t('deleteCouriers'),
     value: 'delete-couriers',
   },
+  {
+    label: t('listCity'),
+    value: 'list-city',
+  },
+  {
+    label: t('createCity'),
+    value: 'create-city',
+  },
+  {
+    label: t('updateCity'),
+    value: 'update-city',
+  },
+  {
+    label: t('deleteCity'),
+    value: 'delete-city',
+  },
 ];
 const tab = ref('profile');
 const loading = ref(false);

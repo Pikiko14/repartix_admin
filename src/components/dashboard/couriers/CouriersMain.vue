@@ -12,7 +12,7 @@
     <!--End table-->
 
     <!--Modal couriers-->
-    <q-dialog v-model="modalCouriers" @before-hide="user = {}">
+    <q-dialog v-model="modalCouriers" @before-hide="courier = {}">
       <ModalCard :title="!courier._id ? t('addDelivery') : t('editDelivery')">
         <template #body>
           <CourierForm :courier-selected="courier" @close-modal="showAddButton" @up-total-item="setTotalItems" />

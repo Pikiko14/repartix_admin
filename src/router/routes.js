@@ -31,6 +31,11 @@ const routes = [
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
         name: 'senders'
       },
+      {
+        path: 'cities-and-zones',
+        component: () => import('src/pages/dashboard/cities/CitiesPage.vue'),
+        name: 'city'
+      },
     ],
     meta: {
       auth: true,

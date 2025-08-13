@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-12 col-md-4" :class="{ 'q-px-sm': $q.screen.gt.sm }">
                       <label class="text-dark" for="cod">{{ t('cod') }}</label>
-                      <q-input dense id="cod" :rules="[
+                      <q-input mask="XXX" dense id="cod" :rules="[
                         (val) => !!val || t('requiredField'),
 
                       ]" outlined v-model="zone.cod_zone" placeholder="BRN"></q-input>
@@ -109,11 +109,19 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { GoogleMap, Rectangle } from 'vue3-google-map';
 import { citiesContent } from 'src/composables/citiesContent';
+
+// props
+const props = defineProps({
+  citySelected: {
+    type: Object,
+    default: () => { },
+  }
+});
 
 // computed
 const user = computed(() => {
@@ -151,6 +159,9 @@ const emit = defineEmits(['close-modal', 'up-total-item']);
 
 // methods
 const handlerSaveCity = async () => {
+  if (city.value.updatedAt) delete city.value.updatedAt;
+  if (city.value.createdAt) delete city.value.createdAt;
+
   loading.value = true;
   if (city.value._id) {
     await handlerUpdateCity();
@@ -168,7 +179,22 @@ const handlerSaveCity = async () => {
   }
 }
 
-const handlerUpdateCity = async () => {}
+const handlerUpdateCity = async () => {
+  city.value.zones = city.value.zones.map((el) => {
+    delete el._id;
+    return el;
+  });
+
+  try {
+    const response = await content.doUpdateCities(city.value);
+    if (response && response.success) {
+      notification('success', t('cityUpdateSuccess'), 'primary');
+      emit('close-modal');
+    }
+  } finally {
+    loading.value = false;
+  }
+}
 
 const loadLatAndLon = async (cityName) => {
   const { brand } = user.value;
@@ -216,6 +242,13 @@ const addZone = () => {
 const removeZone = (idx) => {
   city.value.zones.splice(idx, 1);
 }
+
+// hook
+onBeforeMount(() => {
+  if (props.citySelected && props.citySelected._id) {
+    city.value = JSON.parse(JSON.stringify(props.citySelected));
+  }
+});
 </script>
 
 <style scoped lang="scss">

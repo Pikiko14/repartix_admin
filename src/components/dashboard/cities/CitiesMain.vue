@@ -15,7 +15,7 @@
     <q-dialog v-model="modalCities" @before-hide="city = {}">
       <ModalCard :title="!city._id ? t('cityCreate') : t('cityUpdate')">
         <template #body>
-          <CitiesForm @close-modal="showAddButton" @up-total-item="setTotalItems" />
+          <CitiesForm :city-selected="city" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>

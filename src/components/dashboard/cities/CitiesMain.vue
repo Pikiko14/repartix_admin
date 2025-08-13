@@ -2,7 +2,7 @@
   <section class="city-main">
     <!--Header-->
     <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-city'" :show-add-button="true"
-      :title="t('city')" />
+      :title="t('cityTitle')" />
     <!--End header-->
 
     <!--Table-->
@@ -15,7 +15,7 @@
     <q-dialog v-model="modalCities" @before-hide="city = {}">
       <ModalCard :title="!city._id ? t('cityCreate') : t('cityUpdate')">
         <template #body>
-          123
+          <CitiesForm @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -29,6 +29,7 @@
   import { useI18n } from 'vue-i18n';
   import { computed, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
+  import CitiesForm from './components/CitiesForm.vue';
   import { notification } from 'src/boot/notification';
   import { useCitiesStore } from 'src/stores/citiesStore';
   import ModalCard from 'src/components/partials/ModalCard.vue';
@@ -164,9 +165,9 @@
     }
   }
 
-  // const setTotalItems = () => {
-  //   pagination.value.rowsNumber = store.getTotalItems;
-  // }
+  const setTotalItems = () => {
+    pagination.value.rowsNumber = store.getTotalItems;
+  }
 
   // hook
   if (route.query.page) {

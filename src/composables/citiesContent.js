@@ -13,9 +13,9 @@ export const citiesContent = () => {
       const params = JSON.parse(JSON.stringify(payload))
       delete params.confirmation_password
       const { data } = await api.post(`${path}`, params)
-      if (data && data.cities) {
+      if (data && data.data) {
         if (store.getCities.length < 10) {
-          store.setCities([...store.getCities, data.cities])
+          store.setCities([...store.getCities, data.data])
         }
         store.upTotalItems()
       }

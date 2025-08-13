@@ -135,7 +135,8 @@ export default {
   createCity: 'Create city',
   updateCity: 'Update city',
   deleteCity: 'Delete city',
-  city: 'City and Zones',
+  city: 'City',
+  cityTitle: 'City and Zones',
   cityCreate: 'Create city',
   cityUpdate: 'Update city',
   cityDelete: 'Delete city',
@@ -146,4 +147,6 @@ export default {
   province: 'Province',
   cod: 'Code',
   zones: 'Zones',
+  lat: 'Latitude',
+  lon: 'Longitude',
 }

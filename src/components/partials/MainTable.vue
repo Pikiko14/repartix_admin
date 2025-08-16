@@ -11,6 +11,22 @@
     </template>
     <!--End user type-->
 
+    <!--email td-->
+    <template v-slot:body-cell-email="props">
+      <q-td :props="props">
+        <a :href="`mailto:${props.row.email}`">{{ props.row.email }}</a>
+      </q-td>
+    </template>
+    <!--End email td-->
+
+    <!--email td-->
+    <template v-slot:body-cell-phone="props">
+      <q-td :props="props">
+        <a :href="`tel:${props.row.phone}`">{{ props.row.phone || props.row?.profile?.phone }}</a>
+      </q-td>
+    </template>
+    <!--End email td-->
+
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
@@ -84,3 +100,11 @@ const handlerPagination = (e) => {
   });
 }
 </script>
+
+<style scoped lang="scss">
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 400;
+  }
+</style>

@@ -36,6 +36,11 @@ const routes = [
         component: () => import('src/pages/dashboard/cities/CitiesPage.vue'),
         name: 'city'
       },
+      {
+        path: 'clients',
+        component: () => import('src/pages/dashboard/clients/ClientsPage.vue'),
+        name: 'clients'
+      },
     ],
     meta: {
       auth: true,

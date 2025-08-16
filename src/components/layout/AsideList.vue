@@ -57,7 +57,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple to="/dashboard/couriers?page=1&perPage=10&search=">
+      <q-item clickable v-if="utils.validateRole('list-couriers')" v-ripple to="/dashboard/couriers?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('delivery') }}
@@ -68,7 +68,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable to="/dashboard/clients?page=1&perPage=10&search=" v-if="utils.validateRole('list-client')" v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('client') }}
@@ -79,7 +79,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple to="/dashboard/cities-and-zones?page=1&perPage=10&search=">
+      <q-item clickable v-if="utils.validateRole('list-city')" v-ripple to="/dashboard/cities-and-zones?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('cityAndZones') }}

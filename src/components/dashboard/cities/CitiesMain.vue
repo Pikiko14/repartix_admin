@@ -138,7 +138,7 @@
     const name = city.name;
     q.dialog({
       title: t('deleteCity'),
-      message: description.replace('-id', ` ${name}`),
+      message: description.replace('-name', ` ${name}`),
       cancel: true,
     }).onOk(() => {
       handlerDeleteCities(id);

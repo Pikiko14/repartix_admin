@@ -59,7 +59,7 @@
             <q-input mask="+## ##########" dense id="phone" :rules="[
               (val) => val.length > 0 || t('requiredField'),
               (val) => /^\+\d{1,3} ?\d{7,12}$/.test(val) || t('invalidPhone'),
-            ]" outlined v-model="courier.profile.phone" placeholder="3225361689">
+            ]" outlined v-model="courier.profile.phone" placeholder="+57 3225361689">
             </q-input>
           </div>
           <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">

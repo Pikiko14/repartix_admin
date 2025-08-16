@@ -109,6 +109,7 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
+import { Utils } from 'src/utils/utils';
 import { ref, computed, onBeforeMount } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
@@ -149,6 +150,7 @@ const rectangle = ref({
   fillColor: "#FF0000",
   fillOpacity: 0.35
 })
+const util = new Utils();
 const loading = ref(false);
 const store = useAuthStore();
 const content = citiesContent();
@@ -201,26 +203,11 @@ const loadLatAndLon = async (cityName) => {
 
   if (!brand || !brand.configuration || !brand.configuration.enable_google_map || !brand.configuration.gmap_api__key) return;
   center.value = { lat: 0, lng: 0 };
-  fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${cityName}&key=${brand.configuration.gmap_api__key}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "OK") {
-        const { lat, lng } = data.results[0].geometry.location;
-        city.value.lat = lat;
-        city.value.lon = lng;
-
-        const boundsData = data.results[0].geometry.bounds;
-        center.value = { lat, lng };
-        rectangle.value.bounds = {
-          north: boundsData.northeast.lat,
-          south: boundsData.southwest.lat,
-          east: boundsData.northeast.lng,
-          west: boundsData.southwest.lng
-        };
-      } else {
-        console.error("Error:", data.status);
-      }
-    });
+  const { lat, lng, bounds } = await util.loadLatLng(cityName);
+  city.value.lat = lat;
+  city.value.lon = lng;
+  center.value = { lat, lng };
+  rectangle.value.bounds = bounds;
 }
 
 const backTab = () => {

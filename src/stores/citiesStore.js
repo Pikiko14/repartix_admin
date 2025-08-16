@@ -27,10 +27,10 @@ export const useCitiesStore = defineStore('citiesStore', {
     getIndex(id) {
       return this.cities.findIndex((el) => el._id === id)
     },
-    updateCity(courier) {
-      delete courier.__v
-      const index = this.getIndex(courier._id)
-      this.cities[index] = courier
+    updateCity(city) {
+      delete city.__v
+      const index = this.getIndex(city._id)
+      this.cities[index] = city
     },
   },
 })

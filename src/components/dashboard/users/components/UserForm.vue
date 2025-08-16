@@ -150,6 +150,22 @@ const scopes = [
     label: t('deleteCity'),
     value: 'delete-city',
   },
+  {
+    label: t('listClient'),
+    value: 'list-client',
+  },
+  {
+    label: t('createClient'),
+    value: 'create-client',
+  },
+  {
+    label: t('updateClient'),
+    value: 'update-client',
+  },
+  {
+    label: t('deleteClient'),
+    value: 'delete-client',
+  },
 ];
 const tab = ref('profile');
 const loading = ref(false);
@@ -167,6 +183,7 @@ const scopesOptions = computed(() => {
 // methods
 const handlerSaveUser = async () => {
   loading.value = true;
+  delete user.value.__v;
 
   if (user.value._id) {
     await handlerUpdateUser();

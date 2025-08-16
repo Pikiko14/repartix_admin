@@ -163,6 +163,7 @@ const emit = defineEmits(['close-modal', 'up-total-item']);
 const handlerSaveCity = async () => {
   if (city.value.updatedAt) delete city.value.updatedAt;
   if (city.value.createdAt) delete city.value.createdAt;
+  delete city.value.__v;
 
   loading.value = true;
   if (city.value._id) {

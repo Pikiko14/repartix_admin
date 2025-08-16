@@ -160,4 +160,8 @@ export default {
   lastName: 'Last name',
   personal: 'Personal',
   maxLengthAddress: 'Max 90 characters',
+  listClient: 'List client',
+  createClient: 'Create client',
+  updateClient: 'Update client',
+  deleteClient: 'Delete client',
 }

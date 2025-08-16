@@ -203,6 +203,7 @@ const content = couriersContent();
 // methods
 const handlerSaveCouriers = async () => {
   loading.value = true;
+  delete courier.value.__v;
 
   if (courier.value._id) {
     await handlerUpdateCourier();

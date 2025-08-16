@@ -148,6 +148,7 @@ const emit = defineEmits(['close-modal', 'up-total-item']);
 const handlerSaveClient = async () => {
   if (client.value.updatedAt) delete client.value.updatedAt;
   if (client.value.createdAt) delete client.value.createdAt;
+  delete client.value.__v;
   client.value.dni = parseInt(client.value.dni);
 
   loading.value = true;

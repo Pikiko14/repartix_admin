@@ -19,13 +19,13 @@
     </template>
     <!--End email td-->
 
-    <!--email td-->
+    <!--phone td-->
     <template v-slot:body-cell-phone="props">
       <q-td :props="props">
-        <a :href="`tel:${props.row.phone}`">{{ props.row.phone || props.row?.profile?.phone }}</a>
+        <a :href="`tel:${props.row.phone}`">{{ props.row.phone || props.row.sender_info.brand_phone || props.row?.profile?.phone }}</a>
       </q-td>
     </template>
-    <!--End email td-->
+    <!--End phone td-->
 
     <!--Option td-->
     <template v-slot:body-cell-options="props">

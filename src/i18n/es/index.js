@@ -165,4 +165,13 @@ export default {
   createClient: 'Crear cliente',
   updateClient: 'Modificar cliente',
   deleteClient: 'Borrar cliente',
+  sendersTitle: 'Remitentes',
+  sendersCreate: 'Crear remitente',
+  sendersUpdate: 'Modificar remitente',
+  sendersDelete: 'Borrar remitente',
+  sendersCreateSuccess: 'Remitente creado correctamente',
+  sendersUpdateSuccess: 'Remitente modificado correctamente',
+  sendersDeleted: 'Remitente eliminado correctamente',
+  manager: 'Gerente',
+  deleteSenderDescription: '¿Estas seguro de querer eliminar este remitente -name?',
 }

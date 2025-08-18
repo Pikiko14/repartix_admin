@@ -164,4 +164,13 @@ export default {
   createClient: 'Create client',
   updateClient: 'Update client',
   deleteClient: 'Delete client',
+  sendersTitle: 'Senders',
+  sendersCreate: 'Create senders',
+  sendersUpdate: 'Update senders',
+  sendersDelete: 'Delete senders',
+  sendersCreateSuccess: 'Senders created successfully',
+  sendersUpdateSuccess: 'Senders updated successfully',
+  sendersDeleted: 'Senders deleted successfully',
+  manager: 'Manager',
+  deleteSenderDescription: '¿Are you sure you want to delete this sender -name?',
 }

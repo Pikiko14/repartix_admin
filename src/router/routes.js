@@ -28,7 +28,7 @@ const routes = [
       },
       {
         path: 'senders',
-        component: () => import('src/pages/dashboard/users/MainPage.vue'),
+        component: () => import('src/pages/dashboard/senders/SendersPage.vue'),
         name: 'senders'
       },
       {

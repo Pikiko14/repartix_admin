@@ -166,6 +166,38 @@ const scopes = [
     label: t('deleteClient'),
     value: 'delete-client',
   },
+  {
+    label: t('listSender'),
+    value: 'list-sender',
+  },
+  {
+    label: t('createSender'),
+    value: 'create-sender',
+  },
+  {
+    label: t('updateSender'),
+    value: 'update-sender',
+  },
+  {
+    label: t('deleteSender'),
+    value: 'delete-sender',
+  },
+  {
+    label: t('listOrder'),
+    value: 'list-order',
+  },
+  {
+    label: t('createOrder'),
+    value: 'create-order',
+  },
+  {
+    label: t('updateOrder'),
+    value: 'update-order',
+  },
+  {
+    label: t('deleteOrder'),
+    value: 'delete-order',
+  },
 ];
 const tab = ref('profile');
 const loading = ref(false);

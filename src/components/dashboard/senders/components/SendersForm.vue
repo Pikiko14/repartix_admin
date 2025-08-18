@@ -77,19 +77,20 @@
         <div class="row">
           <div class="col-12" v-for="(address, index) in sender.sender_info.address" :key="index">
             <div class="row">
-              <div class="col-12 col-md-6" @click="selectedIndex = index; addressOptions = []" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+              <div class="col-12 col-md-6" @click="selectedIndex = index; addressOptions = []"
+                :class="{ 'q-pr-sm': $q.screen.gt.sm }">
                 <label class="text-dark" for="address">{{ t('address') }}</label>
-                <q-input debounce="1500" @update:model-value="searchAddress" dense
-                  id="address" :rules="[
-                    (val) => !!val || t('requiredField'),
+                <q-input debounce="1500" @update:model-value="searchAddress" dense id="address" :rules="[
+                  (val) => !!val || t('requiredField'),
 
-                  ]" outlined v-model="address.address" placeholder="Calle 51 #6A - 57"></q-input>
+                ]" outlined v-model="address.address" placeholder="Calle 51 #6A - 57"></q-input>
 
                 <q-menu v-model="showAddressMenu" v-if="selectedIndex === index">
                   <q-list class="q-px-none" dense>
                     <q-item class="q-px-none" tag="label" v-ripple v-for="(address, idx) in addressOptions" :key="idx">
                       <q-item-section avatar>
-                        <q-radio @update:model-value="setCenter(address, index)" v-model="sender.sender_info.address[index].address" :val="address.value" color="primary" />
+                        <q-radio @update:model-value="setCenter(address, index)"
+                          v-model="sender.sender_info.address[index].address" :val="address.value" color="primary" />
                       </q-item-section>
                       <q-item-section>
                         <q-item-label class="address-label">{{ address.label }}</q-item-label>
@@ -109,7 +110,7 @@
                 ]" outlined v-model="address.complement" placeholder="Apto 18 - 02"></q-input>
               </div>
               <div class="col-12 q-pl-sm col-md-1 relative relative flex-items-center">
-                <q-btn size="8pt" @click="openMap(address)" flat dense rounded icon="map" color="primary">
+                <q-btn size="8pt" @click="openMap(address, index)" flat dense rounded icon="map" color="primary">
                   <q-tooltip class="bg-primary">
                     {{ t('showMap') }}
                   </q-tooltip>
@@ -134,15 +135,30 @@
         <q-btn unelevated outline @click="backTab" size="md" no-caps rounded v-if="tab !== 'personal'"
           :label="t('back')" color="primary"></q-btn>
       </div>
-      <q-btn v-if="tab === 'address'" :disable="sender.sender_info.address.length === 0" :loading="loading" unelevated size="md" type="submit"
-        no-caps rounded :label="t('save')" color="primary"></q-btn>
+      <q-btn v-if="tab === 'address'" :disable="sender.sender_info.address.length === 0" :loading="loading" unelevated
+        size="md" type="submit" no-caps rounded :label="t('save')" color="primary"></q-btn>
       <q-btn v-else unelevated @click="nextTab" size="md" no-caps rounded :label="t('next')" color="primary"></q-btn>
     </div>
 
     <q-dialog v-model="showMapModal">
       <q-card>
         <q-card-section>
-          {{ selectedAddress }}
+          <div class="row">
+            <div class="col-11">
+              <p class="text-h6 text-bold">
+                {{ selectedAddress.address }}.
+              </p>
+            </div>
+            <div class="col-1">
+              <q-btn icon="close" v-close-popup flat dense rounded color="red"></q-btn>
+            </div>
+            <div class="col-12 q-mt-md">
+              <GoogleMap @click="setCords" :api-key="user.brand.configuration.gmap_api__key"
+                style="width: 100%; height: 390px" :center="center" :zoom="17">
+                <Marker :options="markerOptions" v-if="render" />
+              </GoogleMap>
+            </div>
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -153,10 +169,10 @@
 // imports
 import { useI18n } from 'vue-i18n';
 import { Utils } from 'src/utils/utils';
-import { ref, onBeforeMount } from 'vue';
-// import { useAuthStore } from 'src/stores/authStore';
+import { ref, onBeforeMount, computed } from 'vue';
+import { GoogleMap, Marker } from 'vue3-google-map';
+import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
-// import { GoogleMap, Marker } from 'vue3-google-map';
 import { sendersContent } from 'src/composables/sendersContent';
 
 // props
@@ -168,7 +184,7 @@ const props = defineProps({
 });
 
 // references
-//const render = ref(false);
+const render = ref(false);
 const sender = ref({
   type_user: 'sender',
   profile: {},
@@ -184,19 +200,19 @@ const util = new Utils();
 const tab = ref('access');
 const loading = ref(false);
 const showMapModal = ref(false);
-// const store = useAuthStore();
+const store = useAuthStore();
 const addressOptions = ref([]);
 const selectedIndex = ref(null);
 const selectedAddress = ref({});
 const content = sendersContent();
 const showAddressMenu = ref(false);
-// const center = ref({ lat: 0, lng: 0 });
-// const markerOptions = ref({ position: center, label: 'L', title: 'LADY LIBERTY' });
+const center = ref({ lat: 0, lng: 0 });
+const markerOptions = ref({ position: center, label: 'L', title: 'LADY LIBERTY' });
 
 // computed
-// const user = computed(() => {
-//   return store.getUser;
-// });
+const user = computed(() => {
+  return store.getUser;
+});
 
 // emits
 const emit = defineEmits(['close-modal', 'up-total-item']);
@@ -205,7 +221,7 @@ const emit = defineEmits(['close-modal', 'up-total-item']);
 const handlerSaveSender = async () => {
   if (sender.value.updatedAt) delete sender.value.updatedAt;
   if (sender.value.createdAt) delete sender.value.createdAt;
-  
+
   if (sender.value.sender_info.updatedAt) delete sender.value.sender_info.updatedAt;
   if (sender.value.sender_info.createdAt) delete sender.value.sender_info.createdAt;
 
@@ -271,9 +287,13 @@ const addAddress = () => {
   });
 }
 
-const openMap = (address) => {
+const openMap = (address, index) => {
   selectedAddress.value = address;
+  center.value = address.coords;
+  markerOptions.value.position = address.coords;
   showMapModal.value = !showMapModal.value;
+  render.value = true;
+  selectedIndex.value = index;
 }
 
 const searchAddress = async (e) => {
@@ -301,6 +321,22 @@ const setCenter = (address, index) => {
 
 const deleteAddress = (index) => {
   sender.value.sender_info.address.splice(index, 1);
+}
+
+const setCords = (e) => {
+  markerOptions.value.position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+  sender.value.sender_info.address[selectedIndex.value].coords = {
+    lat: e.latLng.lat(),
+    lng: e.latLng.lng()
+  }
+  reRender();
+}
+
+const reRender = () => {
+  render.value = false;
+  setTimeout(() => {
+    render.value = true;
+  }, 500)
 }
 
 // hook

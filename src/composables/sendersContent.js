@@ -13,9 +13,9 @@ export const sendersContent = () => {
       const params = JSON.parse(JSON.stringify(payload))
       delete params.confirmation_password
       const { data } = await api.post(`${path}`, params)
-      if (data && data.data) {
+      if (data && data.user	) {
         if (store.getSenders.length < 10) {
-          store.setSenders([...store.getSenders, data.data])
+          store.setSenders([...store.getSenders, data.user	])
         }
         store.upTotalItems()
       }
@@ -42,7 +42,7 @@ export const sendersContent = () => {
     try {
       const { data } = await api.delete(`${path}/${id}`)
       if (data) {
-        store.deleteCity(id)
+        store.deleteSender(id)
       }
       return data
     } catch (error) {
@@ -56,7 +56,7 @@ export const sendersContent = () => {
       delete params.confirmation_password
       const { data } = await api.put(`${path}/${payload._id}`, params)
       if (data && data.data) {
-        store.updateCity(data.data)
+        store.updateSender(data.data)
       }
       return data
     } catch (error) {

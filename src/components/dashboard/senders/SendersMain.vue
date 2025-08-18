@@ -15,7 +15,7 @@
     <q-dialog v-model="modalSender" @before-hide="sender = {}">
       <ModalCard :title="!sender._id ? t('sendersCreate') : t('sendersUpdate')">
         <template #body>
-          123
+          <SendersForm :sender-selected="sender" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -30,6 +30,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'src/boot/notification';
+import SendersForm from './components/SendersForm.vue';
 import { useSendersStore } from 'src/stores/sendersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
@@ -142,9 +143,9 @@ const handlerUpdateSenders = (id) => {
 const doDeleteSenders = (id) => {
   const description = t('deleteSenderDescription');
   const sender = senders.value.find((el) => el._id === id);
-  const name = sender.name;
+  const name = sender.sender_info.brand_name;
   q.dialog({
-    title: t('senderDelete'),
+    title: t('sendersDelete'),
     message: description.replace('-name', ` ${name}`),
     cancel: true,
   }).onOk(() => {
@@ -153,10 +154,10 @@ const doDeleteSenders = (id) => {
 }
 
 const handlerDeleteSenders = async (id) => {
-  const data = await content.doDeleteSenders(id);
+  const data = await content.doDeleteSender(id);
 
   if (data?.success) {
-    notification('success', t('senderDeleted'), 'primary');
+    notification('success', t('sendersDeleted'), 'primary');
     pagination.value.rowsNumber = store.getTotalItems;
   }
 
@@ -172,9 +173,9 @@ const handlerDeleteSenders = async (id) => {
   }
 }
 
-// const setTotalItems = () => {
-//   pagination.value.rowsNumber = store.getTotalItems;
-// }
+const setTotalItems = () => {
+  pagination.value.rowsNumber = store.getTotalItems;
+}
 
 // hook
 if (route.query.page) {

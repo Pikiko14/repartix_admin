@@ -173,4 +173,7 @@ export default {
   sendersDeleted: 'Senders deleted successfully',
   manager: 'Manager',
   deleteSenderDescription: '¿Are you sure you want to delete this sender -name?',
+  senderRem: 'Sender',
+  complement: 'Complement',
+  showMap: 'Show map',
 }

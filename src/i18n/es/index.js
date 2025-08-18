@@ -174,4 +174,7 @@ export default {
   sendersDeleted: 'Remitente eliminado correctamente',
   manager: 'Gerente',
   deleteSenderDescription: '¿Estas seguro de querer eliminar este remitente -name?',
+  senderRem: 'Remitencia',
+  complement: 'Complemento',
+  showMap: 'Mostrar mapa',
 }

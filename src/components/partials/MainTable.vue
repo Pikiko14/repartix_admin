@@ -130,13 +130,21 @@ const statusColor = {
 // methods
 const handlerPagination = (e) => {
   const { pagination } = e;
+
+  const query = {
+    page: pagination.page || 1,
+    perPage: pagination.rowsPerPage,
+    search: route.query.search || '',
+  }
+
+  if (route.query.from && route.query.to) {
+    query.from = route.query.from;
+    query.to = route.query.to;
+  }
+
   router.push({
     name: route.name,
-    query: {
-      page: pagination.page || 1,
-      perPage: pagination.rowsPerPage,
-      search: route.query.search || '',
-    }
+    query
   });
 }
 </script>

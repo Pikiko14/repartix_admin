@@ -3,6 +3,7 @@
     <h2 class="text-primary page-title">
       {{ title }}
     </h2>
+
     <div class="header-actions">
       <q-input placeholder="####/##/## - ####/##/##" mask="####/##/## - ####/##/##" outlined dense v-model="dateLabel" v-if="showDatePicker">
         <template v-slot:append>
@@ -21,6 +22,10 @@
         </q-icon>
       </template>
       </q-input>
+
+      <div class="filters-container" v-if="showFilters">
+        filtros
+      </div>
       
       <q-input @update:model-value="handlerSeach" debounce="1500" v-model="search" dense outlined clearable :placeholder="t('search')">
         <template #append>
@@ -118,6 +123,11 @@ onBeforeMount(() => {
 .header-title {
   display: flex;
   justify-content: space-between;
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+    gap: 0;
+  }
 }
 
 .q-btn {
@@ -128,5 +138,16 @@ onBeforeMount(() => {
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+    .q-input, .q-btn{
+      width: 100%;
+    }
+  }
+}
+
+.filters-container {
+  max-width: 360px;
 }
 </style>

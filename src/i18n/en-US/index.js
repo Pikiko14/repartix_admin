@@ -200,4 +200,8 @@ export default {
   priceDelivery: 'Price delivery',
   reference: 'Reference',
   clear: 'Clear',
+  filters: 'Filters',
+  settledToSender: 'Settled to sender',
+  all: 'All',
+  actives: 'actives',
 }

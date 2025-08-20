@@ -201,4 +201,8 @@ export default {
   priceDelivery: 'Precio de envio',
   reference: 'Referencia',
   clear: 'Limpiar',
+  filters: 'Filtros',
+  settledToSender: 'Liquidado a remitente',
+  all: 'Todos',
+  actives: 'activos',
 }

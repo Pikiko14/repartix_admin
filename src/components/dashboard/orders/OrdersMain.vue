@@ -1,8 +1,9 @@
 <template>
   <section class="order-main">
     <!--Header-->
-    <HeaderPage @filter-by-date="handlerFilterByDate" :show-date-picker="true" @do-search="doHandlerSearch"
-      @add-new="showAddButton" :scope="'create-order'" :show-add-button="true" :title="t('ordersTitle')" />
+    <HeaderPage @do-filter="handlerFilter" @filter-by-date="handlerFilterByDate" :show-date-picker="true"
+      @do-search="doHandlerSearch" @add-new="showAddButton" show-filters :filter-items="filterItems"
+      :scope="'create-order'" show-add-button :title="t('ordersTitle')" @clear-filter="handlerClearFilters" />
     <!--End header-->
 
     <!--Table-->
@@ -119,6 +120,82 @@ const pagination = ref({
 });
 const store = useOrdersStore();
 const content = ordersContent();
+const filterItems = [
+  {
+    label: t('status'),
+    key: 'status',
+    items: [
+      {
+        label: t('pending'),
+        value: 'pending',
+      },
+      {
+        label: t('in_progress'),
+        value: 'in_progress',
+      },
+      {
+        label: t('delivered'),
+        value: 'delivered',
+      },
+      {
+        label: t('cancelled'),
+        value: 'cancelled',
+      },
+      {
+        label: t('returned'),
+        value: 'returned',
+      },
+      {
+        label: t('guide_printed'),
+        value: 'guide_printed',
+      },
+      {
+        label: t('guide_news'),
+        value: 'guide_news',
+      },
+      {
+        label: t('all'),
+        value: 'all',
+      }
+    ]
+  },
+  {
+    label: t('cashOnDelivery'),
+    key: 'cash_on_delivery',
+    items: [
+      {
+        label: t('yes'),
+        value: true,
+      },
+      {
+        label: t('no'),
+        value: false,
+      },
+      {
+        label: t('all'),
+        value: 'all',
+      }
+    ]
+  },
+  {
+    label: t('settledToSender'),
+    key: 'settled_to_sender',
+    items: [
+      {
+        label: t('yes'),
+        value: true,
+      },
+      {
+        label: t('no'),
+        value: false,
+      },
+      {
+        label: t('all'),
+        value: 'all',
+      }
+    ]
+  }
+];
 
 // computed
 const orders = computed(() => {
@@ -143,6 +220,10 @@ const handlerListOrders = async () => {
     query += `&from=${from}&to=${to}`;
   }
 
+  if (route.query.filters) {
+    query += `&filters=${route.query.filters}`;
+  }
+
 
   await content.doListOrders(query);
   pagination.value.rowsNumber = store.getTotalItems;
@@ -160,6 +241,10 @@ const doHandlerSearch = (search) => {
     query.to = route.query.to;
   }
 
+  if (route.query.filters) {
+    query.filters = route.query.filters;
+  }
+
   router.push({
     name: route.name,
     query
@@ -167,15 +252,21 @@ const doHandlerSearch = (search) => {
 }
 
 const handlerFilterByDate = (date) => {
+  const query = {
+    page: route.query.page || 1,
+    perPage: route.query.perPage || 10,
+    search: route.query.search || '',
+    from: date?.from,
+    to: date?.to,
+  }
+
+  if (route.query.filters) {
+    query.filters = route.query.filters;
+  }
+
   router.push({
     name: route.name,
-    query: {
-      page: route.query.page || 1,
-      perPage: route.query.perPage || 10,
-      search: route.query.search || '',
-      from: date?.from,
-      to: date?.to,
-    }
+    query,
   });
 }
 
@@ -216,6 +307,52 @@ const handlerDeleteOrder = async (id) => {
       }
     });
   }
+}
+
+const handlerFilter = ({ key, value }) => {
+  let filters = route.query.filters ? JSON.parse(route.query.filters) : {};
+  filters[key] = value;
+
+  if (value === 'all') delete filters[key];
+
+  const query = {
+    page: parseInt(route.query.page) - 1 || 1,
+    perPage: route.query.perPage,
+    search: route.query.search || '',
+  }
+
+  if (route.query.from && route.query.to) {
+    query.from = route.query.from;
+    query.to = route.query.to;
+  }
+
+  const keys = Object.keys(filters);
+  if (keys.length > 0) {
+    query.filters = JSON.stringify(filters);
+  }
+
+  router.push({
+    name: route.name,
+    query,
+  });
+}
+
+const handlerClearFilters = () => {
+  const query = {
+    page: parseInt(route.query.page) - 1 || 1,
+    perPage: route.query.perPage,
+    search: route.query.search || '',
+  }
+
+  if (route.query.from && route.query.to) {
+    query.from = route.query.from;
+    query.to = route.query.to;
+  }
+
+  router.push({
+    name: route.name,
+    query,
+  });
 }
 
 // const setTotalItems = () => {

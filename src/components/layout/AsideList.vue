@@ -13,7 +13,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple to="/dashboard/orders?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('orders') }}

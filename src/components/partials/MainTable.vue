@@ -22,21 +22,42 @@
     <!--phone td-->
     <template v-slot:body-cell-phone="props">
       <q-td :props="props">
-        <a :href="`tel:${props.row.phone}`">{{ props.row.phone || props.row.sender_info.brand_phone || props.row?.profile?.phone }}</a>
+        <a :href="`tel:${props.row.phone}`">{{ props.row.phone || props.row?.sender_info?.brand_phone ||
+          props.row?.profile?.phone }}</a>
       </q-td>
     </template>
     <!--End phone td-->
 
+    <!--status td-->
+    <template v-slot:body-cell-status="props">
+      <q-td :props="props">
+        <q-chip square size="8pt" class="primary text-bold" :class="[statusColor[props.row.status]]">{{
+          status[props.row.status] }}</q-chip>
+      </q-td>
+    </template>
+    <!--End status td-->
+
+    <!--status td-->
+    <template v-slot:body-cell-cashOnDelivery="props">
+      <q-td :props="props">
+        <q-chip square size="8pt" class="primary text-bold text-primary"
+          :class="props.row.cash_on_delivery ? 'bg-green' : 'bg-red-5'">{{ props.row.cash_on_delivery ? t('yes') :
+            t('no') }}</q-chip>
+      </q-td>
+    </template>
+    <!--End status td-->
+
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense
-          rounded color="primary">
+        <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
+          color="primary">
           <q-tooltip class="bg-primary">
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
+        <q-btn @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense
+          rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}
           </q-tooltip>
@@ -86,6 +107,25 @@ const typeUser = {
   delivery: t('delivery'),
 }
 
+const status = {
+  pending: t('pending'),
+  in_progress: t('in_progress'),
+  delivered: t('delivered'),
+  cancelled: t('cancelled'),
+  returned: t('returned'),
+  guide_printed: t('guide_printed'),
+  guide_news: t('guide_news'),
+}
+
+const statusColor = {
+  pending: 'bg-yellow',
+  in_progress: 'bg-primary',
+  delivered: 'bg-green',
+  cancelled: 'bg-red',
+  returned: 'bg-warning',
+  guide_printed: 'bg-green',
+  guide_news: 'bg-warning',
+}
 
 // methods
 const handlerPagination = (e) => {
@@ -102,9 +142,9 @@ const handlerPagination = (e) => {
 </script>
 
 <style scoped lang="scss">
-  a {
-    color: $primary;
-    text-decoration: none;
-    font-weight: 400;
-  }
+a {
+  color: $primary;
+  text-decoration: none;
+  font-weight: 400;
+}
 </style>

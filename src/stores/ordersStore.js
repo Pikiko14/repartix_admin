@@ -1,0 +1,36 @@
+import { defineStore } from 'pinia'
+
+export const useOrdersStore = defineStore('ordersStore', {
+  state: () => ({
+    orders: [],
+    totalItems: 1,
+  }),
+  getters: {
+    getOrders: (state) => state.orders,
+    getTotalItems: (state) => state.totalItems,
+  },
+  actions: {
+    setOrders(payload) {
+      this.orders = payload
+    },
+    upTotalItems() {
+      this.totalItems++
+    },
+    setTotalItems(payload) {
+      this.totalItems = payload
+    },
+    deleteOrder(id) {
+      const index = this.getIndex(id)
+      this.orders.splice(index, 1)
+      this.totalItems--
+    },
+    getIndex(id) {
+      return this.orders.findIndex((el) => el._id === id)
+    },
+    updateOrder(order) {
+      delete order.__v
+      const index = this.getIndex(order._id)
+      this.orders[index] = order
+    },
+  },
+})

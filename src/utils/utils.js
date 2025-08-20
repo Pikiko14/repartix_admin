@@ -18,7 +18,7 @@ export class Utils {
 
   getConfiguration = () => {
     const user = store.getUser
-    return user.brand.configuration;
+    return user.brand.configuration
   }
 
   loadLatLng = async (cityName) => {
@@ -44,9 +44,9 @@ export class Utils {
 
     if (!config.enable_google_map) return
 
-    let country = null;
+    let country = null
 
-    if (config) country = americanPhoneCodes.find((el) => el.currency === config.currency);
+    if (config) country = americanPhoneCodes.find((el) => el.currency === config.currency)
 
     try {
       const res = await fetch(
@@ -56,7 +56,33 @@ export class Utils {
       return data
     } catch (error) {
       console.error(error)
-      return null;
+      return null
     }
+  }
+
+  formatPrice(price) {
+    const user = store.getUser
+    const { configuration } = user.brand
+    const isoToLocale = {
+      US: 'en-US',
+      CA: 'en-CA',
+      MX: 'es-MX',
+      CO: 'es-CO',
+      VE: 'es-VE',
+      EC: 'es-EC',
+      PE: 'es-PE',
+      BO: 'es-BO',
+      CL: 'es-CL',
+      AR: 'es-AR',
+      UY: 'es-UY',
+      PY: 'es-PY',
+      BR: 'pt-BR',
+    }
+    const locale = isoToLocale[configuration.currency.toUpperCase()]
+
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: configuration.currency,
+    }).format(price);
   }
 }

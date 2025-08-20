@@ -1,25 +1,25 @@
 <template>
-  <section class="client-main">
+  <section class="order-main">
     <!--Header-->
-    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-client'" :show-add-button="true"
-      :title="t('clientTitle')" />
+    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-order'" :show-add-button="true"
+      :title="t('ordersTitle')" />
     <!--End header-->
 
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="clients" edit-scope="update-client" delete-scope="delete-client"
-      @edit="handlerUpdateClient" @delete="doDeleteClients" />
+      :columns="columns" :rows="orders" edit-scope="update-order" delete-scope="delete-order"
+      @edit="handlerUpdateOrder" @delete="doDeleteOrder" />
     <!--End table-->
 
-    <!--Modal clients-->
-    <q-dialog v-model="modalClient" @before-hide="client = {}">
-      <ModalCard :title="!client._id ? t('clientCreate') : t('clientUpdate')">
+    <!--Modal order-->
+    <q-dialog v-model="modalOrder" @before-hide="order = {}">
+      <ModalCard :title="!order._id ? t('ordersCreate') : t('ordersUpdate')">
         <template #body>
-          <ClientsForm :client-selected="client" @close-modal="showAddButton" @up-total-item="setTotalItems" />
+          asd
         </template>
       </ModalCard>
     </q-dialog>
-    <!--End modal clients-->
+    <!--End modal order-->
   </section>
 </template>
 
@@ -28,69 +28,71 @@
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
+import { Utils } from 'src/utils/utils';
 import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'src/boot/notification';
-import ClientsForm from './components/ClientsForm.vue';
-import { useClientsStore } from 'src/stores/clientsStore';
+// import ClientsForm from './components/ClientsForm.vue';
+import { useOrdersStore } from 'src/stores/ordersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
-import { clientsContent } from 'src/composables/clientsContent';
+import { ordersContent } from 'src/composables/ordersContent';
 
 // references
-const client = ref({});
+const order = ref({});
 const q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const modalClient = ref(false);
+const utils = new Utils();
+const modalOrder = ref(false);
 const columns = [
   {
-    name: 'dni',
+    name: 'sender',
     required: true,
-    label: `${t('dni')}`,
+    label: `${t('senderOrder')}`,
+    align: 'left',
+    field: row => row?.sender?.brand_name,
+    sortable: false
+  },
+  {
+    name: 'clientOrder',
+    required: true,
+    label: `${t('clientOrder')}`,
+    align: 'left',
+    field: row => `${row?.client?.name} ${row?.client?.last_name}`,
+    sortable: false
+  },
+  {
+    name: 'cashOnDelivery',
+    required: true,
+    label: `${t('cashOnDelivery')}`,
     align: 'center',
-    field: row => row.dni,
+    field: row => row?.cash_on_delivery,
     sortable: false
   },
   {
-    name: 'name',
+    name: 'cashAmount',
     required: true,
-    label: `${t('name')}s`,
-    align: 'left',
-    field: row => row.name,
+    label: `${t('cashAmount')}`,
+    align: 'center',
+    field: row => utils.formatPrice(row?.cash_amount || 0),
     sortable: false
   },
   {
-    name: 'lastName',
+    name: 'price',
     required: true,
-    label: `${t('lastName')}s`,
-    align: 'left',
-    field: row => row.last_name,
+    label: `${t('priceDelivery')}`,
+    align: 'center',
+    field: row => utils.formatPrice(row?.order_price || 0),
     sortable: false
   },
   {
-    name: 'email',
+    name: 'status',
     required: true,
-    label: `${t('email')}s`,
-    align: 'left',
-    field: row => row.email,
-    sortable: false
-  },
-  {
-    name: 'phone',
-    required: true,
-    label: `${t('phone')}s`,
-    align: 'left',
-    field: row => row.phone,
-    sortable: false
-  },
-  {
-    name: 'address',
-    required: true,
-    label: `${t('address')}s`,
-    align: 'left',
-    field: row => row.address,
+    label: `${t('status')}`,
+    align: 'center',
+    field: row => row?.status,
     sortable: false
   },
   {
@@ -107,27 +109,27 @@ const pagination = ref({
   rowsPerPage: route.query.perPage || 10,
   rowsNumber: 1,
 });
-const store = useClientsStore();
-const content = clientsContent();
+const store = useOrdersStore();
+const content = ordersContent();
 
 // computed
-const clients = computed(() => {
-  return store.getClients;
+const orders = computed(() => {
+  return store.getOrders;
 });
 
 // methods
 const showAddButton = () => {
-  modalClient.value = !modalClient.value;
+  modalOrder.value = !modalOrder.value;
 }
 
-const handlerListCities = async () => {
+const handlerListOrders = async () => {
   const page = route.query.page || 1;
   const search = route.query.search || '';
   const perPage = route.query.perPage || 10;
 
   const query = `page=${page}&perPage=${perPage}&search=${search}`;
 
-  await content.doListClients(query);
+  await content.doListOrders(query);
   pagination.value.rowsNumber = store.getTotalItems;
 }
 
@@ -142,34 +144,34 @@ const doHandlerSearch = (search) => {
   });
 }
 
-const handlerUpdateClient = (id) => {
-  const clientObj = clients.value.find((el) => el._id === id);
-  client.value = clientObj;
+const handlerUpdateOrder = (id) => {
+  const orderObj = orders.value.find((el) => el._id === id);
+  order.value = orderObj;
   showAddButton();
 }
 
-const doDeleteClients = (id) => {
-  const description = t('deleteClientDescription');
-  const client = clients.value.find((el) => el._id === id);
-  const name = client.name;
+const doDeleteOrder = (id) => {
+  const description = t('deleteOrdersDescription');
+  const order = orders.value.find((el) => el._id === id);
+  const name = order._id;
   q.dialog({
-    title: t('clientDelete'),
+    title: t('orderDelete'),
     message: description.replace('-name', ` ${name}`),
     cancel: true,
   }).onOk(() => {
-    handlerDeleteClients(id);
+    handlerDeleteOrder(id);
   });
 }
 
-const handlerDeleteClients = async (id) => {
-  const data = await content.doDeleteClients(id);
+const handlerDeleteOrder = async (id) => {
+  const data = await content.doDeleteOrder(id);
 
   if (data?.success) {
-    notification('success', t('clientDeleted'), 'primary');
+    notification('success', t('ordersDeleted'), 'primary');
     pagination.value.rowsNumber = store.getTotalItems;
   }
 
-  if (clients.value.length === 0) {
+  if (orders.value.length === 0) {
     router.push({
       name: route.name,
       query: {
@@ -181,9 +183,9 @@ const handlerDeleteClients = async (id) => {
   }
 }
 
-const setTotalItems = () => {
-  pagination.value.rowsNumber = store.getTotalItems;
-}
+// const setTotalItems = () => {
+//   pagination.value.rowsNumber = store.getTotalItems;
+// }
 
 // hook
 if (route.query.page) {
@@ -192,5 +194,5 @@ if (route.query.page) {
 if (route.query.perPage) {
   pagination.value.rowsPerPage = parseInt(route.query.perPage);
 }
-handlerListCities();
+handlerListOrders();
 </script>

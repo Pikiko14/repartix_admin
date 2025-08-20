@@ -198,4 +198,6 @@ export default {
   cashOnDelivery: 'Cash on delivery',
   cashAmount: 'Cash amount',
   priceDelivery: 'Price delivery',
+  reference: 'Reference',
+  clear: 'Clear',
 }

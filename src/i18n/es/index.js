@@ -199,4 +199,6 @@ export default {
   cashOnDelivery: 'Recaudo',
   cashAmount: 'Monto Recaudo',
   priceDelivery: 'Precio de envio',
+  reference: 'Referencia',
+  clear: 'Limpiar',
 }

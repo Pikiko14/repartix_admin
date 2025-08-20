@@ -1,14 +1,14 @@
 <template>
   <section class="order-main">
     <!--Header-->
-    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-order'" :show-add-button="true"
-      :title="t('ordersTitle')" />
+    <HeaderPage @filter-by-date="handlerFilterByDate" :show-date-picker="true" @do-search="doHandlerSearch"
+      @add-new="showAddButton" :scope="'create-order'" :show-add-button="true" :title="t('ordersTitle')" />
     <!--End header-->
 
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="orders" edit-scope="update-order" delete-scope="delete-order"
-      @edit="handlerUpdateOrder" @delete="doDeleteOrder" />
+      :columns="columns" :rows="orders" edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
+      @delete="doDeleteOrder" />
     <!--End table-->
 
     <!--Modal order-->
@@ -47,6 +47,14 @@ const router = useRouter();
 const utils = new Utils();
 const modalOrder = ref(false);
 const columns = [
+  {
+    name: 'reference',
+    required: true,
+    label: `${t('reference')}`,
+    align: 'left',
+    field: row => row?.reference,
+    sortable: false
+  },
   {
     name: 'sender',
     required: true,
@@ -126,20 +134,47 @@ const handlerListOrders = async () => {
   const page = route.query.page || 1;
   const search = route.query.search || '';
   const perPage = route.query.perPage || 10;
+  const from = route.query.from || null;
+  const to = route.query.to || null;
 
-  const query = `page=${page}&perPage=${perPage}&search=${search}`;
+  let query = `page=${page}&perPage=${perPage}&search=${search}`;
+
+  if (from && to) {
+    query += `&from=${from}&to=${to}`;
+  }
+
 
   await content.doListOrders(query);
   pagination.value.rowsNumber = store.getTotalItems;
 }
 
 const doHandlerSearch = (search) => {
+  const query = {
+    page: route.query.page || 1,
+    perPage: route.query.perPage,
+    search: search || '',
+  }
+
+  if (route.query.from && route.query.to) {
+    query.from = route.query.from;
+    query.to = route.query.to;
+  }
+
+  router.push({
+    name: route.name,
+    query
+  });
+}
+
+const handlerFilterByDate = (date) => {
   router.push({
     name: route.name,
     query: {
       page: route.query.page || 1,
-      perPage: route.query.perPage,
-      search: search || '',
+      perPage: route.query.perPage || 10,
+      search: route.query.search || '',
+      from: date?.from,
+      to: date?.to,
     }
   });
 }

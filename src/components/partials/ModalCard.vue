@@ -1,5 +1,5 @@
 <template>
-  <q-card class="modal-card">
+  <q-card class="modal-card" :style="styles">
     <q-card-section class="modal-card__header">
       <h3 class="text-primary">
         {{ title }}
@@ -19,6 +19,10 @@ defineProps({
   title: {
     type: String,
     default: () => '',
+  },
+  styles: {
+    type: String,
+    default: () => ''
   }
 });
 </script>

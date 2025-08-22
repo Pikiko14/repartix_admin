@@ -32,5 +32,9 @@ export const useSendersStore = defineStore('sendersStore', {
       const index = this.getIndex(client._id)
       this.senders[index] = client
     },
+    clearSenders () {
+      this.senders = []
+      this.totalItems = 1
+    }
   },
 })

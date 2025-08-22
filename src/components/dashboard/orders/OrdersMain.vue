@@ -14,9 +14,9 @@
 
     <!--Modal order-->
     <q-dialog v-model="modalOrder" @before-hide="order = {}">
-      <ModalCard :title="!order._id ? t('ordersCreate') : t('ordersUpdate')">
+      <ModalCard styles="width: 800px" :title="!order._id ? t('ordersCreate') : t('ordersUpdate')">
         <template #body>
-          asd
+          <OrdersForm :order-selected="order" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -32,12 +32,12 @@ import { computed, ref } from 'vue';
 import { Utils } from 'src/utils/utils';
 import { useRoute, useRouter } from 'vue-router';
 import { notification } from 'src/boot/notification';
-// import ClientsForm from './components/ClientsForm.vue';
+import OrdersForm from './components/OrdersForm.vue';
 import { useOrdersStore } from 'src/stores/ordersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
-import HeaderPage from 'src/components/partials/HeaderPage.vue';
 import { ordersContent } from 'src/composables/ordersContent';
+import HeaderPage from 'src/components/partials/HeaderPage.vue';
 
 // references
 const order = ref({});
@@ -355,9 +355,9 @@ const handlerClearFilters = () => {
   });
 }
 
-// const setTotalItems = () => {
-//   pagination.value.rowsNumber = store.getTotalItems;
-// }
+const setTotalItems = () => {
+  pagination.value.rowsNumber = store.getTotalItems;
+}
 
 // hook
 if (route.query.page) {

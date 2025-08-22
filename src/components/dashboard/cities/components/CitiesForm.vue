@@ -75,10 +75,10 @@
                     </div>
                     <div class="col-12 col-md-4 relative" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
                       <label class="text-dark" for="price">{{ t('price') }}</label>
-                      <q-input dense id="price" :rules="[
+                      <q-input v-money="money" dense id="price" :rules="[
                         (val) => !!val || t('requiredField'),
 
-                      ]" outlined type="number" v-model="zone.price" placeholder="1.5"></q-input>
+                      ]" outlined v-model="zone.price" placeholder="1.5"></q-input>
                       <q-btn @click="removeZone(index)" icon="close" size="8pt" color="red" flat dense rounded class="absolute-top-right"></q-btn>
                     </div>
                   </div>
@@ -108,6 +108,7 @@
 
 <script setup>
 // imports
+import { VMoney } from 'v-money';
 import { useI18n } from 'vue-i18n';
 import { Utils } from 'src/utils/utils';
 import { ref, computed, onBeforeMount } from 'vue';
@@ -138,6 +139,13 @@ const city = ref({
   lat: 0,
   lon: 0
 });
+const money = {
+  decimal: ',',
+  thousands: '.',
+  prefix: '',
+  suffix: ' ',
+  precision: 2
+}
 const { t } = useI18n();
 const tab = ref('city');
 const rectangle = ref({

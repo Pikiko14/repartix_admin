@@ -205,4 +205,12 @@ export default {
   settledToSender: 'Liquidado a remitente',
   all: 'Todos',
   actives: 'activos',
+  general: 'General',
+  products: 'Productos',
+  scheduled_date: 'Fecha programada',
+  notes: 'Notas de la orden',
+  searchSender: 'Ingresa el nombre o documento del remitente...',
+  otherAddress: 'Otra dirección',
+  otherSender: 'Otro remitente',
+  selectOneOptions: 'Selecciona una opción',
 }

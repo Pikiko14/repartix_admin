@@ -132,7 +132,7 @@
 
     <div class="col-12 q-px-md d-flex content-between">
       <div class="div back-div">
-        <q-btn unelevated outline @click="backTab" size="md" no-caps rounded v-if="tab !== 'personal'"
+        <q-btn unelevated outline @click="backTab" size="md" no-caps rounded v-if="tab !== 'access'"
           :label="t('back')" color="primary"></q-btn>
       </div>
       <q-btn v-if="tab === 'address'" :disable="sender.sender_info.address.length === 0" :loading="loading" unelevated
@@ -199,9 +199,9 @@ const { t } = useI18n();
 const util = new Utils();
 const tab = ref('access');
 const loading = ref(false);
-const showMapModal = ref(false);
 const store = useAuthStore();
 const addressOptions = ref([]);
+const showMapModal = ref(false);
 const selectedIndex = ref(null);
 const selectedAddress = ref({});
 const content = sendersContent();
@@ -240,7 +240,7 @@ const handlerSaveSender = async () => {
     const response = await content.doCreateSender(sender.value);
     if (response && response.success) {
       notification('success', t('sendersCreateSuccess'), 'primary');
-      emit('close-modal');
+      emit('close-modal', response);
       emit('up-total-item');
     }
   } finally {

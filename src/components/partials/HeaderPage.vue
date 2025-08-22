@@ -60,12 +60,12 @@
                 </q-list>
               </q-menu>
             </q-item>
-            <q-item clickable @click="clearFilter" v-ripple>
+            <q-item clickable @click="clearFilter" v-ripple v-if="Object.keys(filtersSelected).length > 0">
               <q-item-section>
                 <q-item-label class="text-bold text-primary">{{ t('clear') }}</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-icon size="xs" name="cleaning_services" />
+                <q-icon size="xs" color="red" name="cleaning_services" />
               </q-item-section>
             </q-item>
           </q-list>

@@ -204,4 +204,12 @@ export default {
   settledToSender: 'Settled to sender',
   all: 'All',
   actives: 'actives',
+  general: 'General',
+  products: 'Products',
+  scheduled_date: 'Scheduled date',
+  notes: 'Order notes',
+  searchSender: 'Input sender name or ID...',
+  otherAddress: 'Other address',
+  otherSender: 'Other sender',
+  selectOneOptions: 'Select one option',
 }

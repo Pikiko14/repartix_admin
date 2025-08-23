@@ -213,4 +213,5 @@ export default {
   otherAddress: 'Otra dirección',
   otherSender: 'Otro remitente',
   selectOneOptions: 'Selecciona una opción',
+  searchClient: 'Buscar cliente...',
 }

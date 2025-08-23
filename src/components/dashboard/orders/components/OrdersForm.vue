@@ -123,6 +123,77 @@
         </div>
       </q-tab-panel>
       <!--end sender-->
+
+      <!--Client-->
+      <q-tab-panel name="client">
+        <div class="row">
+          <div class="col-12" v-if="!order.client.name">
+            <label for="sender">{{ t('client').substring(0, 7) }}</label>
+            <q-input debounce="1500" :loading="loadingCLient" @update:model-value="loadsClients" id="sender"
+              :placeholder="t('searchClient')" outlined dense v-model="clientSearch">
+              <template v-slot:append>
+                <q-btn @click="openModalAdd('client')" icon="add" color="primary" flat dense rounded>
+                  <q-tooltip class="bg-primary text-white">
+                    {{ t('add') }}
+                  </q-tooltip>
+                </q-btn>
+              </template>
+            </q-input>
+            <q-menu fit v-model="showClientMenu" v-if="clients.length > 0">
+              <q-list class="q-px-none" dense>
+                <q-item class="q-px-none" tag="label" v-ripple v-for="(client, idx) in clients" :key="idx">
+                  <q-item-section avatar>
+                    <q-radio @update:model-value="setClient" v-model="clientSelected" :val="client" color="primary" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="address-label">{{ `${client.name} ${client.last_name}` }}</q-item-label>
+                    <q-item-label caption>{{ client?.address }}</q-item-label>
+                    <q-item-label caption>{{ client?.phone }} | {{ client?.email }} | {{ client?.dni }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </div>
+
+          <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+            <label for="name">{{ t('name') }}</label>
+            <q-input readonly id="name" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.name" />
+          </div>
+
+          <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+            <label for="lastName">{{ t('lastName') }}</label>
+              <q-input readonly id="lastName" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.last_name" />
+          </div>
+
+          <div class="col-12" v-if="order.client.name">
+            <label for="address">{{ t('address') }}</label>
+              <q-input readonly id="address" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.address" />
+          </div>
+
+          <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+            <label for="phone">{{ t('phone') }}</label>
+            <q-input readonly id="phone" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.phone" />
+          </div>
+
+          <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+            <label for="email">{{ t('email') }}</label>
+              <q-input readonly id="email" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.email" />
+          </div>
+
+          <div class="col-12" v-if="order.client.name">
+            <label for="dni">{{ t('dni') }}</label>
+              <q-input readonly id="dni" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.dni" />
+          </div>
+
+          <div class="col-12 q-mt-lg" v-if="order.client.name">
+            <GoogleMap @click="setCords" :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px"
+              :center="center" :zoom="17">
+              <Marker :options="markerOptions" />
+            </GoogleMap>
+          </div>
+        </div>
+      </q-tab-panel>
+      <!--End client-->
     </q-tab-panels>
 
     <div class="col-12 q-px-md d-flex content-between">
@@ -152,14 +223,17 @@ import { date } from 'quasar';
 import { VMoney } from 'v-money';
 import { useI18n } from 'vue-i18n';
 import AddressForm from './AddressForm.vue';
+import { GoogleMap, Marker } from 'vue3-google-map';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { useCitiesStore } from 'src/stores/citiesStore';
 import { useSendersStore } from 'src/stores/sendersStore';
+import { useClientsStore } from 'src/stores/clientsStore';
 import { citiesContent } from 'src/composables/citiesContent';
 import { ordersContent } from 'src/composables/ordersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import { sendersContent } from 'src/composables/sendersContent';
+import { clientsContent } from 'src/composables/clientsContent';
 import { ref, onBeforeMount, computed, onBeforeUnmount } from 'vue';
 import SendersForm from 'src/components/dashboard/senders/components/SendersForm.vue';
 
@@ -239,17 +313,25 @@ const loading = ref(false);
 const tab = ref('general');
 const dateReference = ref();
 const senderSearch = ref('');
+const clientSearch = ref('');
 const senderSelected = ref({});
+const clientSelected = ref({});
 const content = ordersContent();
 const selectedAddress = ref({});
 const loadingSender = ref(false);
+const loadingCLient = ref(false);
 const authStore = useAuthStore();
 const showSenderMenu = ref(false);
+const showClientMenu = ref(false);
 const cityContent = citiesContent();
 const citiesStore = useCitiesStore();
 const storeSender = useSendersStore();
+const storeClient = useClientsStore();
 const senderContent = sendersContent();
+const clientContent = clientsContent();
+const center = ref({ lat: 0, lng: 0 });
 const tabsOrder = ['general', 'sender', 'client', 'products', 'address'];
+const markerOptions = ref({ position: center, label: 'L', title: 'LADY LIBERTY' });
 
 // emits
 const emit = defineEmits(['close-modal', 'up-total-item']);
@@ -260,6 +342,8 @@ const cities = computed(() => citiesStore.getCities.map(city => {
 }));
 const senders = computed(() => storeSender.getSenders);
 const configuration = computed(() => authStore.getUser.brand.configuration || {});
+const clients = computed(() => storeClient.getClients);
+
 
 // methods
 const handlerSaveOrder = async () => {
@@ -267,6 +351,8 @@ const handlerSaveOrder = async () => {
   const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
 
   order.value.date = formattedString;
+  order.value.client.dni = order.value.client.dni.toString();
+  delete order.value.sender.optionsAddress;
 
   loading.value = true;
   try {
@@ -327,7 +413,6 @@ const setSender = (sender) => {
 }
 
 const setSenderAddress = (address) => {
-  console.log(senderSelected)
   order.value.sender.brand_name = senderSelected.value?.sender_info?.brand_name;
   order.value.sender.brand_phone = senderSelected.value?.sender_info?.brand_phone;
   order.value.sender.address = {
@@ -405,6 +490,36 @@ const closeModalAdd = (e) => {
   formEnable.value = '';
 }
 
+const loadsClients = async (e) => {
+  if (e.trim() === '') return;
+  loadingCLient.value = true;
+  try {
+    await clientContent.doListClients(`page=1&perPage=20&search=${e}`);
+    if (clients.value.length > 0) {
+      showClientMenu.value = true;
+    }
+  } finally {
+    loadingCLient.value = false;
+  }
+}
+
+const setClient = (client) => {
+  order.value.client = {
+    name: client.name,
+    last_name: client.last_name,
+    address: client.address,
+    phone: client.phone,
+    email: client.email,
+    dni: client.dni,
+    coords: {
+      lat: client.coords.lat,
+      lng: client.coords.lng
+    },
+  }
+  center.value = { lat: client.coords.lat, lng: client.coords.lng };
+  showClientMenu.value = false;
+  markerOptions.value = { position: center.value, label: 'L', title: 'LADY LIBERTY' };
+}
 
 // hook
 onBeforeMount(() => {
@@ -421,6 +536,7 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   storeSender.clearSenders();
+  storeClient.clearClients();
 });
 </script>
 

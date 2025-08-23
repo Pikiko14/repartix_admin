@@ -212,4 +212,5 @@ export default {
   otherAddress: 'Other address',
   otherSender: 'Other sender',
   selectOneOptions: 'Select one option',
+  searchClient: 'Search client...',
 }

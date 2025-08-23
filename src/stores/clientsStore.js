@@ -32,5 +32,9 @@ export const useClientsStore = defineStore('clientsStore', {
       const index = this.getIndex(client._id)
       this.clients[index] = client
     },
+    clearClients () {
+      this.clients = []
+      this.totalItems = 1
+    }
   },
 })

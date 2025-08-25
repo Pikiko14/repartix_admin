@@ -6,7 +6,6 @@
       <q-tab name="client" :label="t('client').substring(0, 7)" />
       <q-tab name="products" :label="t('products')" />
     </q-tabs>
-
     <q-tab-panels class="full-width" v-model="tab" animated swipeable vertical transition-prev="jump-up"
       transition-next="jump-up">
       <!--General-->
@@ -15,13 +14,13 @@
           <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }" v-if="!configuration.route_price_by_km">
             <label for="city">{{ t('city') }}</label>
             <q-select @update:model-value="getZones" :label="t('selectOneOptions')" outlined dense
-              :rules="[(val) => !!val || t('requiredField')]" id="city" :options="cities"
-              v-model="city"></q-select>
+              :rules="[(val) => !!val || t('requiredField')]" id="city" :options="cities" v-model="city"></q-select>
           </div>
 
           <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }" v-if="!configuration.route_price_by_km">
             <label for="city">{{ t('zones').substring(0, 4) }}</label>
-            <q-select @update:model-value="setZone" :label="t('selectOneOptions')" outlined dense :rules="[(val) => !!val || t('requiredField')]" id="city" :options="zones" v-model="zone"></q-select>
+            <q-select @update:model-value="setZone" :label="t('selectOneOptions')" outlined dense
+              :rules="[(val) => !!val || t('requiredField')]" id="city" :options="zones" v-model="zone"></q-select>
           </div>
 
           <div class="col-12">
@@ -103,7 +102,7 @@
               <q-item class="q-px-none" tag="label" v-ripple v-for="(address, idx) in order.sender.optionsAddress"
                 :key="idx">
                 <q-item-section avatar>
-                  <q-radio @update:model-value="setSenderAddress" v-model="selectedAddress" :val="address"
+                  <q-radio @update:model-value="setSenderAddress" v-model="selectedAddress" :val="address.address"
                     color="primary" />
                 </q-item-section>
                 <q-item-section>
@@ -115,10 +114,12 @@
             </q-list>
           </div>
           <div class="col-12 q-mt-lg text-center" v-if="order.sender.brand_name">
-            <q-btn @click="openModalAdd('address')" no-caps :label="t('otherAddress')" unelevated color="primary" rounded></q-btn>
+            <q-btn @click="openModalAdd('address')" no-caps :label="t('otherAddress')" unelevated color="primary"
+              rounded></q-btn>
           </div>
           <div class="col-12 q-mt-md text-center" v-if="order.sender.brand_name">
-            <q-btn no-caps @click="clearSenderAddress" outline :label="t('otherSender')" color="primary" rounded></q-btn>
+            <q-btn no-caps @click="clearSenderAddress" outline :label="t('otherSender')" color="primary"
+              rounded></q-btn>
           </div>
         </div>
       </q-tab-panel>
@@ -157,43 +158,90 @@
 
           <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
             <label for="name">{{ t('name') }}</label>
-            <q-input readonly id="name" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.name" />
+            <q-input readonly id="name" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.name" />
           </div>
 
           <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
             <label for="lastName">{{ t('lastName') }}</label>
-              <q-input readonly id="lastName" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.last_name" />
+            <q-input readonly id="lastName" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.last_name" />
           </div>
 
           <div class="col-12" v-if="order.client.name">
             <label for="address">{{ t('address') }}</label>
-              <q-input readonly id="address" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.address" />
+            <q-input readonly id="address" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.address" />
           </div>
 
           <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
             <label for="phone">{{ t('phone') }}</label>
-            <q-input readonly id="phone" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.phone" />
+            <q-input readonly id="phone" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.phone" />
           </div>
 
           <div class="col-12 col-md-6" v-if="order.client.name" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
             <label for="email">{{ t('email') }}</label>
-              <q-input readonly id="email" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.email" />
+            <q-input readonly id="email" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.email" />
           </div>
 
           <div class="col-12" v-if="order.client.name">
             <label for="dni">{{ t('dni') }}</label>
-              <q-input readonly id="dni" :rules="[(val) => !!val || t('requiredField')]" outlined dense v-model="order.client.dni" />
+            <q-input readonly id="dni" :rules="[(val) => !!val || t('requiredField')]" outlined dense
+              v-model="order.client.dni" />
           </div>
 
-          <div class="col-12 q-mt-lg" v-if="order.client.name">
-            <GoogleMap @click="setCords" :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px"
+          <div class="col-12 q-mt-lg relative" v-if="order.client.name">
+            <GoogleMap :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px"
               :center="center" :zoom="17">
               <Marker :options="markerOptions" />
             </GoogleMap>
+            <div class="div absolute-top full-width full-height"></div>
           </div>
         </div>
       </q-tab-panel>
       <!--End client-->
+
+      <!--Products-->
+      <q-tab-panel name="products">
+        <div class="row" v-for="(product, idx) in order.products" :key="idx">
+          <div class="col-12">
+            <label for="productName">{{ t('name') }}</label>
+            <q-input id="productName" :rules="[(val) => !!val || t('requiredField')]"
+              :placeholder="t('productNamePlaceholder')" outlined dense v-model="product.name" />
+          </div>
+          <div class="col-12 col-md-4" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+            <label for="quantity">{{ t('quantity') }}</label>
+            <q-input id="quantity" type="number" :rules="[(val) => !!val || t('requiredField')]" placeholder="1"
+              outlined dense v-model="product.quantity" />
+          </div>
+          <div class="col-12 col-md-4" :class="{ 'q-px-sm': $q.screen.gt.sm }">
+            <label for="unitPrice">{{ t('unitPrice') }}</label>
+            <q-input v-money="money" id="unitPrice" :rules="[(val) => !!val || t('requiredField')]"
+              placeholder="5.000,00" outlined dense v-model="product.unit_price" />
+          </div>
+          <div class="col-12 col-md-4" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+            <label for="weight">{{ t('weight') }} (Kg)</label>
+            <q-input type="number" id="weight" :rules="[(val) => !!val || t('requiredField')]" placeholder="1.00" outlined dense
+              v-model="product.weight" />
+          </div>
+          <div class="col-12">
+            <label for="description">{{ t('description') }}</label>
+            <q-input rows="3" type="textarea" id="description" :placeholder="t('description')" outlined dense
+              v-model="product.description" />
+          </div>
+          <div class="col-12 q-mb-md q-mt-lg" v-if="order.products.length > 1 && idx !== order.products.length - 1">
+            <q-separator></q-separator>
+          </div>
+        </div>
+        <div class="row q-mt-lg">
+          <div class="col-12 text-center">
+            <q-btn @click="addNewProduct" rounded color="primary" unelevated :label="t('add')"></q-btn>
+          </div>
+        </div>
+      </q-tab-panel>
+      <!--End products-->
     </q-tab-panels>
 
     <div class="col-12 q-px-md d-flex content-between">
@@ -201,16 +249,18 @@
         <q-btn unelevated outline @click="backTab" size="md" no-caps rounded v-if="tab !== 'general'" :label="t('back')"
           color="primary"></q-btn>
       </div>
-      <q-btn v-if="tab === 'products'" :disable="!order.client" :loading="loading" unelevated size="md" type="submit"
+      <q-btn v-if="tab === 'products'" :disable="!order.sender.brand_name || !order.client.name || !order.sender.address.address" :loading="loading" unelevated size="md" type="submit"
         no-caps rounded :label="t('save')" color="primary"></q-btn>
       <q-btn v-else unelevated @click="nextTab" size="md" no-caps rounded :label="t('next')" color="primary"></q-btn>
     </div>
 
     <q-dialog position="right" v-model="formAdd">
-      <ModalCard :title="formEnable === 'sender' ? t('sendersCreate') : formEnable === 'address' ? t('address') : t('clientCreate')">
+      <ModalCard
+        :title="formEnable === 'sender' ? t('sendersCreate') : formEnable === 'address' ? t('address') : t('clientCreate')">
         <template #body>
           <SendersForm v-if="formEnable === 'sender'" :sender-selected="senderSelected" @close-modal="closeModalAdd" />
           <AddressForm :senderSelected="senderSelected" v-if="formEnable === 'address'" @close-modal="closeModalAdd" />
+          <ClientsForm v-if="formEnable === 'client'" @close-modal="closeModalAdd" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -234,6 +284,7 @@ import { ordersContent } from 'src/composables/ordersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import { sendersContent } from 'src/composables/sendersContent';
 import { clientsContent } from 'src/composables/clientsContent';
+import ClientsForm from '../../clients/components/ClientsForm.vue';
 import { ref, onBeforeMount, computed, onBeforeUnmount } from 'vue';
 import SendersForm from 'src/components/dashboard/senders/components/SendersForm.vue';
 
@@ -262,10 +313,10 @@ const order = ref({
     {
       name: "",
       description: "",
-      quantity: null,
+      quantity: 1,
       unit_price: null,
       total_price: null,
-      weight: 1
+      weight: 1.00
     }
   ],
   client: {
@@ -292,13 +343,13 @@ const order = ref({
       }
     }
   },
-  courier: {
-    full_name: "",
-    vehicle_type: "",
-    license_plate: ""
-  },
+  // courier: {
+  //   full_name: "",
+  //   vehicle_type: "",
+  //   license_plate: ""
+  // },
   cash_on_delivery: false,
-  cash_amount: 0,
+  cash_amount: '0',
   settled_to_sender: false,
   notes: "",
   order_price: 0,
@@ -350,19 +401,48 @@ const handlerSaveOrder = async () => {
   const timeStamp = Date.now()
   const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
 
-  order.value.date = formattedString;
+  if (!order.value._id) order.value.date = formattedString;
   order.value.client.dni = order.value.client.dni.toString();
   delete order.value.sender.optionsAddress;
+
+  order.value.products = order.value.products.map((el) => {
+    el.total_price = `${parseFloat(el.unit_price.replace('.', '')) * el.quantity}`;
+    return el;
+  });
+
+  if (order.value?._id) {
+    await handlerUpdateOrder();
+    return;
+  }
 
   loading.value = true;
   try {
     const response = await content.doCreateOrder(order.value);
     if (response && response.success) {
-      notification('success', t('clientCreateSuccess'), 'primary');
+      notification('success', t('orderCreated'), 'primary');
       emit('close-modal');
       emit('up-total-item');
     }
   } finally {
+    loading.value = false;
+  }
+}
+
+const handlerUpdateOrder = async () => {
+  order.value.products = order.value.products.map((el) => {
+    el.quantity = Number(el.quantity);
+    el.weight = Number(el.weight);
+    return el;
+  })
+
+  loading.value = true;
+  try {
+    const response = await content.doUpdateOrder(order.value);
+    if (response && response.success) {
+      notification('success', t('orderUpdated'), 'primary');
+      emit('close-modal');
+    }
+    } finally {
     loading.value = false;
   }
 }
@@ -415,6 +495,7 @@ const setSender = (sender) => {
 const setSenderAddress = (address) => {
   order.value.sender.brand_name = senderSelected.value?.sender_info?.brand_name;
   order.value.sender.brand_phone = senderSelected.value?.sender_info?.brand_phone;
+  address = order.value.sender.optionsAddress.find(a => a.address === address);
   order.value.sender.address = {
     address: address?.address,
     complement: address?.complement,
@@ -481,9 +562,14 @@ const closeModalAdd = (e) => {
   }
 
   if (formEnable.value === 'address') {
-    console.log(e);
     senderSelected.value = e;
     order.value.sender.optionsAddress = e?.sender_info?.address;
+  }
+
+  if (formEnable.value === 'client') {
+    setClient(e?.data);
+    center.value = { lat: e?.data.coords.lat, lng: e?.data.coords.lng };
+    markerOptions.value.position = center.value;
   }
 
   formAdd.value = !formAdd.value;
@@ -521,10 +607,40 @@ const setClient = (client) => {
   markerOptions.value = { position: center.value, label: 'L', title: 'LADY LIBERTY' };
 }
 
+const addNewProduct = () => {
+  order.value.products.push({
+    name: '',
+    description: "",
+    quantity: 1,
+    unit_price: null,
+    total_price: null,
+    weight: 1
+  });
+}
+
 // hook
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (props.orderSelected && props.orderSelected._id) {
     order.value = JSON.parse(JSON.stringify(props.orderSelected));
+
+    // validamos el remitente
+    if (order.value.sender && order.value.sender.brand_name) {
+      await loadSenders(order.value.sender.brand_name);
+      if (senders.value.length > 0) {
+        const sender = senders.value.find(s => s.sender_info.brand_name === order.value.sender.brand_name);
+        senderSelected.value = sender;
+        order.value.sender.optionsAddress = sender?.sender_info?.address;
+        selectedAddress.value = order.value.sender?.address?.address;
+        storeSender.clearSenders();
+      }
+    }
+
+    // validamos el cliente
+    if (order.value.client && order.value.client.name) {
+      setClient(order.value.client);
+      center.value = { lat: order.value.client.coords.lat, lng: order.value.client.coords.lng };
+      markerOptions.value.position = center.value;
+    }
   }
   const promiseArray = [];
   if (!configuration.value.route_price_by_km) {

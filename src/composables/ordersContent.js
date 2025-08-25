@@ -64,8 +64,18 @@ export const ordersContent = () => {
     }
   }
 
+  const doShowOrder = async (id) => {
+    try {
+      const { data } = await api.get(`${path}/${id}`)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
+    doShowOrder,
     doListOrders,
     doUpdateOrder,
     doCreateOrder,

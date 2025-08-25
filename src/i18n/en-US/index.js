@@ -213,4 +213,11 @@ export default {
   otherSender: 'Other sender',
   selectOneOptions: 'Select one option',
   searchClient: 'Search client...',
+  productNamePlaceholder: 'Box 01',
+  quantity: 'Quantity',
+  unitPrice: 'Unit price',
+  weight: 'Weight',
+  description: 'Description',
+  orderCreated: 'Order created successfully',
+  orderUpdated: 'Order updated successfully',
 }

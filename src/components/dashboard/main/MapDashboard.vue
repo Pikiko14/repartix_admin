@@ -4,7 +4,6 @@
       style="width: 100%; height: calc(100vh - 200px);" :center="center" :zoom="15">
       <Marker v-if="center.lat > 0" :options="markerOptions" />
     </GoogleMap>
-    {{ config }}
   </section>
 </template>
 

@@ -214,4 +214,11 @@ export default {
   otherSender: 'Otro remitente',
   selectOneOptions: 'Selecciona una opción',
   searchClient: 'Buscar cliente...',
+  productNamePlaceholder: 'Paquete 01',
+  quantity: 'Cantidad',
+  unitPrice: 'Precio unitario',
+  weight: 'Peso',
+  description: 'Descripción',
+  orderCreated: 'Orden creada correctamente',
+  orderUpdated: 'Orden modificada correctamente',
 }

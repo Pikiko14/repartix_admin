@@ -14,7 +14,7 @@
 
     <!--Modal order-->
     <q-dialog v-model="modalOrder" @before-hide="order = {}">
-      <ModalCard styles="width: 800px" :title="!order._id ? t('ordersCreate') : t('ordersUpdate')">
+      <ModalCard styles="width: 800px" :title="!order?.date ? t('ordersCreate') : t('ordersUpdate')">
         <template #body>
           <OrdersForm :order-selected="order" @close-modal="showAddButton" @up-total-item="setTotalItems" />
         </template>
@@ -26,7 +26,7 @@
 
 <script setup>
 // imports
-import { useQuasar } from 'quasar';
+import { Loading, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { Utils } from 'src/utils/utils';
@@ -85,7 +85,7 @@ const columns = [
     required: true,
     label: `${t('cashAmount')}`,
     align: 'center',
-    field: row => utils.formatPrice(row?.cash_amount || 0),
+    field: row => row?.cash_on_delivery ? utils.formatPrice(parseFloat(row?.cash_amount.replace('.', '')) || 0) : utils.formatPrice(0),
     sortable: false
   },
   {
@@ -270,10 +270,20 @@ const handlerFilterByDate = (date) => {
   });
 }
 
-const handlerUpdateOrder = (id) => {
-  const orderObj = orders.value.find((el) => el._id === id);
-  order.value = orderObj;
-  showAddButton();
+const handlerUpdateOrder = async (id) => {
+  try {
+    Loading.show();
+    const response = await content.doShowOrder(id);
+    if (response?.success) {
+      delete response?.order?.__v;
+      delete response?.order?.createdAt;
+      delete response?.order?.updatedAt;
+      order.value = response.order;
+      showAddButton();
+    }
+  } finally {
+    Loading.hide();
+  }
 }
 
 const doDeleteOrder = (id) => {

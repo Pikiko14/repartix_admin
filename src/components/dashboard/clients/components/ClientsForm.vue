@@ -160,7 +160,7 @@ const handlerSaveClient = async () => {
     const response = await content.doCreateClients(client.value);
     if (response && response.success) {
       notification('success', t('clientCreateSuccess'), 'primary');
-      emit('close-modal');
+      emit('close-modal', response);
       emit('up-total-item');
     }
   } finally {

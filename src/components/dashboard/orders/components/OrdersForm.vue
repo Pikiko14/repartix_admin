@@ -199,6 +199,10 @@
             </GoogleMap>
             <div class="div absolute-top full-width full-height"></div>
           </div>
+
+          <div class="col-12 text-center q-mt-lg" v-if="order.client.name">
+            <q-btn rounded color="primary" @click="resetClient" :label="t('otherClient')" no-caps unelevated></q-btn>
+          </div>
         </div>
       </q-tab-panel>
       <!--End client-->
@@ -616,6 +620,24 @@ const addNewProduct = () => {
     total_price: null,
     weight: 1
   });
+}
+
+const resetClient = () => {
+  order.value.client = {
+    name: "",
+    last_name: "",
+    address: "",
+    phone: "",
+    email: "",
+    dni: "",
+    coords: {
+      lat: null,
+      lng: null
+    }
+  }
+  storeClient.clearClients();
+  clientSearch.value = '';
+  showClientMenu.value = false;
 }
 
 // hook

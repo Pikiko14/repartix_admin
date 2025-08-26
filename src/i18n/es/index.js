@@ -221,4 +221,5 @@ export default {
   description: 'Descripción',
   orderCreated: 'Orden creada correctamente',
   orderUpdated: 'Orden modificada correctamente',
+  otherClient: 'Otro cliente',
 }

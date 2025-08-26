@@ -27,7 +27,7 @@
                 <div class="col">
                   <div class="text-h6 text-primary">{{ t(plan.name) }}</div>
                   <div class="text-subtitle2" :title="t(plan.description)">
-                    <p>{{ t(plan.description) }}123</p>
+                    <p>{{ t(plan.description) }}.</p>
                   </div>
                 </div>
               </div>
@@ -35,7 +35,7 @@
 
             <q-card-section>
               <q-list class="dense q-pa-none">
-                <q-item class="q-pa-none" v-for="(usability, idxUsabilities) in plan?.usabilities"
+                <q-item dense class="q-pa-none" v-for="(usability, idxUsabilities) in plan?.usabilities"
                   :key="idxUsabilities">
                   <q-item-section>
                     <q-item-label class="text-bold text-primary">

@@ -222,4 +222,8 @@ export default {
   orderCreated: 'Orden creada correctamente',
   orderUpdated: 'Orden modificada correctamente',
   otherClient: 'Otro cliente',
+  create_cities: 'Ciudades',
+  create_clients: 'Clientes',
+  create_senders: 'Remitentes',
+  create_orders: 'Ordenes'
 }

@@ -41,6 +41,7 @@ export default {
   silver: 'Silver',
   plan_silver_description: 'The intermediate plan, perfect for medium-sized shipping and logistics companies',
   create_user: 'Users',
+  create_cities: 'Cities',
   price: 'Price',
   month: 'Month',
   year: 'Year',
@@ -221,4 +222,7 @@ export default {
   orderCreated: 'Order created successfully',
   orderUpdated: 'Order updated successfully',
   otherClient: 'Other client',
+  create_clients: 'Clients',
+  create_senders: 'Senders',
+  create_orders: 'Orders'
 }

@@ -247,5 +247,9 @@ onBeforeMount(() => {
     display: inline-flex;
     align-items: center;
   }
+
+  @media(width < 768px) {
+    width: 100%;
+  }
 }
 </style>

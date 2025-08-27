@@ -225,5 +225,8 @@ export default {
   create_cities: 'Ciudades',
   create_clients: 'Clientes',
   create_senders: 'Remitentes',
-  create_orders: 'Ordenes'
+  create_orders: 'Ordenes',
+  resume: 'Resumen',
+  content: 'Contenido',
+  printGuide: 'Imprimir guía',
 }

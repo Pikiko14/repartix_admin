@@ -224,5 +224,8 @@ export default {
   otherClient: 'Other client',
   create_clients: 'Clients',
   create_senders: 'Senders',
-  create_orders: 'Orders'
+  create_orders: 'Orders',
+  resume: 'Summary',
+  content: 'Content',
+  printGuide: 'Print guide',
 }

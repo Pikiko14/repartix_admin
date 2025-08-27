@@ -5,7 +5,10 @@
       <q-tab name="sender" :label="t('sender').substring(0, 9)" />
       <q-tab name="client" :label="t('client').substring(0, 7)" />
       <q-tab name="products" :label="t('products')" />
+      <q-tab name="summary" :label="t('resume')"
+        v-if="order.sender.brand_name && order.client.name && order.sender.address.address && order.order_price" />
     </q-tabs>
+
     <q-tab-panels class="full-width" v-model="tab" animated swipeable vertical transition-prev="jump-up"
       transition-next="jump-up">
       <!--General-->
@@ -193,8 +196,8 @@
           </div>
 
           <div class="col-12 q-mt-lg relative" v-if="order.client.name">
-            <GoogleMap :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px"
-              :center="center" :zoom="17">
+            <GoogleMap :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px" :center="center"
+              :zoom="17">
               <Marker :options="markerOptions" />
             </GoogleMap>
             <div class="div absolute-top full-width full-height"></div>
@@ -227,8 +230,8 @@
           </div>
           <div class="col-12 col-md-4" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
             <label for="weight">{{ t('weight') }} (Kg)</label>
-            <q-input type="number" id="weight" :rules="[(val) => !!val || t('requiredField')]" placeholder="1.00" outlined dense
-              v-model="product.weight" />
+            <q-input type="number" id="weight" :rules="[(val) => !!val || t('requiredField')]" placeholder="1.00"
+              outlined dense v-model="product.weight" />
           </div>
           <div class="col-12">
             <label for="description">{{ t('description') }}</label>
@@ -246,6 +249,131 @@
         </div>
       </q-tab-panel>
       <!--End products-->
+
+      <!--Summary-->
+      <q-tab-panel name="summary"
+        v-if="order.sender.brand_name && order.client.name && order.sender.address.address && order.order_price">
+        <div class="row">
+          <q-list class="summary-list">
+            <!--Sender item-->
+            <q-item dense>
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('sender').substring(0, 9) }}:</q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="store" class="q-mr-sm" />
+                    {{ order.sender.brand_name }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="2">
+                  <span>
+                    <q-icon color="primary" name="location_on" class="q-mr-sm" />
+                    {{ order.sender.address.address }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="phone" class="q-mr-sm" />
+                    {{ order.sender.brand_phone }}
+                  </span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End sender item-->
+
+            <!--item cliente-->
+            <q-item dense class="q-mt-sm">
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('client').substring(0, 7) }}:</q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="person" class="q-mr-sm" />
+                    {{ order.client.name }} {{ order.client.last_name }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="2">
+                  <span>
+                    <q-icon color="primary" name="location_on" class="q-mr-sm" />
+                    {{ order.client.address }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="phone" class="q-mr-sm" />
+                    {{ order.client.phone }}
+                  </span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End item client-->
+
+            <!--item products-->
+            <q-item dense class="q-mt-sm">
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('content') }}:</q-item-label>
+                <q-item-label caption lines="3">
+                  <span>
+                    {{ productsSummary }}.
+                  </span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End item products-->
+
+            <!--item city and zone-->
+            <q-item dense class="q-mt-sm" v-if="order.city && order.zone">
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('city') }}:</q-item-label>
+                <q-item-label caption lines="3">
+                  <span>
+                    {{ order.city }}, {{ order.zone.name }}
+                  </span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End item city and zone-->
+
+            <!--item complemento-->
+            <q-item dense class="q-mt-sm">
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('general') }}:</q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="calendar_today" class="q-mr-sm" />
+                    {{ order.scheduled_date }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="account_balance_wallet" class="q-mr-sm" />
+                    {{ order.cash_on_delivery ? t('yes') : t('no') }}
+                  </span>
+                </q-item-label>
+                <q-item-label caption lines="1">
+                  <span>
+                    <q-icon color="primary" name="payments" class="q-mr-sm" />
+                    {{ utils.formatPrice(parseFloat(order.cash_amount.replace('.', ''))) }}
+                  </span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End item client-->
+
+            <!--item print guide-->
+            <q-item dense class="q-mt-sm">
+              <q-item-section>
+                <q-item-label class="title text-primary q-mb-sm">{{ t('printGuide') }}:</q-item-label>
+                <q-item-label caption>
+                  <q-checkbox style="margin-left: -10px" v-model="printGuide"
+                    :label="printGuide ? t('yes') : t('no')"></q-checkbox>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <!--End item city and zone-->
+          </q-list>
+        </div>
+      </q-tab-panel>
+      <!--End summary-->
     </q-tab-panels>
 
     <div class="col-12 q-px-md d-flex content-between">
@@ -253,8 +381,10 @@
         <q-btn unelevated outline @click="backTab" size="md" no-caps rounded v-if="tab !== 'general'" :label="t('back')"
           color="primary"></q-btn>
       </div>
-      <q-btn v-if="tab === 'products'" :disable="!order.sender.brand_name || !order.client.name || !order.sender.address.address" :loading="loading" unelevated size="md" type="submit"
-        no-caps rounded :label="t('save')" color="primary"></q-btn>
+      <q-btn v-if="tab === 'summary'"
+        :disable="!order.sender.brand_name || !order.client.name || !order.sender.address.address || !order.order_price"
+        :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')"
+        color="primary"></q-btn>
       <q-btn v-else unelevated @click="nextTab" size="md" no-caps rounded :label="t('next')" color="primary"></q-btn>
     </div>
 
@@ -273,9 +403,10 @@
 
 <script setup>
 // imports
-import { date } from 'quasar';
 import { VMoney } from 'v-money';
 import { useI18n } from 'vue-i18n';
+import { date, Loading } from 'quasar';
+import { Utils } from 'src/utils/utils';
 import AddressForm from './AddressForm.vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
 import { useAuthStore } from 'src/stores/authStore';
@@ -288,6 +419,7 @@ import { ordersContent } from 'src/composables/ordersContent';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import { sendersContent } from 'src/composables/sendersContent';
 import { clientsContent } from 'src/composables/clientsContent';
+import { shippingContent } from 'src/composables/shippingContent';
 import ClientsForm from '../../clients/components/ClientsForm.vue';
 import { ref, onBeforeMount, computed, onBeforeUnmount } from 'vue';
 import SendersForm from 'src/components/dashboard/senders/components/SendersForm.vue';
@@ -361,7 +493,9 @@ const order = ref({
 const city = ref('');
 const zone = ref('');
 const zones = ref([]);
+const quote = ref({});
 const { t } = useI18n();
+const utils = new Utils();
 const formAdd = ref(false);
 const formEnable = ref('');
 const loading = ref(false);
@@ -369,6 +503,7 @@ const tab = ref('general');
 const dateReference = ref();
 const senderSearch = ref('');
 const clientSearch = ref('');
+const printGuide = ref(false);
 const senderSelected = ref({});
 const clientSelected = ref({});
 const content = ordersContent();
@@ -385,22 +520,57 @@ const storeClient = useClientsStore();
 const senderContent = sendersContent();
 const clientContent = clientsContent();
 const center = ref({ lat: 0, lng: 0 });
-const tabsOrder = ['general', 'sender', 'client', 'products', 'address'];
+const shippingContents = shippingContent();
+const tabsOrder = ['general', 'sender', 'client', 'products', 'summary'];
 const markerOptions = ref({ position: center, label: 'L', title: 'LADY LIBERTY' });
 
 // emits
 const emit = defineEmits(['close-modal', 'up-total-item']);
 
 //computed
+const productsSummary = computed(() => {
+  const products = [];
+  order.value.products.map((product) => {
+    products.push(product.name);
+  });
+  return products.join(', ');
+});
+const senders = computed(() => storeSender.getSenders);
+const clients = computed(() => storeClient.getClients);
 const cities = computed(() => citiesStore.getCities.map(city => {
   return { label: city.name, value: city.name, zones: city.zones }
 }));
-const senders = computed(() => storeSender.getSenders);
 const configuration = computed(() => authStore.getUser.brand.configuration || {});
-const clients = computed(() => storeClient.getClients);
-
 
 // methods
+const handlerDoQuote = async () => {
+  if (configuration.value && configuration.value?.route_price_by_km && !quote.value?.sender) return;
+  if (configuration.value && configuration.value?.route_price_by_km && !quote.value?.client) return;
+
+  Loading.show();
+  try {
+    const data = await shippingContents.doQuoteShipping(quote.value);
+    if (data) {
+      order.value.order_price = data.shipping_price;
+    }
+  } finally {
+    Loading.hide();
+  }
+}
+
+const handlerDoQuoteByCity = async () => {
+  if (configuration.value && !configuration.value?.route_price_by_km && !quote.value.city || !quote.value.city.zone) return;
+  Loading.show();
+  try {
+    const data = await shippingContents.doQuoteShipping(quote.value);
+    if (data) {
+      order.value.order_price = parseFloat(data.shipping_price.replace('.', ''));
+    }
+  } finally {
+    Loading.hide();
+  }
+}
+
 const handlerSaveOrder = async () => {
   const timeStamp = Date.now()
   const formattedString = date.formatDate(timeStamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ')
@@ -413,6 +583,8 @@ const handlerSaveOrder = async () => {
     el.total_price = `${parseFloat(el.unit_price.replace('.', '')) * el.quantity}`;
     return el;
   });
+
+  order.value.print_guide = printGuide.value;
 
   if (order.value?._id) {
     await handlerUpdateOrder();
@@ -446,7 +618,7 @@ const handlerUpdateOrder = async () => {
       notification('success', t('orderUpdated'), 'primary');
       emit('close-modal');
     }
-    } finally {
+  } finally {
     loading.value = false;
   }
 }
@@ -496,7 +668,7 @@ const setSender = (sender) => {
   showSenderMenu.value = false;
 }
 
-const setSenderAddress = (address) => {
+const setSenderAddress = async (address) => {
   order.value.sender.brand_name = senderSelected.value?.sender_info?.brand_name;
   order.value.sender.brand_phone = senderSelected.value?.sender_info?.brand_phone;
   address = order.value.sender.optionsAddress.find(a => a.address === address);
@@ -507,6 +679,18 @@ const setSenderAddress = (address) => {
       "lat": address?.coords?.lat,
       "lng": address?.coords?.lng
     }
+  }
+
+  // set quote for quote shipping
+  if (configuration.value?.route_price_by_km) {
+    quote.value.sender = {
+      coords: {
+        lat: address?.coords?.lat,
+        lng: address?.coords?.lng
+      }
+
+    }
+    await handlerDoQuote();
   }
 }
 
@@ -529,7 +713,7 @@ const clearSenderAddress = () => {
   storeSender.clearSenders();
 }
 
-const getZones = (e) => {
+const getZones = async (e) => {
   order.value.city = e.label;
   zones.value = e.zones.map((z) => {
     return {
@@ -539,14 +723,28 @@ const getZones = (e) => {
       cod_zone: z.cod_zone
     }
   });
+
+  quote.value.city = {
+    name: e.label,
+    zone: null,
+  }
+  if (zone.value) zone.value = null;
+  await handlerDoQuoteByCity();
 }
 
-const setZone = (e) => {
+const setZone = async (e) => {
   order.value.zone = {
     name: e.label,
     price: e.price,
     cod_zone: e.cod_zone
   }
+
+  quote.value.city.zone = {
+    name: e.label,
+    price: e.price,
+  }
+
+  await handlerDoQuoteByCity();
 }
 
 const openModalAdd = (type) => {
@@ -593,7 +791,7 @@ const loadsClients = async (e) => {
   }
 }
 
-const setClient = (client) => {
+const setClient = async (client) => {
   order.value.client = {
     name: client.name,
     last_name: client.last_name,
@@ -609,6 +807,17 @@ const setClient = (client) => {
   center.value = { lat: client.coords.lat, lng: client.coords.lng };
   showClientMenu.value = false;
   markerOptions.value = { position: center.value, label: 'L', title: 'LADY LIBERTY' };
+
+  // set quote for quote shipping
+  if (configuration.value?.route_price_by_km) {
+    quote.value.client = {
+      coords: {
+        lat: client.coords.lat,
+        lng: client.coords.lng
+      }
+    }
+    await handlerDoQuote();
+  }
 }
 
 const addNewProduct = () => {
@@ -645,6 +854,14 @@ onBeforeMount(async () => {
   if (props.orderSelected && props.orderSelected._id) {
     order.value = JSON.parse(JSON.stringify(props.orderSelected));
 
+
+    const promiseArray = [];
+    if (!configuration.value.route_price_by_km) {
+      promiseArray.push(cityContent.doListCities('page=1&perPage=100'));
+    }
+
+    Promise.all(promiseArray);
+
     // validamos el remitente
     if (order.value.sender && order.value.sender.brand_name) {
       await loadSenders(order.value.sender.brand_name);
@@ -663,13 +880,14 @@ onBeforeMount(async () => {
       center.value = { lat: order.value.client.coords.lat, lng: order.value.client.coords.lng };
       markerOptions.value.position = center.value;
     }
-  }
-  const promiseArray = [];
-  if (!configuration.value.route_price_by_km) {
-    promiseArray.push(cityContent.doListCities('page=1&perPage=100'));
-  }
 
-  Promise.all(promiseArray);
+    if (!configuration.value?.route_price_by_km && order.value && order.value.city) {
+      city.value = order.value.city;
+      const citySelected = cities.value.find(c => c.label === order.value.city);
+      await getZones(citySelected);
+      zone.value = order.value.zone.name;
+    }
+  }
 });
 
 onBeforeUnmount(() => {
@@ -678,4 +896,23 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.summary-list {
+  font-size: 1rem;
+  width: 100%;
+
+  .title {
+    font-weight: 600;
+  }
+
+  .q-item__label--caption {
+    font-size: .8rem;
+  }
+
+  span {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+  }
+}
+</style>

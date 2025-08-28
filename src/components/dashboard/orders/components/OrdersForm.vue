@@ -370,6 +370,12 @@
               </q-item-section>
             </q-item>
             <!--End item city and zone-->
+
+            <!--price order-->
+            <div class="price-order">
+              {{ utils.formatPrice(order.order_price) || utils.formatPrice(0) }}
+            </div>
+            <!--end price order-->
           </q-list>
         </div>
       </q-tab-panel>
@@ -914,5 +920,19 @@ onBeforeUnmount(() => {
     justify-content: center;
     align-content: center;
   }
+}
+
+.price-order {
+  display: flex;
+  background: $primary;
+  max-width: 160px;
+  padding: .3rem .5rem;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  position: absolute;
+  right: 20px;
+  bottom: 50px
 }
 </style>

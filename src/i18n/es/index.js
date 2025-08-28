@@ -229,4 +229,5 @@ export default {
   resume: 'Resumen',
   content: 'Contenido',
   printGuide: 'Imprimir guía',
+  guide: 'Ver guía',
 }

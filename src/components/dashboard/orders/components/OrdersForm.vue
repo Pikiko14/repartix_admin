@@ -429,6 +429,7 @@ import { shippingContent } from 'src/composables/shippingContent';
 import ClientsForm from '../../clients/components/ClientsForm.vue';
 import { ref, onBeforeMount, computed, onBeforeUnmount } from 'vue';
 import SendersForm from 'src/components/dashboard/senders/components/SendersForm.vue';
+import { useOrdersStore } from 'src/stores/ordersStore';
 
 // props
 const props = defineProps({
@@ -520,6 +521,7 @@ const authStore = useAuthStore();
 const showSenderMenu = ref(false);
 const showClientMenu = ref(false);
 const cityContent = citiesContent();
+const ordersStore = useOrdersStore();
 const citiesStore = useCitiesStore();
 const storeSender = useSendersStore();
 const storeClient = useClientsStore();
@@ -601,6 +603,10 @@ const handlerSaveOrder = async () => {
   try {
     const response = await content.doCreateOrder(order.value);
     if (response && response.success) {
+      if (response.data?.print_guide) {
+        response.data.status = response.data?.print_guide === true ? 'guide-printed' : 'pending';
+        ordersStore.updateOrder(response.data)
+      };
       notification('success', t('orderCreated'), 'primary');
       emit('close-modal');
       emit('up-total-item');

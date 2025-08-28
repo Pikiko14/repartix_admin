@@ -8,7 +8,7 @@
 
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="orders" edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
+      :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
       @delete="doDeleteOrder" />
     <!--End table-->
 

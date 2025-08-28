@@ -54,6 +54,20 @@
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
+        <q-btn
+          size="10pt"
+          @click="emit('showOrder', props.row._id)"
+          v-if="utils.validateRole(showOrderScope) && props.row.print_guide"
+          icon="document_scanner"
+          flat
+          dense
+          rounded
+          color="primary"
+        >
+          <q-tooltip class="bg-primary">
+            {{ t('guide') }}
+          </q-tooltip>
+        </q-btn>
         <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
           color="primary">
           <q-tooltip class="bg-primary">
@@ -90,6 +104,7 @@ defineProps({
   },
   editScope: String,
   deleteScope: String,
+  showOrderScope: String,
   pagination: {
     type: Object,
     default: () => { }

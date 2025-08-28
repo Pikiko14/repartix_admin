@@ -56,6 +56,7 @@ export const ordersContent = () => {
       delete params.confirmation_password
       const { data } = await api.put(`${path}/${payload._id}`, params)
       if (data && data.data) {
+        data.data.status = data.data?.print_guide === true ? 'guide-printed' : 'pending'
         store.updateOrder(data.data)
       }
       return data

@@ -15,6 +15,7 @@ export const ordersContent = () => {
       const { data } = await api.post(`${path}`, params)
       if (data && data.data) {
         if (store.getOrders.length < 10) {
+          data.data.status = data.data?.print_guide === true ? 'guide-printed' : 'pending'
           store.setOrders([...store.getOrders, data.data])
         }
         store.upTotalItems()

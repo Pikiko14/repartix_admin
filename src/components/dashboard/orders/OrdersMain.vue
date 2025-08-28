@@ -9,7 +9,7 @@
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
       :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
-      @delete="doDeleteOrder" />
+      @delete="doDeleteOrder" @show-guide="showGuide" />
     <!--End table-->
 
     <!--Modal order-->
@@ -37,6 +37,7 @@ import { useOrdersStore } from 'src/stores/ordersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import MainTable from 'src/components/partials/MainTable.vue';
 import { ordersContent } from 'src/composables/ordersContent';
+import { guidesContent } from 'src/composables/guidesContent';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
 
 // references
@@ -111,15 +112,6 @@ const columns = [
     align: 'center',
   },
 ];
-const pagination = ref({
-  sortBy: 'desc',
-  descending: false,
-  page: route.query.page || 1,
-  rowsPerPage: route.query.perPage || 10,
-  rowsNumber: 1,
-});
-const store = useOrdersStore();
-const content = ordersContent();
 const filterItems = [
   {
     label: t('status'),
@@ -196,6 +188,16 @@ const filterItems = [
     ]
   }
 ];
+const pagination = ref({
+  sortBy: 'desc',
+  descending: false,
+  page: route.query.page || 1,
+  rowsPerPage: route.query.perPage || 10,
+  rowsNumber: 1,
+});
+const store = useOrdersStore();
+const content = ordersContent();
+const contentGuides = guidesContent();
 
 // computed
 const orders = computed(() => {
@@ -367,6 +369,18 @@ const handlerClearFilters = () => {
 
 const setTotalItems = () => {
   pagination.value.rowsNumber = store.getTotalItems;
+}
+
+const showGuide = async (reference) => {
+  Loading.show();
+  try {
+    const data = await contentGuides.doGetGuide(`reference=${reference}`);
+    if (data?.success) {
+      utils.donloadLink(data?.data?.guide_url)
+    }
+  } finally {
+    Loading.hide();
+  }
 }
 
 // hook

@@ -83,6 +83,16 @@ export class Utils {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: configuration.currency,
-    }).format(price);
+    }).format(price)
+  }
+
+  donloadLink = (url) => {
+    const link = document.createElement('a')
+    link.href = url
+    link.target = '__blank'
+    link.download = url.split('/').pop() || 'download'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 }

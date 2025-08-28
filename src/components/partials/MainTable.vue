@@ -56,7 +56,7 @@
       <q-td :props="props">
         <q-btn
           size="10pt"
-          @click="emit('showOrder', props.row._id)"
+          @click="emit('show-guide', props.row.reference)"
           v-if="utils.validateRole(showOrderScope) && props.row.print_guide"
           icon="document_scanner"
           flat

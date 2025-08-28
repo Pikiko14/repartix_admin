@@ -22,6 +22,11 @@ const routes = [
         name: 'orders'
       },
       {
+        path: 'show/:id/orders',
+        component: () => import('src/pages/dashboard/orders/ShowOrderPage.vue'),
+        name: 'showOrder'
+      },
+      {
         path: 'users',
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
         name: 'users'

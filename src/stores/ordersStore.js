@@ -4,8 +4,10 @@ export const useOrdersStore = defineStore('ordersStore', {
   state: () => ({
     orders: [],
     totalItems: 1,
+    order: {},
   }),
   getters: {
+    getOrder: (state) => state.order,
     getOrders: (state) => state.orders,
     getTotalItems: (state) => state.totalItems,
   },
@@ -32,5 +34,8 @@ export const useOrdersStore = defineStore('ordersStore', {
       const index = this.getIndex(order._id)
       this.orders[index] = order
     },
+    setOrder(order) {
+      this.order = order
+    }
   },
 })

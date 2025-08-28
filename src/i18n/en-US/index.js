@@ -229,4 +229,12 @@ export default {
   content: 'Content',
   printGuide: 'Print guide',
   guide: 'Show guide',
+  showOrder: 'Show order',
+  orderShowTitle: 'Order #-reference',
+  contact: 'Contact',
+  whastappText: 'Hello, we are writing to you about business.',
+  statusChangedSuccess: 'Sttaus changed successfully',
+  createdAt: 'Creation date',
+  deliverySelected: 'Courier',
+  collection: 'Collection',
 }

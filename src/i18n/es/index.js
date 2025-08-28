@@ -230,4 +230,12 @@ export default {
   content: 'Contenido',
   printGuide: 'Imprimir guía',
   guide: 'Ver guía',
+  showOrder: 'Mostrar orden',
+  orderShowTitle: 'Orden #-reference',
+  contact: 'Contactar',
+  whastappText: 'hola, te escribimos de -business',
+  statusChangedSuccess: 'Estado modificado correctamente',
+  createdAt: 'Fecha creación',
+  deliverySelected: 'Domiciliario',
+  collection: 'Recaudo',
 }

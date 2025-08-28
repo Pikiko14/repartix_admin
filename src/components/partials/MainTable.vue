@@ -44,7 +44,7 @@
     <!--status td-->
     <template v-slot:body-cell-cashOnDelivery="props">
       <q-td :props="props">
-        <q-chip square size="8pt" class="primary text-bold text-primary"
+        <q-chip square size="8pt" class="primary text-bold text-white"
           :class="props.row.cash_on_delivery ? 'bg-green' : 'bg-red-5'">{{ props.row.cash_on_delivery ? t('yes') :
             t('no') }}</q-chip>
       </q-td>
@@ -55,6 +55,19 @@
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
         <q-btn
+          @click="emit('show-order', props.row._id)"
+          v-if="utils.validateRole(showOrderScope)"
+          icon="visibility"
+          flat
+          dense
+          rounded
+          color="primary"
+        >
+          <q-tooltip class="bg-primary">
+            {{ t('showOrder') }}
+          </q-tooltip>
+        </q-btn>
+        <q-btn
           size="10pt"
           @click="emit('show-guide', props.row.reference)"
           v-if="utils.validateRole(showOrderScope) && props.row.print_guide"
@@ -62,15 +75,15 @@
           flat
           dense
           rounded
-          color="primary"
+          color="green"
         >
-          <q-tooltip class="bg-primary">
+          <q-tooltip class="bg-green">
             {{ t('guide') }}
           </q-tooltip>
         </q-btn>
         <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
-          color="primary">
-          <q-tooltip class="bg-primary">
+          color="blue">
+          <q-tooltip class="bg-blue">
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
@@ -177,6 +190,7 @@ a {
 
 .chip-status {
   width: 90px;
+  color: white !important;
 
   span {
     display: inline-flex;

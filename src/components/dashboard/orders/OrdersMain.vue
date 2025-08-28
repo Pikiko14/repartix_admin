@@ -9,7 +9,7 @@
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
       :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
-      @delete="doDeleteOrder" @show-guide="showGuide" />
+      @delete="doDeleteOrder" @show-guide="showGuide" @show-order="showOrder" />
     <!--End table-->
 
     <!--Modal order-->
@@ -45,8 +45,8 @@ const order = ref({});
 const q = useQuasar();
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const utils = new Utils();
+const router = useRouter();
 const modalOrder = ref(false);
 const columns = [
   {
@@ -376,7 +376,24 @@ const showGuide = async (reference) => {
   try {
     const data = await contentGuides.doGetGuide(`reference=${reference}`);
     if (data?.success) {
-      utils.donloadLink(data?.data?.guide_url)
+      utils.donloadLink(data?.data?.guide_url);
+    }
+  } finally {
+    Loading.hide();
+  }
+}
+
+const showOrder = async (id) => {
+  Loading.show();
+  try {
+    const data =await content.doShowOrder(id);
+    if (data?.success) {
+      router.push({
+        name: 'showOrder',
+        params: {
+          id: data?.order?._id,
+        }
+      });
     }
   } finally {
     Loading.hide();

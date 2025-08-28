@@ -31,8 +31,12 @@
     <!--status td-->
     <template v-slot:body-cell-status="props">
       <q-td :props="props">
-        <q-chip square size="8pt" class="primary text-bold" :class="[statusColor[props.row.status]]">{{
-          status[props.row.status] }}</q-chip>
+        <q-chip square size="8pt" class="primary text-bold chip-status" :class="[statusColor[props.row.status]]">
+          <span>
+            {{
+              status[props.row.status] }}
+          </span>
+        </q-chip>
       </q-td>
     </template>
     <!--End status td-->
@@ -113,7 +117,7 @@ const status = {
   delivered: t('delivered'),
   cancelled: t('cancelled'),
   returned: t('returned'),
-  guide_printed: t('guide_printed'),
+  'guide-printed': t('guide_printed'),
   guide_news: t('guide_news'),
 }
 
@@ -123,7 +127,7 @@ const statusColor = {
   delivered: 'bg-green',
   cancelled: 'bg-red',
   returned: 'bg-warning',
-  guide_printed: 'bg-green',
+  'guide-printed': 'bg-green',
   guide_news: 'bg-warning',
 }
 
@@ -154,5 +158,17 @@ a {
   color: $primary;
   text-decoration: none;
   font-weight: 400;
+}
+
+.chip-status {
+  width: 90px;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
 }
 </style>

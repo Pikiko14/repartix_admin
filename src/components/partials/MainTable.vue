@@ -81,7 +81,7 @@
             {{ t('guide') }}
           </q-tooltip>
         </q-btn>
-        <q-btn @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
+        <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
           color="blue">
           <q-tooltip class="bg-blue">
             {{ t('edit') }}
@@ -152,7 +152,7 @@ const status = {
 const statusColor = {
   pending: 'bg-yellow',
   in_progress: 'bg-primary',
-  delivered: 'bg-green',
+  delivered: 'bg-blue-10',
   cancelled: 'bg-red',
   returned: 'bg-warning',
   'guide-printed': 'bg-green',

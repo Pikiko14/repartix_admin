@@ -21,7 +21,7 @@
         <!--En Show guide action-->
 
         <!--Contact action-->
-        <q-btn class="order-action__item" @click="openWhatSapp(order?.client?.phone)" color="primary" unelevated rounded
+        <q-btn class="order-action__item" @click="openWhatSapp(order?.client?.phone?.replace(/\D/g, ''))" color="primary" unelevated rounded
           :label="t('contact')" no-caps icon-right="phone"></q-btn>
         <!--En contact action-->
       </div>
@@ -194,6 +194,7 @@
         <div class="col-12 col-md-7" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
           <!--tabs-->
           <article class="show-order-article">
+            <!--tabs header-->
             <header>
               <q-tabs v-model="tab" no-caps class="text-primary full-width">
                 <q-tab style="width: 100%" name="products" :label="t('products')" />
@@ -201,7 +202,9 @@
                 <q-tab style="width: 100%" name="news" :label="t('guide_news')" />
               </q-tabs>
             </header>
+            <!--End tabs header-->
 
+            <!--tabs content-->
             <section>
               <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up"
                 transition-next="jump-up">
@@ -251,8 +254,37 @@
                   </q-markup-table>
                 </q-tab-panel>
                 <!--End panel for product-->
+
+                <!--panel for news-->
+                <q-tab-panel class="q-pa-none q-px-md" name="news">
+                  <q-timeline color="primary" v-if="order.news.length > 0">
+                    <q-timeline-entry
+                      class="text-primary"
+                      v-for="(news, idx) in order.news"
+                      :key="idx"
+                      :title="news.type_news"
+                      :subtitle="date.formatDate(news.date, 'DD/MM/YYYY HH:mm')"
+                    >
+                      <div v-if="news?.description" style="margin-top: -10px" class="text-black">
+                        <p>
+                          {{ news.description || '' }}
+                        </p>
+                        <p v-if="news?.resolve_answer">
+                          <span class="text-bold">{{ t('resolve') }}</span>: {{ news?.resolve_answer }}
+                        </p>
+                      </div>
+                    </q-timeline-entry>
+                  </q-timeline>
+                  <section v-else class="text-center">
+                    <span>
+                    {{ t('noNews') }}
+                  </span>
+                  </section>
+                </q-tab-panel>
+                <!--end panel for news-->
               </q-tab-panels>
             </section>
+            <!--End tabs content-->
           </article>
           <!--End tabs-->
 

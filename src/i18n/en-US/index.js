@@ -246,4 +246,6 @@ export default {
   createOrder: 'Create orders',
   updateOrder: 'Update orders',
   deleteOrder: 'Delete orders',
+  noNews: 'No news for this order',
+  resolve: 'Solution',
 }

@@ -247,4 +247,6 @@ export default {
   createOrder: 'Crear orden',
   updateOrder: 'Modificar orden',
   deleteOrder: 'Borrar orden',
+  noNews: 'No hay novedades para esta orden',
+  resolve: 'Solución',
 }

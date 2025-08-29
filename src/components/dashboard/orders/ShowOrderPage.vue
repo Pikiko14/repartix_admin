@@ -1,5 +1,5 @@
 <template>
-  <div class="row" v-if="order._id">
+  <div class="row guide-wrapper" v-if="order._id">
     <!--Header-->
     <div class="col-12 col-md-6">
       <h4 class="title">
@@ -9,7 +9,7 @@
     <div class="col-12 col-md-6">
       <div class="order-action">
         <!--Status action-->
-        <q-select v-if="utils.validateRole('update-order')" @update:model-value="toggleStatus"
+        <q-select v-if="utils.validateRole('update-order') && order?.status !== 'delivered'" @update:model-value="toggleStatus"
           class="order-action__item" outlined map-options rounded dense v-model="order.status"
           :options="statusOption"></q-select>
         <!--End status action-->
@@ -28,7 +28,7 @@
     </div>
     <!--End header-->
 
-    <!--body-->
+    <!--section-->
     <div class="col-12 q-mt-lg">
       <section class="full-width row">
         <!--General information data-->
@@ -41,7 +41,7 @@
               </h5>
             </header>
 
-            <body class="row">
+            <section class="row">
               <div class="col-12 col-md-6">
                 <h6>
                   {{ t('createdAt') }}
@@ -72,7 +72,7 @@
                 </h6>
                 <span>{{ order?.notes }}</span>
               </div>
-            </body>
+            </section>
           </article>
           <!--End general data-->
 
@@ -84,7 +84,7 @@
               </h5>
             </header>
 
-            <body class="row">
+            <section class="row">
               <div class="col-12 col-md-6">
                 <h6>
                   {{ t('name') }}
@@ -121,7 +121,7 @@
                     :options="{ position: { lat: order?.sender?.address.coords?.lat, lng: order?.sender?.address.coords?.lng }, label: 'L', title: 'LADY LIBERTY' }" />
                 </GoogleMap>
               </div>
-            </body>
+            </section>
           </article>
           <!--End sender data-->
 
@@ -133,7 +133,7 @@
               </h5>
             </header>
 
-            <body class="row">
+            <section class="row">
               <div class="col-12 col-md-6">
                 <h6>
                   {{ t('name') }}
@@ -184,14 +184,15 @@
                     :options="{ position: { lat: order?.client?.coords?.lat, lng: order?.client?.coords?.lng }, label: 'L', title: 'LADY LIBERTY' }" />
                 </GoogleMap>
               </div>
-            </body>
+            </section>
           </article>
           <!--End Client data-->
         </div>
         <!--End general information data-->
 
-        <!--tabs section-->
+        <!--complement section-->
         <div class="col-12 col-md-7" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+          <!--tabs-->
           <article class="show-order-article">
             <header>
               <q-tabs v-model="tab" no-caps class="text-primary full-width">
@@ -201,7 +202,7 @@
               </q-tabs>
             </header>
 
-            <body>
+            <section>
               <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up"
                 transition-next="jump-up">
                 <!--panel for product-->
@@ -241,7 +242,9 @@
                           {{ utils.formatPrice(parseFloat(product?.unit_price.replace('.', '')) || 0) }}
                         </td>
                         <td class="text-right">
-                          {{ product?.total_price > 0 ? utils.formatPrice(parseFloat(parseFloat(product?.unit_price.replace('.', '')) * product?.quantity)) : utils.formatPrice(0) }}
+                          {{ product?.total_price > 0 ?
+                            utils.formatPrice(parseFloat(parseFloat(product?.unit_price.replace('.', '')) *
+                          product?.quantity)) : utils.formatPrice(0) }}
                         </td>
                       </tr>
                     </tbody>
@@ -249,17 +252,48 @@
                 </q-tab-panel>
                 <!--End panel for product-->
               </q-tab-panels>
-            </body>
+            </section>
           </article>
+          <!--End tabs-->
 
+          <!--status-->
           <article class="show-order-article q-mt-lg">
             <header>
               <h5 class="text-primary">
-                {{ t('deliverySelected') }}
+                {{ t('statuses') }}
               </h5>
             </header>
 
-            <body class="row">
+            <section class="row">
+              <div class="col-12">
+                <q-timeline color="primary">
+                  <q-timeline-entry
+                    class="text-primary"
+                    v-for="(state, idx) in order.statuses"
+                    :key="idx"
+                    :title="status[state.status]"
+                    :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
+                    :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')"
+                  >
+                    <div v-if="state?.description">
+                      {{ state.description || '' }}
+                    </div>
+                  </q-timeline-entry>
+                </q-timeline>
+              </div>
+            </section>
+          </article>
+          <!--end status-->
+
+          <!--Courier-->
+          <article class="show-order-article q-mt-lg">
+            <header>
+              <h5 class="text-primary">
+                {{ t('delivery').substring(0, 10) }}
+              </h5>
+            </header>
+
+            <section class="row">
               <div class="col-12 col-md-6">
                 <h6>
                   {{ t('name') }}
@@ -291,13 +325,14 @@
                 </span>
                 <span v-else>-</span>
               </div>
-            </body>
+            </section>
           </article>
+          <!--End courier-->
         </div>
-        <!--End tab section-->
+        <!--End complement-->
       </section>
     </div>
-    <!--End body-->
+    <!--End section-->
   </div>
 </template>
 
@@ -403,13 +438,13 @@ const showGuide = async (reference) => {
 const toggleStatus = async (status) => {
   const createOrderDto = {
     status: status.value,
-    _id: order.value?._id,
-    print_guide: status.value === 'pending' ? false : true,
+    order_reference: order.value?.reference,
+    guide_url: '',
   }
 
   try {
     Loading.show();
-    const data = await contentOrder.doUpdateOrder(createOrderDto);
+    const data = await contentOrder.doUpdateOrderStatus(createOrderDto);
     if (data.success) {
       notification('success', t('statusChangedSuccess'), 'primary')
     }
@@ -470,7 +505,7 @@ onBeforeMount(() => {
     }
   }
 
-  body {
+  section {
     padding-top: .5rem;
     padding-bottom: .5rem;
 
@@ -493,5 +528,10 @@ onBeforeMount(() => {
       }
     }
   }
+}
+
+.guide-wrapper {
+  max-width: 1200px;
+  margin: 0px auto;
 }
 </style>

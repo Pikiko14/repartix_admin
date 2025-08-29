@@ -238,4 +238,5 @@ export default {
   createdAt: 'Fecha creación',
   deliverySelected: 'Domiciliario',
   collection: 'Recaudo',
+  statuses: 'Estados',
 }

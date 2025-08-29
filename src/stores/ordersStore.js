@@ -36,6 +36,9 @@ export const useOrdersStore = defineStore('ordersStore', {
     },
     setOrder(order) {
       this.order = order
-    }
+    },
+    putOrder(order) {
+      this.order = order
+    },
   },
 })

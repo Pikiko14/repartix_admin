@@ -78,6 +78,19 @@ export const ordersContent = () => {
     }
   }
 
+  const doUpdateOrderStatus = async (payload) => {
+    try {
+      const { data } = await api.put(`${path}/${payload.order_reference}/status`, payload)
+      if (data && data.data) {
+        console.log(data.data)
+        store.putOrder(data.data)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doShowOrder,
@@ -85,5 +98,6 @@ export const ordersContent = () => {
     doUpdateOrder,
     doCreateOrder,
     doDeleteOrder,
+    doUpdateOrderStatus,
   }
 }

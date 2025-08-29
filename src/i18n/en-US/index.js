@@ -237,4 +237,5 @@ export default {
   createdAt: 'Creation date',
   deliverySelected: 'Courier',
   collection: 'Collection',
+  statuses: 'Statuses',
 }

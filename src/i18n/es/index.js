@@ -239,4 +239,12 @@ export default {
   deliverySelected: 'Domiciliario',
   collection: 'Recaudo',
   statuses: 'Estados',
+  listSender: 'Listar remitente',
+  createSender: 'Crear remitente',
+  updateSender: 'Modificar remitente',
+  deleteSender: 'Borrar remitente',
+  listOrder: 'Listar orden',
+  createOrder: 'Crear orden',
+  updateOrder: 'Modificar orden',
+  deleteOrder: 'Borrar orden',
 }

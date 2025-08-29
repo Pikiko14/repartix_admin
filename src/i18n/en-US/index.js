@@ -238,4 +238,12 @@ export default {
   deliverySelected: 'Courier',
   collection: 'Collection',
   statuses: 'Statuses',
+  listSender: 'List senders',
+  createSender: 'Create senders',
+  updateSender: 'Update senders',
+  deleteSender: 'Delete senders',
+  listOrder: 'List orders',
+  createOrder: 'Create orders',
+  updateOrder: 'Update orders',
+  deleteOrder: 'Delete orders',
 }

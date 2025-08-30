@@ -31,10 +31,9 @@
     <!--status td-->
     <template v-slot:body-cell-status="props">
       <q-td :props="props">
-        <q-chip square size="8pt" class="primary text-bold chip-status" :class="[statusColor[props.row.status]]">
+        <q-chip square size="8pt" class="primary text-bold chip-status" :class="[statusColor[props.row.status] || 'bg-purple-10']">
           <span>
-            {{
-              status[props.row.status] }}
+            {{ status[props.row.status] || props.row.status }}
           </span>
         </q-chip>
       </q-td>

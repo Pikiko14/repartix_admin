@@ -337,7 +337,7 @@
               <div class="col-12">
                 <q-timeline color="primary">
                   <q-timeline-entry class="text-primary" v-for="(state, idx) in order.statuses" :key="idx"
-                    :title="status[state.status]" :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
+                    :title="status[state.status] || state.status" :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
                     :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')">
                     <div v-if="state?.description">
                       {{ state.description || '' }}

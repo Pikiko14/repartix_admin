@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('authStore', {
     getUser: (state) => state.user,
     getHaveSubscription: (state) => state.user?.subscription,
     getOpenModalPlan: (state) => state.modalPlan,
+    getConfiguration: (state) => state.user?.brand?.configuration || {},
   },
   actions: {
     setUser(userData) {

@@ -8,8 +8,9 @@
 
     <!--Table-->
     <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder"
-      @delete="doDeleteOrder" @show-guide="showGuide" @show-order="showOrder" />
+      :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order"
+      delete-scope="delete-order" @edit="handlerUpdateOrder" @delete="doDeleteOrder" @show-guide="showGuide"
+      @show-order="showOrder" />
     <!--End table-->
 
     <!--Modal order-->
@@ -31,6 +32,7 @@ import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { Utils } from 'src/utils/utils';
 import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import OrdersForm from './components/OrdersForm.vue';
 import { useOrdersStore } from 'src/stores/ordersStore';
@@ -112,82 +114,6 @@ const columns = [
     align: 'center',
   },
 ];
-const filterItems = [
-  {
-    label: t('status'),
-    key: 'status',
-    items: [
-      {
-        label: t('pending'),
-        value: 'pending',
-      },
-      {
-        label: t('in_progress'),
-        value: 'in_progress',
-      },
-      {
-        label: t('delivered'),
-        value: 'delivered',
-      },
-      {
-        label: t('cancelled'),
-        value: 'cancelled',
-      },
-      {
-        label: t('returned'),
-        value: 'returned',
-      },
-      {
-        label: t('guide_printed'),
-        value: 'guide_printed',
-      },
-      {
-        label: t('guide_news'),
-        value: 'guide_news',
-      },
-      {
-        label: t('all'),
-        value: 'all',
-      }
-    ]
-  },
-  {
-    label: t('cashOnDelivery'),
-    key: 'cash_on_delivery',
-    items: [
-      {
-        label: t('yes'),
-        value: true,
-      },
-      {
-        label: t('no'),
-        value: false,
-      },
-      {
-        label: t('all'),
-        value: 'all',
-      }
-    ]
-  },
-  {
-    label: t('settledToSender'),
-    key: 'settled_to_sender',
-    items: [
-      {
-        label: t('yes'),
-        value: true,
-      },
-      {
-        label: t('no'),
-        value: false,
-      },
-      {
-        label: t('all'),
-        value: 'all',
-      }
-    ]
-  }
-];
 const pagination = ref({
   sortBy: 'desc',
   descending: false,
@@ -197,11 +123,106 @@ const pagination = ref({
 });
 const store = useOrdersStore();
 const content = ordersContent();
+const authStore = useAuthStore();
 const contentGuides = guidesContent();
 
 // computed
 const orders = computed(() => {
   return store.getOrders;
+});
+
+const configuration = computed(() => authStore.getConfiguration);
+
+const filterItems = computed(() => {
+  const itemsStatus = [
+    {
+      label: t('pending'),
+      value: 'pending',
+    },
+    {
+      label: t('in_progress'),
+      value: 'in_progress',
+    },
+    {
+      label: t('delivered'),
+      value: 'delivered',
+    },
+    {
+      label: t('cancelled'),
+      value: 'cancelled',
+    },
+    {
+      label: t('returned'),
+      value: 'returned',
+    },
+    {
+      label: t('guide_printed'),
+      value: 'guide_printed',
+    },
+    {
+      label: t('guide_news'),
+      value: 'guide_news',
+    },
+    {
+      label: t('all'),
+      value: 'all',
+    },
+  ];
+
+  if (configuration.value?.statuses) {
+    const complementStatuses = configuration.value?.statuses?.split('\n');
+
+    for (const status of complementStatuses) {
+      itemsStatus.push({
+        label: status,
+        value: status,
+      });
+    }
+  }
+
+  return [
+    {
+      label: t('status'),
+      key: 'status',
+      items: itemsStatus
+    },
+    {
+      label: t('cashOnDelivery'),
+      key: 'cash_on_delivery',
+      items: [
+        {
+          label: t('yes'),
+          value: true,
+        },
+        {
+          label: t('no'),
+          value: false,
+        },
+        {
+          label: t('all'),
+          value: 'all',
+        }
+      ]
+    },
+    {
+      label: t('settledToSender'),
+      key: 'settled_to_sender',
+      items: [
+        {
+          label: t('yes'),
+          value: true,
+        },
+        {
+          label: t('no'),
+          value: false,
+        },
+        {
+          label: t('all'),
+          value: 'all',
+        }
+      ]
+    }
+  ];
 });
 
 // methods
@@ -386,7 +407,7 @@ const showGuide = async (reference) => {
 const showOrder = async (id) => {
   Loading.show();
   try {
-    const data =await content.doShowOrder(id);
+    const data = await content.doShowOrder(id);
     if (data?.success) {
       router.push({
         name: 'showOrder',

@@ -256,4 +256,6 @@ export default {
   paymentCreatedSuccess: 'Pago creado correctamente',
   cantExcedAmount: 'El pago no puede exceder este monto -money',
   cashAmountPending: 'Pendiente de recaudo',
+  note: 'Nota',
+  statusesDescription: 'Cada linea sera un estado disponible en el selector de cambio de estado',
 }

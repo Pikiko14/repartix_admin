@@ -286,12 +286,13 @@
                         </q-item-section>
 
                         <q-item-section side top v-if="payment?.file">
-                          <q-btn @click="openEvidence(payment?.file)" icon="image" flat dense rounded color="primary"></q-btn>
+                          <q-btn @click="openEvidence(payment?.file)" icon="image" flat dense rounded
+                            color="primary"></q-btn>
                         </q-item-section>
                       </q-item>
                     </q-list>
-                    <q-btn v-if="utils.validateRole('update-order') && restToCollection !== 0" @click="openModalPayment" rounded color="primary"
-                      :label="t('add')" unelevated no-caps></q-btn>
+                    <q-btn v-if="utils.validateRole('update-order') && restToCollection !== 0" @click="openModalPayment"
+                      rounded color="primary" :label="t('add')" unelevated no-caps></q-btn>
                   </section>
                 </q-tab-panel>
                 <!--End panel for collection-->
@@ -401,11 +402,8 @@
     <q-dialog v-model="openModalCollection">
       <ModalCard :title="t('createCollection')">
         <template #body>
-          <OrderPaymentForm
-            :order-id="order._id"
-            :rest-to-collection="restToCollection"
-            @close-modal="openModalPayment"
-          />
+          <OrderPaymentForm :order-id="order._id" :rest-to-collection="restToCollection"
+            @close-modal="openModalPayment" />
         </template>
       </ModalCard>
     </q-dialog>
@@ -452,37 +450,6 @@ const status = {
   guide_news: t('guide_news'),
 }
 
-const statusOption = [
-  {
-    label: status.pending,
-    value: 'pending',
-  },
-  {
-    label: status.in_progress,
-    value: 'in_progress',
-  },
-  {
-    label: status.delivered,
-    value: 'delivered',
-  },
-  {
-    label: status.cancelled,
-    value: 'cancelled',
-  },
-  {
-    label: status.returned,
-    value: 'returned',
-  },
-  {
-    label: status['guide-printed'],
-    value: 'guide-printed',
-  },
-  {
-    label: status.guide_news,
-    value: 'guide_news',
-  }
-];
-
 // computed
 const order = computed(() => {
   return store.getOrder;
@@ -507,7 +474,55 @@ const restToCollection = computed(() => {
   return cashAmount - totalPayment;
 });
 
+const configuration = computed(() => authStore.getConfiguration);
+
 const formatDate = computed(() => date.formatDate(order.value?.date, 'DD/MM/YYYY'));
+
+const statusOption = computed(() => {
+  const statuses = [
+    {
+      label: status.pending,
+      value: 'pending',
+    },
+    {
+      label: status.in_progress,
+      value: 'in_progress',
+    },
+    {
+      label: status.delivered,
+      value: 'delivered',
+    },
+    {
+      label: status.cancelled,
+      value: 'cancelled',
+    },
+    {
+      label: status.returned,
+      value: 'returned',
+    },
+    {
+      label: status['guide-printed'],
+      value: 'guide-printed',
+    },
+    {
+      label: status.guide_news,
+      value: 'guide_news',
+    }
+  ];
+
+  if (configuration.value?.statuses) {
+    const complementStatuses = configuration.value?.statuses?.split('\n');
+
+    for (const status of complementStatuses) {
+      statuses.push({
+        label: status,
+        value: status,
+      });
+    }
+  }
+
+  return statuses;
+});
 
 // methods
 const openWhatSapp = (phone) => {

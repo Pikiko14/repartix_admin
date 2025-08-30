@@ -255,4 +255,6 @@ export default {
   paymentCreatedSuccess: 'Payment created success',
   cantExcedAmount: 'Payment can´t exceed this -money',
   cashAmountPending: 'Pending to  collection',
+  note: 'Note',
+  statusesDescription: 'Each line will be a state available in the state change selector',
 }

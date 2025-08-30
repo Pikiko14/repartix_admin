@@ -22,6 +22,7 @@
             <q-tab name="profile" icon="person" :label="t('profile')" />
             <q-tab v-if="utils.validateRole('update-brand')" name="configuration" icon="admin_panel_settings" :label="t('configuration')" />
             <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="map" icon="explore" :label="t('map')" />
+            <q-tab v-if="utils.validateRole('update-brand')" name="statuses" icon="signal_cellular_alt_2_bar" :label="t('statuses')" />
           </q-tabs>
         </template>
         <!--End tabs-->
@@ -192,6 +193,12 @@
               <ConfigComponent />
             </q-tab-panel>
             <!--End Configuration tab-->
+
+            <!--statuses tab-->
+            <q-tab-panel class="q-pa-none q-px-md" name="statuses">
+              <StatusesForm />
+            </q-tab-panel>
+            <!--Statuses tab-->
           </q-tab-panels>
         </template>
         <!--End body tabs-->
@@ -210,6 +217,7 @@ import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { americanPhoneCodes } from 'src/utils/constant';
 import { authContent } from 'src/composables/authContent';
+import StatusesForm from './configurations/StatusesForm.vue';
 import ConfigComponent from './configurations/ConfigComponent.vue';
 import MapConfiguration from './configurations/MapConfiguration.vue';
 

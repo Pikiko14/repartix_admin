@@ -87,7 +87,7 @@
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense
+        <q-btn :disabled="props.row.status && props.row.status !== 'pending'" @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense
           rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}

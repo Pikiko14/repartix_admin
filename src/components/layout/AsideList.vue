@@ -46,7 +46,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple to="/dashboard/senders?page=1&perPage=10&search=">
+      <q-item v-if="utils.validateRole('list-sender')" clickable v-ripple to="/dashboard/senders?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('sender') }}

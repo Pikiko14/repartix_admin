@@ -20,9 +20,9 @@
         <template v-slot:before>
           <q-tabs v-model="tab" no-caps vertical class="text-primary">
             <q-tab name="profile" icon="person" :label="t('profile')" />
-            <q-tab v-if="utils.validateRole('update-brand')" name="configuration" icon="admin_panel_settings" :label="t('configuration')" />
+            <q-tab v-if="utils.validateRole('update-brand') && user.brand" name="configuration" icon="admin_panel_settings" :label="t('configuration')" />
             <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="map" icon="explore" :label="t('map')" />
-            <q-tab v-if="utils.validateRole('update-brand')" name="statuses" icon="signal_cellular_alt_2_bar" :label="t('statuses')" />
+            <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="statuses" icon="signal_cellular_alt_2_bar" :label="t('statuses')" />
           </q-tabs>
         </template>
         <!--End tabs-->

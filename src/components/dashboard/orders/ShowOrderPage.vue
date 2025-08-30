@@ -335,15 +335,17 @@
 
             <section class="row">
               <div class="col-12">
-                <q-timeline color="primary">
-                  <q-timeline-entry class="text-primary" v-for="(state, idx) in order.statuses" :key="idx"
-                    :title="status[state.status] || state.status" :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
-                    :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')">
-                    <div v-if="state?.description">
-                      {{ state.description || '' }}
-                    </div>
-                  </q-timeline-entry>
-                </q-timeline>
+                <q-scroll-area style="width: 100%; height: 630px">
+                  <q-timeline color="primary" style="margin-left: 8px">
+                    <q-timeline-entry class="text-primary" v-for="(state, idx) in order.statuses" :key="idx"
+                      :title="status[state.status] || state.status" :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
+                      :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')">
+                      <div v-if="state?.description">
+                        {{ state.description || '' }}
+                      </div>
+                    </q-timeline-entry>
+                  </q-timeline>
+                </q-scroll-area>
               </div>
             </section>
           </article>

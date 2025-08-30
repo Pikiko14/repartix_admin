@@ -262,6 +262,18 @@
                       {{ t('noPayments') }}
                     </span>
 
+                    <div class="row full-width">
+                      <div class="col-12 col-md-6 text-center">
+                        <p class="text-bold text-primary">{{ t('cashAmount') }}</p>
+                        {{ utils.formatPrice(parseFloat(order.cash_amount.replace('.', '')) || 0) }}
+                      </div>
+
+                      <div class="col-12 col-md-6 text-center">
+                        <p class="text-bold text-primary">{{ t('cashAmountPending') }}</p>
+                        {{ utils.formatPrice(restToCollection) }}
+                      </div>
+                    </div>
+
                     <q-list class="full-width">
                       <q-item v-for="(payment, idx) in order.payments" :key="idx">
                         <q-item-section>
@@ -269,7 +281,7 @@
                             {{ payment.methods }}
                           </q-item-label>
                           <q-item-label caption lines="1">
-                            {{ payment.amount }}
+                            {{ utils.formatPrice(parseFloat(payment.amount.replace('.', '')) || 0) }}
                           </q-item-label>
                         </q-item-section>
 
@@ -278,8 +290,7 @@
                         </q-item-section>
                       </q-item>
                     </q-list>
-
-                    <q-btn v-if="utils.validateRole('update-order')" @click="openModalPayment" rounded color="primary"
+                    <q-btn v-if="utils.validateRole('update-order') && restToCollection !== 0" @click="openModalPayment" rounded color="primary"
                       :label="t('add')" unelevated no-caps></q-btn>
                   </section>
                 </q-tab-panel>
@@ -390,7 +401,11 @@
     <q-dialog v-model="openModalCollection">
       <ModalCard :title="t('createCollection')">
         <template #body>
-          <OrderPaymentForm :order-id="order._id" @close-modal="openModalCollection" />
+          <OrderPaymentForm
+            :order-id="order._id"
+            :rest-to-collection="restToCollection"
+            @close-modal="openModalPayment"
+          />
         </template>
       </ModalCard>
     </q-dialog>
@@ -481,6 +496,16 @@ const user = computed(() => {
   return authStore.getUser;
 });
 
+const restToCollection = computed(() => {
+  let totalPayment = 0;
+  for (const payment of order.value.payments) {
+    let amount = payment?.amount.replace('.', '');
+    amount = parseFloat(amount);
+    totalPayment += amount;
+  }
+  const cashAmount = parseFloat(order.value?.cash_amount.replace('.', ''));
+  return cashAmount - totalPayment;
+});
 
 const formatDate = computed(() => date.formatDate(order.value?.date, 'DD/MM/YYYY'));
 

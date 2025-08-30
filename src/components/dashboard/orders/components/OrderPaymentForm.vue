@@ -7,8 +7,17 @@
     </div>
     <div class="col-12">
       <label for="amount">{{ t('amount') }}</label>
-      <q-input v-money="money" id="amount" placeholder="150.000,00" outlined dense v-model="payment.amount"
-        :rules="[(val) => !!val || t('requiredField')]" />
+      <q-input
+        v-money="money"
+        id="amount"
+        placeholder="150.000,00"
+        outlined
+        dense
+        v-model="payment.amount"
+        :rules="[
+          (val) => !!val || t('requiredField'),
+          (val) => parseFloat(val.replace('.', '')) <= restToCollection || t('cantExcedAmount').replace('-money', restToCollection),
+        ]" />
     </div>
     <div class="col-12">
       <label for="file">{{ t('selectOneFile') }}</label>
@@ -34,6 +43,10 @@ const props = defineProps({
   orderId: {
     type: String,
     default: ''
+  },
+  restToCollection: {
+    type: Number,
+    default: 0
   }
 });
 

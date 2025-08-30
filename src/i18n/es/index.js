@@ -254,4 +254,6 @@ export default {
   method: 'Método de pago',
   selectOneFile: 'Selecciona un archivo',
   paymentCreatedSuccess: 'Pago creado correctamente',
+  cantExcedAmount: 'El pago no puede exceder este monto -money',
+  cashAmountPending: 'Pendiente de recaudo',
 }

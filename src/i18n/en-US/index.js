@@ -253,4 +253,6 @@ export default {
   method: 'Payment method',
   selectOneFile: 'Select one file',
   paymentCreatedSuccess: 'Payment created success',
+  cantExcedAmount: 'Payment can´t exceed this -money',
+  cashAmountPending: 'Pending to  collection',
 }

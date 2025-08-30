@@ -447,7 +447,7 @@ const money = {
   thousands: '.',
   prefix: '',
   suffix: ' ',
-  precision: 2
+  precision: 0
 }
 const order = ref({
   date: '',
@@ -676,6 +676,7 @@ const setSender = (sender) => {
   order.value.sender.brand_name = sender.sender_info.brand_name;
   order.value.sender.brand_phone = sender.sender_info.brand_phone;
   order.value.sender.optionsAddress = sender.sender_info.address;
+  order.value.sender.sender_id = sender._id;
 
   showSenderMenu.value = false;
 }

@@ -248,4 +248,9 @@ export default {
   deleteOrder: 'Delete orders',
   noNews: 'No news for this order',
   resolve: 'Solution',
+  noPayments: 'No payments for this order',
+  createCollection: 'Add payment',
+  method: 'Payment method',
+  selectOneFile: 'Select one file',
+  paymentCreatedSuccess: 'Payment created success',
 }

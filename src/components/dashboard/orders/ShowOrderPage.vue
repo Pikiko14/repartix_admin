@@ -9,9 +9,9 @@
     <div class="col-12 col-md-6">
       <div class="order-action">
         <!--Status action-->
-        <q-select v-if="utils.validateRole('update-order') && order?.status !== 'delivered'" @update:model-value="toggleStatus"
-          class="order-action__item" outlined map-options rounded dense v-model="order.status"
-          :options="statusOption"></q-select>
+        <q-select v-if="utils.validateRole('update-order') && order?.status !== 'delivered'"
+          @update:model-value="toggleStatus" class="order-action__item" outlined map-options rounded dense
+          v-model="order.status" :options="statusOption"></q-select>
         <!--End status action-->
 
         <!--Show guide action-->
@@ -21,8 +21,8 @@
         <!--En Show guide action-->
 
         <!--Contact action-->
-        <q-btn class="order-action__item" @click="openWhatSapp(order?.client?.phone?.replace(/\D/g, ''))" color="primary" unelevated rounded
-          :label="t('contact')" no-caps icon-right="phone"></q-btn>
+        <q-btn class="order-action__item" @click="openWhatSapp(order?.client?.phone?.replace(/\D/g, ''))"
+          color="primary" unelevated rounded :label="t('contact')" no-caps icon-right="phone"></q-btn>
         <!--En contact action-->
       </div>
     </div>
@@ -191,14 +191,14 @@
         <!--End general information data-->
 
         <!--complement section-->
-        <div class="col-12 col-md-7" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+        <div class="col-12 col-md-7" :class="{ 'q-pl-sm': $q.screen.gt.sm, 'q-mt-lg': $q.screen.lt.md }">
           <!--tabs-->
           <article class="show-order-article">
             <!--tabs header-->
             <header>
               <q-tabs v-model="tab" no-caps class="text-primary full-width">
                 <q-tab style="width: 100%" name="products" :label="t('products')" />
-                <q-tab style="width: 100%" name="collection" :label="t('collection')" />
+                <q-tab v-if="order?.cash_on_delivery" style="width: 100%" name="collection" :label="t('collection')" />
                 <q-tab style="width: 100%" name="news" :label="t('guide_news')" />
               </q-tabs>
             </header>
@@ -247,7 +247,7 @@
                         <td class="text-right">
                           {{ product?.total_price > 0 ?
                             utils.formatPrice(parseFloat(parseFloat(product?.unit_price.replace('.', '')) *
-                          product?.quantity)) : utils.formatPrice(0) }}
+                              product?.quantity)) : utils.formatPrice(0) }}
                         </td>
                       </tr>
                     </tbody>
@@ -255,16 +255,41 @@
                 </q-tab-panel>
                 <!--End panel for product-->
 
+                <!--panel for collection-->
+                <q-tab-panel class="q-pa-none q-px-md" name="collection">
+                  <section class="order-collection">
+                    <span v-if="order.payments.length === 0">
+                      {{ t('noPayments') }}
+                    </span>
+
+                    <q-list class="full-width">
+                      <q-item v-for="(payment, idx) in order.payments" :key="idx">
+                        <q-item-section>
+                          <q-item-label class="text-bold text-primary">
+                            {{ payment.methods }}
+                          </q-item-label>
+                          <q-item-label caption lines="1">
+                            {{ payment.amount }}
+                          </q-item-label>
+                        </q-item-section>
+
+                        <q-item-section side top v-if="payment?.file">
+                          <q-btn @click="openEvidence(payment?.file)" icon="image" flat dense rounded color="primary"></q-btn>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+
+                    <q-btn v-if="utils.validateRole('update-order')" @click="openModalPayment" rounded color="primary"
+                      :label="t('add')" unelevated no-caps></q-btn>
+                  </section>
+                </q-tab-panel>
+                <!--End panel for collection-->
+
                 <!--panel for news-->
                 <q-tab-panel class="q-pa-none q-px-md" name="news">
                   <q-timeline color="primary" v-if="order.news.length > 0">
-                    <q-timeline-entry
-                      class="text-primary"
-                      v-for="(news, idx) in order.news"
-                      :key="idx"
-                      :title="news.type_news"
-                      :subtitle="date.formatDate(news.date, 'DD/MM/YYYY HH:mm')"
-                    >
+                    <q-timeline-entry class="text-primary" v-for="(news, idx) in order.news" :key="idx"
+                      :title="news.type_news" :subtitle="date.formatDate(news.date, 'DD/MM/YYYY HH:mm')">
                       <div v-if="news?.description" style="margin-top: -10px" class="text-black">
                         <p>
                           {{ news.description || '' }}
@@ -277,8 +302,8 @@
                   </q-timeline>
                   <section v-else class="text-center">
                     <span>
-                    {{ t('noNews') }}
-                  </span>
+                      {{ t('noNews') }}
+                    </span>
                   </section>
                 </q-tab-panel>
                 <!--end panel for news-->
@@ -299,14 +324,9 @@
             <section class="row">
               <div class="col-12">
                 <q-timeline color="primary">
-                  <q-timeline-entry
-                    class="text-primary"
-                    v-for="(state, idx) in order.statuses"
-                    :key="idx"
-                    :title="status[state.status]"
-                    :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
-                    :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')"
-                  >
+                  <q-timeline-entry class="text-primary" v-for="(state, idx) in order.statuses" :key="idx"
+                    :title="status[state.status]" :icon="state.status === 'delivered' ? 'done' : 'local_shipping'"
+                    :subtitle="date.formatDate(state.date, 'DD/MM/YYYY HH:mm')">
                     <div v-if="state?.description">
                       {{ state.description || '' }}
                     </div>
@@ -365,6 +385,16 @@
       </section>
     </div>
     <!--End section-->
+
+    <!--collection dialog-->
+    <q-dialog v-model="openModalCollection">
+      <ModalCard :title="t('createCollection')">
+        <template #body>
+          <OrderPaymentForm :order-id="order._id" @close-modal="openModalCollection" />
+        </template>
+      </ModalCard>
+    </q-dialog>
+    <!--End collection dialog-->
   </div>
 </template>
 
@@ -380,8 +410,10 @@ import { GoogleMap, Marker } from 'vue3-google-map';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { useOrdersStore } from 'src/stores/ordersStore';
+import ModalCard from 'src/components/partials/ModalCard.vue';
 import { ordersContent } from 'src/composables/ordersContent';
 import { guidesContent } from 'src/composables/guidesContent';
+import OrderPaymentForm from './components/OrderPaymentForm.vue';
 
 // references
 const tab = ref('products');
@@ -392,6 +424,8 @@ const store = useOrdersStore();
 const authStore = useAuthStore();
 const contentOrder = ordersContent();
 const contentGuides = guidesContent();
+const openModalCollection = ref(false);
+
 
 const status = {
   pending: t('pending'),
@@ -485,6 +519,14 @@ const toggleStatus = async (status) => {
   }
 }
 
+const openModalPayment = () => {
+  openModalCollection.value = !openModalCollection.value;
+}
+
+const openEvidence = (url) => {
+  window.open(url, '_blank');
+}
+
 // hook
 onBeforeMount(() => {
   if (route.params.id) {
@@ -565,5 +607,12 @@ onBeforeMount(() => {
 .guide-wrapper {
   max-width: 1200px;
   margin: 0px auto;
+}
+
+.order-collection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
 }
 </style>

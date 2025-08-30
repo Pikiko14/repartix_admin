@@ -417,6 +417,7 @@ import AddressForm from './AddressForm.vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
+import { useOrdersStore } from 'src/stores/ordersStore';
 import { useCitiesStore } from 'src/stores/citiesStore';
 import { useSendersStore } from 'src/stores/sendersStore';
 import { useClientsStore } from 'src/stores/clientsStore';
@@ -429,7 +430,6 @@ import { shippingContent } from 'src/composables/shippingContent';
 import ClientsForm from '../../clients/components/ClientsForm.vue';
 import { ref, onBeforeMount, computed, onBeforeUnmount } from 'vue';
 import SendersForm from 'src/components/dashboard/senders/components/SendersForm.vue';
-import { useOrdersStore } from 'src/stores/ordersStore';
 
 // props
 const props = defineProps({

@@ -249,4 +249,9 @@ export default {
   deleteOrder: 'Borrar orden',
   noNews: 'No hay novedades para esta orden',
   resolve: 'Solución',
+  noPayments: 'No hay pagos para esta orden',
+  createCollection: 'Agregar pago',
+  method: 'Método de pago',
+  selectOneFile: 'Selecciona un archivo',
+  paymentCreatedSuccess: 'Pago creado correctamente',
 }

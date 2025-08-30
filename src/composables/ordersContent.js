@@ -82,8 +82,23 @@ export const ordersContent = () => {
     try {
       const { data } = await api.put(`${path}/${payload.order_reference}/status`, payload)
       if (data && data.data) {
-        console.log(data.data)
         store.putOrder(data.data)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const doCreatePayment = async (payload) => {
+    try {
+      const { data } = await api.post(`${path}/payment`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      if (data && data.order) {
+        store.addPayment(data.order)
       }
       return data
     } catch (error) {
@@ -98,6 +113,7 @@ export const ordersContent = () => {
     doUpdateOrder,
     doCreateOrder,
     doDeleteOrder,
+    doCreatePayment,
     doUpdateOrderStatus,
   }
 }

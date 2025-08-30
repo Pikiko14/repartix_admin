@@ -40,5 +40,8 @@ export const useOrdersStore = defineStore('ordersStore', {
     putOrder(order) {
       this.order = order
     },
+    addPayment(order) {
+      this.order.payments = order.payments
+    },
   },
 })

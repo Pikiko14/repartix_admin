@@ -23,6 +23,7 @@
             <q-tab v-if="utils.validateRole('update-brand') && user.brand" name="configuration" icon="admin_panel_settings" :label="t('configuration')" />
             <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="map" icon="explore" :label="t('map')" />
             <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="statuses" icon="signal_cellular_alt_2_bar" :label="t('statuses')" />
+            <q-tab v-if="utils.validateRole('update-brand') && user.brand.configuration" name="payments" icon="attach_money" :label="t('payments')" />
           </q-tabs>
         </template>
         <!--End tabs-->
@@ -199,6 +200,12 @@
               <StatusesForm />
             </q-tab-panel>
             <!--Statuses tab-->
+
+            <!--payments tab-->
+            <q-tab-panel class="q-pa-none q-px-md" name="payments">
+              <PaymentsForm />
+            </q-tab-panel>
+            <!--payments tab-->
           </q-tab-panels>
         </template>
         <!--End body tabs-->
@@ -218,6 +225,7 @@ import { notification } from 'src/boot/notification';
 import { americanPhoneCodes } from 'src/utils/constant';
 import { authContent } from 'src/composables/authContent';
 import StatusesForm from './configurations/StatusesForm.vue';
+import PaymentsForm from './configurations/PaymentsForm.vue';
 import ConfigComponent from './configurations/ConfigComponent.vue';
 import MapConfiguration from './configurations/MapConfiguration.vue';
 

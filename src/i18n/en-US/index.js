@@ -257,4 +257,6 @@ export default {
   cashAmountPending: 'Pending to  collection',
   note: 'Note',
   statusesDescription: 'Each line will be a state available in the state change selector',
+  payments: 'Payments',
+  paymentsMethods: 'Payments methods'
 }

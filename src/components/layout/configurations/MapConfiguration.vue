@@ -59,6 +59,8 @@ const handlerSaveMapConfiguration = async () => {
   params.currency = user.value.brand.configuration.currency || '';
   params.price_by_km = user.value.brand.configuration.price_by_km || 0;
   params.route_price_by_km = user.value.brand.configuration.route_price_by_km || false;
+  params.payments = user.value.brand.configuration.payments || '';
+  params.statuses = user.value.brand.configuration.statuses || '';
 
   loading.value = true;
   try {

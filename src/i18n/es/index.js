@@ -258,4 +258,6 @@ export default {
   cashAmountPending: 'Pendiente de recaudo',
   note: 'Nota',
   statusesDescription: 'Cada linea sera un estado disponible en el selector de cambio de estado',
+  payments: 'Pagos',
+  paymentsMethods: 'Métodos de pago'
 }

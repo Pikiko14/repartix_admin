@@ -2,7 +2,7 @@
   <q-form @submit="handlerSavePayment" class="row">
     <div class="col-12">
       <label for="methods">{{ t('method') }}</label>
-      <q-input id="methods" placeholder="Usdt | Btc | Trans" outlined dense v-model="payment.methods"
+      <q-select :options="paymentsOptions" id="methods" :label="t('selectOneOptions')" outlined dense v-model="payment.methods"
         :rules="[(val) => !!val || t('requiredField')]" />
     </div>
     <div class="col-12">
@@ -34,7 +34,8 @@
 // import
 import { VMoney } from 'v-money';
 import { useI18n } from 'vue-i18n';
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, computed } from 'vue';
+import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { ordersContent } from 'src/composables/ordersContent';
 
@@ -58,6 +59,7 @@ const { t } = useI18n();
 const payment = ref({});
 const loading = ref(false);
 const content = ordersContent();
+const authStore = useAuthStore();
 
 const money = {
   decimal: ',',
@@ -66,6 +68,13 @@ const money = {
   suffix: ' ',
   precision: 0
 }
+
+// computed
+const paymentsOptions = computed(() => {
+  const configuration = authStore.getConfiguration;
+  const payments = configuration.payments.split('\n');
+  return payments;
+});
 
 // methods
 const handlerSavePayment = async () => {

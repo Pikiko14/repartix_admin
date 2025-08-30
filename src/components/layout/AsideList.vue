@@ -68,7 +68,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable to="/dashboard/clients?page=1&perPage=10&search=" v-if="utils.validateRole('list-client')" v-ripple>
+      <q-item clickable to="/dashboard/clients?page=1&perPage=10&search=" v-if="utils.validateRole('list-client') && user.type_user !== 'sender'" v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('client') }}
@@ -134,6 +134,7 @@
 
 <script setup>
 // imports
+import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
@@ -146,6 +147,9 @@ const { t } = useI18n();
 const utils = new Utils();
 const router = useRouter();
 const authStore = useAuthStore();
+
+// computed
+const user = computed(() => authStore.getUser);
 
 // methods
 const handlerLogout = () => {

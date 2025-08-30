@@ -120,7 +120,7 @@
             <q-btn @click="openModalAdd('address')" no-caps :label="t('otherAddress')" unelevated color="primary"
               rounded></q-btn>
           </div>
-          <div class="col-12 q-mt-md text-center" v-if="order.sender.brand_name">
+          <div class="col-12 q-mt-md text-center" v-if="order.sender.brand_name && user.type_user !== 'sender'">
             <q-btn no-caps @click="clearSenderAddress" outline :label="t('otherSender')" color="primary"
               rounded></q-btn>
           </div>
@@ -548,7 +548,8 @@ const clients = computed(() => storeClient.getClients);
 const cities = computed(() => citiesStore.getCities.map(city => {
   return { label: city.name, value: city.name, zones: city.zones }
 }));
-const configuration = computed(() => authStore.getUser.brand.configuration || {});
+const configuration = computed(() => authStore.getConfiguration || {});
+const user = computed(() => authStore.getUser || {});
 
 // methods
 const handlerDoQuote = async () => {
@@ -864,9 +865,13 @@ const resetClient = () => {
 
 // hook
 onBeforeMount(async () => {
+  if (user.value.type_user === 'sender') {
+    setSender(user.value);
+    senderSelected.value = user.value;
+  }
+
   if (props.orderSelected && props.orderSelected._id) {
     order.value = JSON.parse(JSON.stringify(props.orderSelected));
-
 
     const promiseArray = [];
     if (!configuration.value.route_price_by_km) {

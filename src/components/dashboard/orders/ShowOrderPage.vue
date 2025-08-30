@@ -291,7 +291,7 @@
                         </q-item-section>
                       </q-item>
                     </q-list>
-                    <q-btn v-if="utils.validateRole('update-order') && restToCollection !== 0" @click="openModalPayment"
+                    <q-btn v-if="utils.validateRole('update-order') && restToCollection !== 0 && user.type_user !== 'sender'" @click="openModalPayment"
                       rounded color="primary" :label="t('add')" unelevated no-caps></q-btn>
                   </section>
                 </q-tab-panel>

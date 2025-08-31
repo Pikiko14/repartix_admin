@@ -1,5 +1,20 @@
 <template>
   <section class="repartix-dashboard">
+    <div class="col-12">
+      <h2 class="text-h6">
+        {{ t('titleDashboard') }} {{ dateSelected || date.formatDate(now, 'DD/MM/YYYY') }}
+        <q-btn icon="calendar_month" flat dense rounded color="primary">
+          <q-popup-proxy ref="updateProxy" @before-show="updateProxy" cover transition-show="scale" transition-hide="scale">
+            <q-date @update:model-value="filterByDate" v-model="dateSelected">
+            </q-date>
+          </q-popup-proxy>
+          <q-tooltip class="bg-primary">
+            {{ t('selectDate') }}
+          </q-tooltip>
+        </q-btn>
+      </h2>
+    </div>
+
     <!--Card metrics-->
     <CardDashboard />
     <!--Card metrics-->
@@ -12,8 +27,37 @@
 
 <script setup>
 // imports
+import { ref } from 'vue';
+import { date } from 'quasar';
+import { useI18n } from 'vue-i18n';
 import MapDashboard from './main/MapDashboard.vue';
 import CardDashboard from './main/CardDashboard.vue';
+import { dashboardContent } from 'src/composables/dashboardContent';
+
+// references
+const now = new Date();
+const { t } = useI18n();
+const dateSelected = ref('');
+const updateProxy = ref();
+const content = dashboardContent();
+
+
+
+// methods
+const loadfashboardData = async () => {
+  const from = dateSelected.value || date.formatDate(now, 'YYYY/MM/DD');
+  const to = dateSelected.value || date.formatDate(now, 'YYYY/MM/DD');
+  if (updateProxy.value) updateProxy.value.hide();
+  await content.doListDashboardData(`from=${from}&to=${to}`);
+}
+
+const filterByDate = (e) => {
+  dateSelected.value = e;
+  loadfashboardData();
+}
+
+// hook
+loadfashboardData();
 </script>
 
 <style lang="scss" scoped>
@@ -28,5 +72,13 @@ import CardDashboard from './main/CardDashboard.vue';
     gap: 1rem;
     width: 100%;
   }
+}
+
+h2 {
+  margin: 0px;
+  line-height: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
 }
 </style>

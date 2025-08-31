@@ -2,12 +2,19 @@
 @use './pages/_auth';
 @use './pages/_register';
 
-h1,h2,h3,h4,h5,h6,p {
-    margin: 0;
-    padding: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
 }
 
-label, .q-toggle__label {
+label,
+.q-toggle__label {
   font-size: 12pt;
   font-weight: 600;
 }
@@ -22,11 +29,11 @@ label, .q-toggle__label {
 }
 
 .q-table tbody td {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .q-table th {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .d-flex {
@@ -62,4 +69,32 @@ label, .q-toggle__label {
 
 .active {
   background-color: #21224531;
+}
+
+.gm-style-iw-c {
+  background-color: $primary !important;
+  color: white;
+  padding: 12px !important;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .gm-style-iw-chr {
+    height: 24px;
+    width: 24px;
+    color: white;
+
+    button {
+      height: 24px !important;
+      width: 24px !important;
+      color: white;
+      margin-right: -5px !important;
+      filter: brightness(0) invert(1) !important;
+
+      span {
+        margin: 0 !important;
+        filter: brightness(0) invert(1) !important;
+      }
+    }
+  }
 }

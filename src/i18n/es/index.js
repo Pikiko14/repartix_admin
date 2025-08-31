@@ -259,5 +259,8 @@ export default {
   note: 'Nota',
   statusesDescription: 'Cada linea sera un estado disponible en el selector de cambio de estado',
   payments: 'Pagos',
-  paymentsMethods: 'Métodos de pago'
+  paymentsMethods: 'Métodos de pago',
+  titleDashboard: 'Datos para este periodo',
+  selectDate: 'Selecciona una fecha',
+  youPosition: 'Tu estas aquí',
 }

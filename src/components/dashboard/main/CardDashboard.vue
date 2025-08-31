@@ -6,7 +6,8 @@
           Domicilios:
         </p>
         <p class="value">
-          150
+          <AnimatedCounter v-if="counters.totalOrders" :value="counters.totalOrders || 0" :duration="500" class="counter"/>
+          <span v-else>0</span>
         </p>
       </q-card-section>
     </q-card>
@@ -17,7 +18,8 @@
           Entregados:
         </p>
         <p class="value">
-          140
+          <AnimatedCounter v-if="counters.delivered" :value="counters.delivered || 0" :duration="500" class="counter"/>
+          <span v-else>0</span>
         </p>
       </q-card-section>
     </q-card>
@@ -28,7 +30,8 @@
           Pendientes:
         </p>
         <p class="value">
-          3
+          <AnimatedCounter v-if="counters.pending" :value="counters.pending || 0" :duration="500" class="counter"/>
+          <span v-else>0</span>
         </p>
       </q-card-section>
     </q-card>
@@ -39,7 +42,8 @@
           Cancelados:
         </p>
         <p class="value">
-          4
+          <AnimatedCounter v-if="counters.cancelled" :value="counters.cancelled || 0" :duration="500" class="counter"/>
+          <span v-else>0</span>
         </p>
       </q-card-section>
     </q-card>
@@ -47,10 +51,11 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Reprogramados:
+          Novedades:
         </p>
         <p class="value">
-          3
+          <AnimatedCounter v-if="counters.news" :value="counters.news || 0" :duration="500" class="counter"/>
+          <span v-else>0</span>
         </p>
       </q-card-section>
     </q-card>
@@ -58,10 +63,38 @@
 </template>
 
 <script setup>
-//
+// imports
+import { computed } from 'vue';
+import { useDashboardStore } from 'src/stores/dashboardStore';
+
+// references
+const store = useDashboardStore();
+
+// computed
+const counters = computed(() => store.counters);
+
 </script>
 
 <style scoped lang="scss">
+.repartix-dashboard__cards {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  width: 100%;
+
+  @media(width < 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media(width < 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media(width < 500px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 .q-card {
   flex: 1 !important;
 }

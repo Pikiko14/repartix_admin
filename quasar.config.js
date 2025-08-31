@@ -21,7 +21,8 @@ export default defineConfig((ctx) => {
       'i18n',
       'axios',
       'routeGuard',
-      'notification'
+      'notification',
+      'counterNumber',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css

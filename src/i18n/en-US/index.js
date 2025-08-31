@@ -258,5 +258,8 @@ export default {
   note: 'Note',
   statusesDescription: 'Each line will be a state available in the state change selector',
   payments: 'Payments',
-  paymentsMethods: 'Payments methods'
+  paymentsMethods: 'Payments methods',
+  titleDashboard: 'Data for this period',
+  selectDate: 'Select one date',
+  youPosition: 'You are here',
 }

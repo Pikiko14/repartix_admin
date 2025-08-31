@@ -70,6 +70,18 @@
             ]" outlined v-model="sender.sender_info.brand_phone" placeholder="+57 3225361689">
             </q-input>
           </div>
+
+          <div class="col-12">
+            <label class="text-dark" for="discount">{{ t('discount') }}</label>
+            <q-input dense id="discount" mask="##" :rules="[
+              (val) => !!val || t('requiredField'),
+
+            ]" outlined v-model="sender.sender_info.discount_porcent" placeholder="10%">
+              <template #append>
+                %
+              </template>
+            </q-input>
+          </div>
         </div>
       </q-tab-panel>
 
@@ -230,6 +242,8 @@ const handlerSaveSender = async () => {
     full_name: sender.value.sender_info.manager,
     phone: sender.value.sender_info.brand_phone,
   }
+
+  sender.value.sender_info.discount_porcent = parseInt(sender.value.sender_info.discount_porcent || 0);
 
   loading.value = true;
   if (sender.value._id) {

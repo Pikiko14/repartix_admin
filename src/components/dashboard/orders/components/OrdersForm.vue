@@ -372,10 +372,10 @@
             <!--End item city and zone-->
 
             <!--price order-->
-            <div class="quote-order">
+            <div class="quote-order" v-if="discount > 0">
               {{ utils.formatPrice(quotePrice) || utils.formatPrice(0) }}
             </div>
-            <div class="discount-order">
+            <div class="discount-order" v-if="discount > 0">
               -({{ senderSelected?.sender_info?.discount_porcent }}%) {{ utils.formatPrice(discount) || utils.formatPrice(0) }}
             </div>
             <div class="price-order">
@@ -607,6 +607,7 @@ const handlerSaveOrder = async () => {
   });
 
   order.value.print_guide = printGuide.value;
+  order.value.discount = discount.value;
 
   if (order.value?._id) {
     await handlerUpdateOrder();

@@ -22,11 +22,16 @@
         :pin-options="pinOptions"
       >
         <div style="text-align: center">
-          <img width="40px" src="/images/location.png" color="primary" />
+          <img v-if="order.status !== 'delivered'" width="40px" src="/images/location.png" />
+          <img v-else width="40px" src="/images/location-success.png" />
           <q-tooltip class="bg-primary">
             <div class="order-resume">
-              <p>Cliente:</p>
+              <p class="title">Cliente:</p>
               <p>{{ order.client }}</p>
+              <p class="title">Orden:</p>
+              <p>{{ order.order }}</p>
+              <p class="title">Estado:</p>
+              <p>{{ status[order.status] || order.status }}</p>
             </div>
           </q-tooltip>
         </div>
@@ -38,21 +43,25 @@
 
 <script setup>
 // imports
+import { Loading } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
 import { computed, onBeforeMount, ref } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
-import { useDashboardStore } from 'src/stores/dashboardStore';
 import { GoogleMap, CustomMarker } from 'vue3-google-map';
+import { useDashboardStore } from 'src/stores/dashboardStore';
+import { ordersContent } from 'src/composables/ordersContent';
 
 
 // references
 const { t } = useI18n();
+const router = useRouter();
 const store = useAuthStore();
-const dashboardStore = useDashboardStore();
-
+const orderContent = ordersContent();
 const center = ref({ lat: 0, lng: 0 });
-const pinOptions = { background: '#212245' }
+const dashboardStore = useDashboardStore();
+const pinOptions = { background: '#212245' };
 const markerOptions = ref({ position: center.value });
 
 // computeds
@@ -60,14 +69,24 @@ const config = computed(() => {
   return store.getUser?.brand?.configuration || {};
 });
 
+const status = {
+ pending: t('pending'),
+ delivered: t('delivered'),
+ cancelled: t('cancelled'),
+ guide_news: t('guide_news'),
+ in_progress: t('in_progress'),
+ returned: t('returned'),
+ 'guide-printed': t('guide_printed'),
+};
+
 const orders = computed(() => {
   return dashboardStore.orders.map(order => {
-    console.log(order);
     return {
       client: `${order?.client?.name} ${order?.client?.last_name}`,
       order: order?.reference,
       status: order?.status,
       coords: order?.client?.coords,
+      id: order?._id,
     };
   });
 });
@@ -118,8 +137,21 @@ const getCoords = async () => {
   }
 };
 
-const openInfo = (order) => {
-  console.log(order);
+const openInfo = async (order) => {
+  Loading.show();
+  try {
+    const data = await orderContent.doShowOrder(order?.id);
+    if (data?.success) {
+      router.push({
+        name: 'showOrder',
+        params: {
+          id: data?.order?._id,
+        }
+      });
+    }
+  } finally {
+    Loading.hide();
+  }
 }
 
 // hook
@@ -142,5 +174,13 @@ onBeforeMount(() => {
 .you {
   font-size: 1rem;
   font-weight: 600;
+}
+
+.order-resume {
+  font-size: 1rem;
+
+  .title {
+    font-weight: 600;
+  }
 }
 </style>

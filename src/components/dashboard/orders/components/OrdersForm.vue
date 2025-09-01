@@ -886,6 +886,9 @@ onBeforeMount(async () => {
 
   if (props.orderSelected && props.orderSelected._id) {
     order.value = JSON.parse(JSON.stringify(props.orderSelected));
+    quotePrice.value = order.value.order_price + order.value.discount;
+    discount.value = order.value.discount;
+
 
     const promiseArray = [];
     if (!configuration.value.route_price_by_km) {

@@ -66,6 +66,18 @@
                 </h6>
                 <span>{{ utils.formatPrice(parseFloat(order?.cash_amount.replace('.', '')) || 0) }}</span>
               </div>
+              <div class="col-12 col-md-6">
+                <h6>
+                  {{ t('price') }}
+                </h6>
+                <span>{{ utils.formatPrice(order?.order_price || 0) }}</span>
+              </div>
+              <div class="col-12 col-md-6" v-if="order?.discount > 0">
+                <h6>
+                  {{ t('discount') }}
+                </h6>
+                <span class="text-red">- {{ utils.formatPrice(order.discount || 0) }}</span>
+              </div>
               <div class="col-12">
                 <h6>
                   {{ t('notes') }}

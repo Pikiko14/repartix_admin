@@ -263,4 +263,5 @@ export default {
   titleDashboard: 'Datos para este periodo',
   selectDate: 'Selecciona una fecha',
   youPosition: 'Tu estas aquí',
+  discount: 'Descuento',
 }

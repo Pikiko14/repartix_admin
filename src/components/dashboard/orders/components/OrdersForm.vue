@@ -196,7 +196,7 @@
           </div>
 
           <div class="col-12 q-mt-lg relative" v-if="order.client.name">
-            <GoogleMap :api-key="configuration.gmap_api__key" style="width: 100%; height: 220px" :center="center"
+            <GoogleMap :api-key="configuration.gmap_api__key" style="width: 100%; height: 260px" :center="center"
               :zoom="17">
               <Marker :options="markerOptions" />
             </GoogleMap>
@@ -372,6 +372,12 @@
             <!--End item city and zone-->
 
             <!--price order-->
+            <div class="quote-order">
+              {{ utils.formatPrice(quotePrice) || utils.formatPrice(0) }}
+            </div>
+            <div class="discount-order">
+              -({{ senderSelected?.sender_info?.discount_porcent }}%) {{ utils.formatPrice(discount) || utils.formatPrice(0) }}
+            </div>
             <div class="price-order">
               {{ utils.formatPrice(order.order_price) || utils.formatPrice(0) }}
             </div>
@@ -502,6 +508,8 @@ const zone = ref('');
 const zones = ref([]);
 const quote = ref({});
 const { t } = useI18n();
+const discount = ref(0);
+const quotePrice = ref(0);
 const utils = new Utils();
 const formAdd = ref(false);
 const formEnable = ref('');
@@ -558,9 +566,13 @@ const handlerDoQuote = async () => {
 
   Loading.show();
   try {
+    quote.value.discount_porcent = senderSelected.value?.sender_info?.discount_porcent || 0;
+
     const data = await shippingContents.doQuoteShipping(quote.value);
     if (data) {
-      order.value.order_price = data.shipping_price;
+      discount.value = data.discount_amount;
+      quotePrice.value = data.shipping_price;
+      order.value.order_price = data.shipping_price - (data.discount_amount || 0);
     }
   } finally {
     Loading.hide();
@@ -571,6 +583,7 @@ const handlerDoQuoteByCity = async () => {
   if (configuration.value && !configuration.value?.route_price_by_km && !quote.value.city || !quote.value.city.zone) return;
   Loading.show();
   try {
+    quote.value.discount_porcent = senderSelected.value?.sender_info?.discount_porcent || 0;
     const data = await shippingContents.doQuoteShipping(quote.value);
     if (data) {
       order.value.order_price = parseFloat(data.shipping_price.replace('.', ''));
@@ -937,7 +950,7 @@ onBeforeUnmount(() => {
 .price-order {
   display: flex;
   background: $primary;
-  max-width: 160px;
+  max-width: 260px;
   padding: .3rem .5rem;
   justify-content: center;
   color: white;
@@ -946,5 +959,33 @@ onBeforeUnmount(() => {
   position: absolute;
   right: 20px;
   bottom: 50px
+}
+
+.discount-order {
+  display: flex;
+  background: rgb(195, 16, 16);
+  max-width: 260px;
+  padding: .3rem .5rem;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  position: absolute;
+  right: 20px;
+  bottom: 100px
+}
+
+.quote-order {
+  display: flex;
+  background: $primary;
+  max-width: 260px;
+  padding: .3rem .5rem;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  position: absolute;
+  right: 20px;
+  bottom: 150px;
 }
 </style>

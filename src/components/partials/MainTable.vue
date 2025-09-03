@@ -84,6 +84,22 @@
     </template>
     <!--End option td-->
 
+    <!--relation delivered-->
+    <template v-slot:body-cell-orderResume="props">
+      <q-td :props="props">
+        <q-slider
+          disable
+          v-model="props.row.orders_delivered"
+          :min="0"
+          :max="props?.row?.order_total"
+          :step="props?.row?.orders_delivered"
+          marker-labels
+          color="primary"
+        />
+      </q-td>
+    </template>
+    <!--End relation delivered-->
+
     <!--Selection slot-->
     <template v-slot:header-selection="scope">
       <q-toggle color="primary" v-model="scope.selected" />

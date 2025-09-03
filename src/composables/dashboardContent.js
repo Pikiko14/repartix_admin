@@ -1,6 +1,6 @@
 // imports
 import { api } from 'src/boot/axios'
-import { useDashboardStore } from 'src/stores/dashboardStore'
+import { useDashboardStore } from 'src/stores/dashboardStore.js'
 
 // content
 

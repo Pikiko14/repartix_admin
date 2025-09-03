@@ -24,7 +24,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item v-if="utils.validateRole('list-shipping-list')" clickable v-ripple to="/dashboard/shipping-list?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('shippingList') }}

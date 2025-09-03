@@ -65,7 +65,7 @@
 <script setup>
 // imports
 import { computed } from 'vue';
-import { useDashboardStore } from 'src/stores/dashboardStore';
+import { useDashboardStore } from 'src/stores/dashboardStore.js';
 
 // references
 const store = useDashboardStore();

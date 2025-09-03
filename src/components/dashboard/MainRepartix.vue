@@ -41,8 +41,6 @@ const dateSelected = ref('');
 const updateProxy = ref();
 const content = dashboardContent();
 
-
-
 // methods
 const loadfashboardData = async () => {
   const from = dateSelected.value || date.formatDate(now, 'YYYY/MM/DD');

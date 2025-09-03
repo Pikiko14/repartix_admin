@@ -14,42 +14,47 @@ const routes = [
       {
         path: '',
         component: () => import('src/pages/dashboard/MainRepartix.vue'),
-        name: 'dahsboard'
+        name: 'dahsboard',
       },
       {
         path: 'orders',
         component: () => import('src/pages/dashboard/orders/OrdersPage.vue'),
-        name: 'orders'
+        name: 'orders',
       },
       {
         path: 'show/:id/orders',
         component: () => import('src/pages/dashboard/orders/ShowOrderPage.vue'),
-        name: 'showOrder'
+        name: 'showOrder',
       },
       {
         path: 'users',
         component: () => import('src/pages/dashboard/users/MainPage.vue'),
-        name: 'users'
+        name: 'users',
       },
       {
         path: 'couriers',
         component: () => import('src/pages/dashboard/couriers/MainPage.vue'),
-        name: 'couriers'
+        name: 'couriers',
       },
       {
         path: 'senders',
         component: () => import('src/pages/dashboard/senders/SendersPage.vue'),
-        name: 'senders'
+        name: 'senders',
       },
       {
         path: 'cities-and-zones',
         component: () => import('src/pages/dashboard/cities/CitiesPage.vue'),
-        name: 'city'
+        name: 'city',
       },
       {
         path: 'clients',
         component: () => import('src/pages/dashboard/clients/ClientsPage.vue'),
-        name: 'clients'
+        name: 'clients',
+      },
+      {
+        path: 'shipping-list',
+        component: () => import('src/pages/dashboard/shipping-list/ShippingListPage.vue'),
+        name: 'shipping-list',
       },
     ],
     meta: {

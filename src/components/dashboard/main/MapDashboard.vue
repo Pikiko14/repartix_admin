@@ -50,7 +50,7 @@ import { computed, onBeforeMount, ref } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
 import { GoogleMap, CustomMarker } from 'vue3-google-map';
-import { useDashboardStore } from 'src/stores/dashboardStore';
+import { useDashboardStore } from 'src/stores/dashboardStore.js';
 import { ordersContent } from 'src/composables/ordersContent';
 
 

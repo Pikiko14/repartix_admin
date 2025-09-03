@@ -268,4 +268,8 @@ export default {
   shippingListCreate: 'Crear relación de envío',
   courierSelect: 'Selecciona un repartidor',
   shippingListCreated: 'Relación de envío creada correctamente',
+  courier: 'Repartidor',
+  relationDelivered: 'Relación entrega',
+  deleteShippingDescription: '¿Estas seguro de querer eliminar esta relación de envío -name?',
+  shippingListDelete: 'Eliminar relación de envío',
 }

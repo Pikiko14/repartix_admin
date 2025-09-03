@@ -263,4 +263,8 @@ export default {
   selectDate: 'Select one date',
   youPosition: 'You are here',
   discount: 'Discount',
+  multipleActions: 'Actions',
+  shippingListCreate: 'Create shipping list',
+  courierSelect: 'Select one courier',
+  shippingListCreated: 'Shipping list created success',
 }

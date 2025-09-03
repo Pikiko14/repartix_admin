@@ -264,4 +264,8 @@ export default {
   selectDate: 'Selecciona una fecha',
   youPosition: 'Tu estas aquí',
   discount: 'Descuento',
+  multipleActions: 'Acciones',
+  shippingListCreate: 'Crear relación de envío',
+  courierSelect: 'Selecciona un repartidor',
+  shippingListCreated: 'Relación de envío creada correctamente',
 }

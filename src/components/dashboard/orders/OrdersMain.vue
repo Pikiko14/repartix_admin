@@ -1,16 +1,17 @@
 <template>
   <section class="order-main">
     <!--Header-->
-    <HeaderPage @do-filter="handlerFilter" @filter-by-date="handlerFilterByDate" :show-date-picker="true"
-      @do-search="doHandlerSearch" @add-new="showAddButton" show-filters :filter-items="filterItems"
-      :scope="'create-order'" show-add-button :title="t('ordersTitle')" @clear-filter="handlerClearFilters" />
+    <HeaderPage @set-action="handlerAction" :actions-items="actionsItems" @do-filter="handlerFilter"
+      @filter-by-date="handlerFilterByDate" :show-date-picker="true" @do-search="doHandlerSearch"
+      @add-new="showAddButton" show-filters :filter-items="filterItems" :scope="'create-order'"
+      :selected-items="selectedItems" show-add-button :title="t('ordersTitle')" @clear-filter="handlerClearFilters" />
     <!--End header-->
 
     <!--Table-->
-    <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope edit-scope="update-order"
-      delete-scope="delete-order" @edit="handlerUpdateOrder" @delete="doDeleteOrder" @show-guide="showGuide"
-      @show-order="showOrder" />
+    <MainTable class="q-mt-lg" enable-selected :key="pagination.rowsNumber + '-' + pagination.page"
+      :pagination="pagination" :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope
+      edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder" @delete="doDeleteOrder"
+      @show-guide="showGuide" @show-order="showOrder" @handler-selected="handlerSelectedItems" />
     <!--End table-->
 
     <!--Modal order-->
@@ -22,15 +23,29 @@
       </ModalCard>
     </q-dialog>
     <!--End modal order-->
+
+    <!--Modal actions-->
+    <q-dialog v-model="modalAction" @before-hide="order = {}">
+      <ModalCard :title="actionSelected === 'shipping_list' ? t('shippingListCreate') : t('')">
+        <template #body>
+          <ShippingListForm
+            v-if="actionSelected === 'shipping_list'"
+            @close-modal="openModalAction"
+            @create-shipping-list="createShippingList"
+          />
+        </template>
+      </ModalCard>
+    </q-dialog>
+    <!--End modal order-->
   </section>
 </template>
 
 <script setup>
 // imports
-import { Loading, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { Utils } from 'src/utils/utils';
+import { Loading, useQuasar } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
@@ -41,6 +56,8 @@ import MainTable from 'src/components/partials/MainTable.vue';
 import { ordersContent } from 'src/composables/ordersContent';
 import { guidesContent } from 'src/composables/guidesContent';
 import HeaderPage from 'src/components/partials/HeaderPage.vue';
+import ShippingListForm from './components/ListShippingForm.vue';
+import { shippingListContent } from 'src/composables/shippingListContent';
 
 // references
 const order = ref({});
@@ -49,6 +66,7 @@ const { t } = useI18n();
 const route = useRoute();
 const utils = new Utils();
 const router = useRouter();
+const selectedItems = ref([]);
 const modalOrder = ref(false);
 const columns = [
   {
@@ -122,9 +140,12 @@ const pagination = ref({
   rowsNumber: 1,
 });
 const store = useOrdersStore();
+const actionSelected = ref('');
+const modalAction = ref(false);
 const content = ordersContent();
 const authStore = useAuthStore();
 const contentGuides = guidesContent();
+const contentShippingList = shippingListContent();
 
 // computed
 const orders = computed(() => {
@@ -224,6 +245,18 @@ const filterItems = computed(() => {
     }
   ];
 });
+
+const actionsItems = [
+  // {
+  //   label: `${t('printGuide')}s`,
+  //   icon: 'document_scanner',
+  // },
+  {
+    label: t('shippingList'),
+    icon: 'receipt_long',
+    value: 'shipping_list'
+  },
+];
 
 // methods
 const showAddButton = () => {
@@ -421,10 +454,55 @@ const showOrder = async (id) => {
   }
 }
 
+const handlerSelectedItems = (items) => {
+  selectedItems.value = items.map((el) => el._id);
+}
+
+const handlerAction = async (e) => {
+  switch (e) {
+    case 'shipping_list':
+      actionSelected.value = e;
+      openModalAction();
+      break;
+  
+    default:
+      break;
+  }
+}
+
+const openModalAction = () => {
+  modalAction.value = !modalAction.value;
+}
+
+const createShippingList = async (e) => {
+  Loading.show();
+  const payload = {
+    ordersIds: selectedItems.value,
+    courier: {
+      full_name: e?.profile?.full_name,
+      phone: e?.profile?.phone,
+      vehicle_type: e?.courier_info?.vehicle_type,
+      dni: e?.profile?.dni,
+    }
+  }
+  
+  try {
+    const data = await contentShippingList.doCreateShippingList(payload);
+    if (data?.success) {
+      notification('success', t('shippingListCreated'), 'primary');
+      openModalAction();
+      selectedItems.value = false;
+    }
+  } finally {
+    Loading.hide();
+  }
+}
+
 // hook
 if (route.query.page) {
   pagination.value.page = parseInt(route.query.page);
 }
+
 if (route.query.perPage) {
   pagination.value.rowsPerPage = parseInt(route.query.perPage);
 }

@@ -1,6 +1,7 @@
 <template>
-  <q-table @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns" row-key="_id"
-    :pagination="pagination">
+  <q-table :selected-rows-label="getSelectedString" :selection="enableSelected ? 'multiple' : 'none'"
+    v-model:selected="selecteds" @request="handlerPagination" :rows="rows" class="shadow-0" :columns="columns"
+    row-key="_id" :pagination="pagination">
     <!--User type-->
     <template v-slot:body-cell-typeUser="props">
       <q-td :props="props">
@@ -31,7 +32,8 @@
     <!--status td-->
     <template v-slot:body-cell-status="props">
       <q-td :props="props">
-        <q-chip square size="8pt" class="primary text-bold chip-status" :class="[statusColor[props.row.status] || 'bg-purple-10']">
+        <q-chip square size="8pt" class="primary text-bold chip-status"
+          :class="[statusColor[props.row.status] || 'bg-purple-10']">
           <span>
             {{ status[props.row.status] || props.row.status }}
           </span>
@@ -53,41 +55,27 @@
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        <q-btn
-          @click="emit('show-order', props.row._id)"
-          v-if="utils.validateRole(showOrderScope)"
-          icon="visibility"
-          flat
-          dense
-          rounded
-          color="primary"
-        >
+        <q-btn @click="emit('show-order', props.row._id)" v-if="utils.validateRole(showOrderScope)" icon="visibility"
+          flat dense rounded color="primary">
           <q-tooltip class="bg-primary">
             {{ t('showOrder') }}
           </q-tooltip>
         </q-btn>
-        <q-btn
-          size="10pt"
-          @click="emit('show-guide', props.row.reference)"
-          v-if="utils.validateRole(showOrderScope) && props.row.print_guide"
-          icon="document_scanner"
-          flat
-          dense
-          rounded
-          color="green"
-        >
+        <q-btn size="10pt" @click="emit('show-guide', props.row.reference)"
+          v-if="utils.validateRole(showOrderScope) && props.row.print_guide" icon="document_scanner" flat dense rounded
+          color="green">
           <q-tooltip class="bg-green">
             {{ t('guide') }}
           </q-tooltip>
         </q-btn>
-        <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)" v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded
-          color="blue">
+        <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)"
+          v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded color="blue">
           <q-tooltip class="bg-blue">
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn :disabled="props.row.status && props.row.status !== 'pending'" @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense
-          rounded color="red">
+        <q-btn :disabled="props.row.status && props.row.status !== 'pending'" @click="emit('delete', props.row._id)"
+          v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}
           </q-tooltip>
@@ -95,17 +83,28 @@
       </q-td>
     </template>
     <!--End option td-->
+
+    <!--Selection slot-->
+    <template v-slot:header-selection="scope">
+      <q-toggle color="primary" v-model="scope.selected" />
+    </template>
+
+    <template v-slot:body-selection="scope">
+      <q-toggle color="primary" v-model="scope.selected" />
+    </template>
+    <!--End selection slot-->
   </q-table>
 </template>
 
 <script setup>
 // import
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Utils } from 'src/utils/utils';
 import { useRouter, useRoute } from 'vue-router';
 
 // props
-defineProps({
+const props = defineProps({
   rows: {
     type: Array,
     default: () => [],
@@ -120,15 +119,20 @@ defineProps({
   pagination: {
     type: Object,
     default: () => { }
+  },
+  enableSelected: {
+    type: Boolean,
+    default: false,
   }
 });
 
 // emits
-const emit = defineEmits(['edit', 'delete']);
+const emit = defineEmits(['edit', 'delete', 'handler-selected']);
 
 // references
 const { t } = useI18n();
 const route = useRoute();
+const selecteds = ref([]);
 const utils = new Utils();
 const router = useRouter();
 const typeUser = {
@@ -158,6 +162,11 @@ const statusColor = {
   guide_news: 'bg-warning',
 }
 
+// watch
+watch(() => selecteds.value, (newVal) => {
+  emit('handler-selected', newVal);
+});
+
 // methods
 const handlerPagination = (e) => {
   const { pagination } = e;
@@ -177,6 +186,10 @@ const handlerPagination = (e) => {
     name: route.name,
     query
   });
+}
+
+const getSelectedString = () => {
+  return selecteds.value.length === 0 ? '' : `${selecteds.value.length} record${selecteds.value.length > 1 ? 's' : ''} selected of ${props.rows.length}`
 }
 </script>
 

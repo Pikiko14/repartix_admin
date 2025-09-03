@@ -42,7 +42,8 @@
 
         <q-menu fit>
           <q-list style="min-width: 100px">
-            <q-item v-ripple clickable v-for="(item, idx) in filterItems" :key="idx" :class="{ 'active': Object.keys(filtersSelected).includes(item.key) }">
+            <q-item v-ripple clickable v-for="(item, idx) in filterItems" :key="idx"
+              :class="{ 'active': Object.keys(filtersSelected).includes(item.key) }">
               <q-item-section>
                 <q-item-label class="text-bold text-primary">{{ item.label }}</q-item-label>
               </q-item-section>
@@ -51,8 +52,9 @@
               </q-item-section>
               <q-menu anchor="top end" self="top start">
                 <q-list>
-                  <q-item :class="{ 'active': filtersSelected[item.key] === filter.value }" dense v-close-popup @click="doFilter(item.key, filter.value)" clickable v-ripple
-                    v-for="(filter, idx) in item.items" :key="idx">
+                  <q-item :class="{ 'active': filtersSelected[item.key] === filter.value }" dense v-close-popup
+                    @click="doFilter(item.key, filter.value)" clickable v-ripple v-for="(filter, idx) in item.items"
+                    :key="idx">
                     <q-item-section>
                       <q-item-label class="text-bold text-primary">{{ filter.label }}</q-item-label>
                     </q-item-section>
@@ -71,6 +73,29 @@
           </q-list>
         </q-menu>
       </div>
+
+      <!--acciones en lote-->
+      <div class="filters-container" v-if="selectedItems.length > 0">
+        <span>
+          {{ t('multipleActions') }}
+        </span>
+
+        <q-icon size="1.5rem" :name="actionsMenu ? 'arrow_drop_up' : 'arrow_drop_down'" color="primary"></q-icon>
+
+        <q-menu fit v-model="actionsMenu">
+          <q-list style="min-width: 100px">
+            <q-item v-ripple clickable v-for="(item, idx) in actionsItems" :key="idx" @click="emit('set-action', item.value)">
+              <q-item-section>
+                <q-item-label class="text-bold text-primary">{{ item.label }}</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-icon :name="item.icon" size="xs" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
+      </div>
+      <!--End acciones en lote-->
 
       <q-input @update:model-value="handlerSeach" debounce="1500" v-model="search" dense outlined clearable
         :placeholder="t('search')">
@@ -120,17 +145,27 @@ const props = defineProps({
   filterItems: {
     type: Array,
     default: () => []
-  }
+  },
+  selectedItems: {
+    type: Array,
+    default: () => []
+  },
+  actionsItems: {
+    type: Array,
+    default: () => []
+  },
 });
 
 // emits
-const emit = defineEmits(['add-new', 'do-search', 'filter-by-date', 'do-filter']);
+const emit = defineEmits(['add-new', 'do-search', 'filter-by-date', 'do-filter', 'set-action']);
 
 // references
 const search = ref('');
 const { t } = useI18n();
 const dateLabel = ref('');
+const actionsMenu = ref(false);
 const date = ref({ from: '', to: '' });
+
 
 // watch
 watch(() => date.value, (val) => {

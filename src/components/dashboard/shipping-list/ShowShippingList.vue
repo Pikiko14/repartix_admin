@@ -6,12 +6,13 @@
       </h5>
 
       <div class="header-shipping-actions">
-        <q-btn @click="printPdf"
-          v-if="utils.validateRole('list-shipping-list') && !shippingList.is_close" rounded color="green" no-caps
+        <q-btn @click="closeShipping" v-if="utils.validateRole('update-shipping-list') && !shippingList.is_close"
+          rounded color="orange" no-caps unelevated icon-right="close" :loading="loadingClose"
+          :label="t('close')"></q-btn>
+        <q-btn @click="printPdf" v-if="utils.validateRole('list-shipping-list')" rounded color="green" no-caps
           unelevated icon-right="document_scanner" :loading="loadingPrinted" :label="t('printPdf')"></q-btn>
-        <q-btn @click="openModal"
-          v-if="utils.validateRole('update-shipping-list') && !shippingList.is_close" rounded color="primary" no-caps
-          unelevated :label="t('addOrder')"></q-btn>
+        <q-btn @click="openModal" v-if="utils.validateRole('update-shipping-list') && !shippingList.is_close" rounded
+          color="primary" no-caps unelevated :label="t('addOrder')"></q-btn>
       </div>
     </div>
 
@@ -115,8 +116,9 @@
                   {{ t('showOrder') }}
                 </q-tooltip>
               </q-btn>
-              <q-btn @click="deleteOrder(shipping.id)" v-if="utils.validateRole('update-shipping-list')" icon="delete"
-                flat dense rounded color="red">
+              <q-btn @click="deleteOrder(shipping.id)"
+                v-if="utils.validateRole('update-shipping-list') && !shippingList.is_close" icon="delete" flat dense
+                rounded color="red">
                 <q-tooltip class="bg-red">
                   {{ t('delete') }}
                 </q-tooltip>
@@ -162,6 +164,7 @@ const { t } = useI18n();
 const route = useRoute();
 const utils = new Utils();
 const loading = ref(false);
+const loadingClose = ref(false);
 const authStore = useAuthStore();
 const loadingPrinted = ref(false);
 const store = useShippingListStore();
@@ -260,6 +263,31 @@ const printPdf = async () => {
   }
 }
 
+const closeShipping = async () => {
+  const description = t('closeShippingDescription');
+  q.dialog({
+    title: t('closeShipping'),
+    message: description,
+    cancel: true,
+  }).onOk(() => {
+    handlerCloseShipping();
+  });
+}
+
+const handlerCloseShipping = async () => {
+  loadingClose.value = true;
+  try {
+    const data = await content.doCloseShipping(shippingList.value._id);
+
+    if (data.success) {
+      notification('success', t('shippingListCloseSuccess'), 'primary');
+    }
+  } finally {
+    loadingClose.value = false;
+  }
+
+}
+
 // hook
 if (route.params.id && !store.getShipping._id) {
   loadShippingData(route.params.id);
@@ -344,6 +372,7 @@ if (route.params.id && !store.getShipping._id) {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+
   @media(width < 768px) {
     flex-direction: column;
   }

@@ -279,4 +279,7 @@ export default {
   addOrder: 'Agregar orden',
   shippingListUpdateSuccess: 'Relación de envío modificada correctamente',
   printPdf: 'Imprimir pdf',
+  closeShipping: 'Cerrar relación de envío',
+  closeShippingDescription: '¿Estas seguro de querer cerrar esta relación de envío?',
+  shippingListCloseSuccess: 'Relación de envío cerrada correctamente',
 }

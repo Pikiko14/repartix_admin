@@ -51,5 +51,9 @@ export const useShippingListStore = defineStore('shippingList', {
       this.shipping.orders.push(payload)
       this.enableEdit = true
     },
+    closeShipping() {
+      this.shipping.is_close = true
+      this.enableEdit = false
+    },
   },
 })

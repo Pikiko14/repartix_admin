@@ -67,6 +67,7 @@ export const shippingListContent = () => {
     try {
       const params = JSON.parse(JSON.stringify(payload))
       delete params.__v
+      delete params.pdf_path
       delete params.createdAt
       delete params.updatedAt
       const { data } = await api.put(`${path}/${payload._id}`, params)
@@ -88,11 +89,17 @@ export const shippingListContent = () => {
     }
   }
 
+  const doCloseShipping = async () => {
+    store.closeShipping()
+    return await doUpdateShippingList(store.getShipping)
+  }
+
   // return
   return {
     setNewOrder,
     doDeleteOrder,
     loadShippingPdf,
+    doCloseShipping,
     doUpdateShippingList,
     doFilterShippingList,
     doDeleteShippingList,

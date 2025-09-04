@@ -278,4 +278,7 @@ export default {
   deleteShippingList: 'Delete shipping list',
   addOrder: 'Add order',
   printPdf: 'Print pdf',
+  closeShipping: 'Close shipping',
+  closeShippingDescription: '¿Are you sure you want to close this shipping list?',
+  shippingListCloseSuccess: 'Shipping list close successfully',
 }

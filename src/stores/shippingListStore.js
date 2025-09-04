@@ -49,7 +49,7 @@ export const useShippingListStore = defineStore('shippingList', {
       if (index !== -1) return
 
       this.shipping.orders.push(payload)
-      this.enableEdit = !this.enableEdit
+      this.enableEdit = true
     },
   },
 })

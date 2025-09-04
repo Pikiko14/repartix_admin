@@ -58,7 +58,7 @@ const routes = [
       },
       {
         path: 'shipping-list/:id/show',
-        component: () => import('src/pages/dashboard/shipping-list/ShippingListPage.vue'),
+        component: () => import('src/pages/dashboard/shipping-list/ShowShippingList.vue'),
         name: 'shipping-list-show',
       },
     ],

@@ -382,7 +382,7 @@
                 <h6>
                   {{ t('typeVehicle') }}
                 </h6>
-                <span class="text-primary cursor-pointer">
+                <span class="text-primary">
                   <span>{{ order?.courier?.vehicle_type || '-' }}</span>
                 </span>
               </div>
@@ -583,7 +583,7 @@ const openEvidence = (url) => {
 
 // hook
 onBeforeMount(() => {
-  if (route.params.id) {
+  if (route.params.id && !order.value._id) {
     contentOrder.doShowOrder(route.params.id);
   }
 })

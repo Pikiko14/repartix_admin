@@ -42,7 +42,7 @@
     </template>
     <!--End status td-->
 
-    <!--status td-->
+    <!--cash on delivery td-->
     <template v-slot:body-cell-cashOnDelivery="props">
       <q-td :props="props">
         <q-chip square size="8pt" class="primary text-bold text-white"
@@ -50,7 +50,7 @@
             t('no') }}</q-chip>
       </q-td>
     </template>
-    <!--End status td-->
+    <!--End cash on deliver td-->
 
     <!--Option td-->
     <template v-slot:body-cell-options="props">

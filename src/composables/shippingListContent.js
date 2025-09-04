@@ -55,8 +55,36 @@ export const shippingListContent = () => {
     }
   }
 
+  const doDeleteOrder = async (id) => {
+    store.deleteOrderFromShipping(id);
+  }
+
+  const setNewOrder = (order) => {
+    store.addOrderToShippingList(order);
+  }
+
+
+  const doUpdateShippingList = async (payload) => {
+    try {
+      const params = JSON.parse(JSON.stringify(payload))
+      delete params.__v
+      delete params.createdAt
+      delete params.updatedAt
+      const { data } = await api.put(`${path}/${payload._id}`, params)
+      if (data && data.shippingList) {
+        store.updateShipping(data.shippingList)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
+    setNewOrder,
+    doDeleteOrder,
+    doUpdateShippingList,
     doFilterShippingList,
     doDeleteShippingList,
     doCreateShippingList,

@@ -267,8 +267,14 @@ export default {
   shippingListCreate: 'Create shipping list',
   courierSelect: 'Select one courier',
   shippingListCreated: 'Shipping list created success',
+  shippingListUpdateSuccess: 'Shipping list updated success',
   courier: 'Courier',
   relationDelivered: 'Relation delivered',
   deleteShippingDescription: '¿Are you sure you want to delete this shipping list -name?',
   shippingListDelete: 'Delete shipping list',
+  listShippingList: 'List shipping list',
+  createShippingList: 'Create shipping list',
+  updateShippingList: 'Update shipping list',
+  deleteShippingList: 'Delete shipping list',
+  addOrder: 'Add order'
 }

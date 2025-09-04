@@ -56,7 +56,9 @@
             <q-input outlined dense :placeholder="t('search')" v-model="search"></q-input>
           </div>
           <div class="col-12 q-mt-md">
-            <q-option-group v-model="user.scopes" type="checkbox" :options="scopesOptions" color="primary" inline />
+            <q-scroll-area style="width: 100%; height: 250px">
+              <q-option-group v-model="user.scopes" type="checkbox" :options="scopesOptions" color="primary" inline />
+            </q-scroll-area>
           </div>
         </div>
       </q-tab-panel>
@@ -197,6 +199,22 @@ const scopes = [
   {
     label: t('deleteOrder'),
     value: 'delete-order',
+  },
+  {
+    label: t('listShippingList'),
+    value: 'list-shipping-list',
+  },
+  {
+    label: t('createShippingList'),
+    value: 'create-shipping-list',
+  },
+  {
+    label: t('updateShippingList'),
+    value: 'update-shipping-list',
+  },
+  {
+    label: t('deleteShippingList'),
+    value: 'delete-shipping-list',
   },
 ];
 const tab = ref('profile');

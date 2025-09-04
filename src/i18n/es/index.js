@@ -272,4 +272,10 @@ export default {
   relationDelivered: 'Relación entrega',
   deleteShippingDescription: '¿Estas seguro de querer eliminar esta relación de envío -name?',
   shippingListDelete: 'Eliminar relación de envío',
+  listShippingList: 'Listar relación de envío',
+  createShippingList: 'Crear relación de envío',
+  updateShippingList: 'Modificar relación de envío',
+  deleteShippingList: 'Borrar relación de envío',
+  addOrder: 'Agregar orden',
+  shippingListUpdateSuccess: 'Relación de envío modificada correctamente'
 }

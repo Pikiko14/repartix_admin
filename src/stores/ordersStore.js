@@ -43,5 +43,9 @@ export const useOrdersStore = defineStore('ordersStore', {
     addPayment(order) {
       this.order.payments = order.payments
     },
+    clearOrders() {
+      this.orders = []
+      this.totalItems = 0
+    }
   },
 })

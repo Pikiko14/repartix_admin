@@ -35,9 +35,10 @@ export const useShippingListStore = defineStore('shippingList', {
       this.shipping = payload
     },
     deleteOrderFromShipping(id) {
+      if (this.shipping.orders && this.shipping.orders.length === 1) return false
       const idx = this.shipping.orders.findIndex((el) => el.id === id)
       this.shipping.orders.splice(idx, 1)
-      this.enableEdit = !this.enableEdit
+      this.enableEdit = true
     },
     updateShipping(payload) {
       this.shipping = payload
@@ -45,7 +46,7 @@ export const useShippingListStore = defineStore('shippingList', {
     },
     addOrderToShippingList(payload) {
       const index = this.shipping.orders.findIndex((el) => el.id === payload.id)
-      if (index !== -1) return;
+      if (index !== -1) return
 
       this.shipping.orders.push(payload)
       this.enableEdit = !this.enableEdit

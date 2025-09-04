@@ -232,7 +232,7 @@ const handlerUpdateShippingList = async () => {
   loading.value = true
   try {
     const data = await content.doUpdateShippingList(shippingList.value);
-    if (data.succes) {
+    if (data.success) {
       notification('success', t('shippingListUpdateSuccess'), 'primary');
     }
   } finally {

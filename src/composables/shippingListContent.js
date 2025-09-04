@@ -56,13 +56,12 @@ export const shippingListContent = () => {
   }
 
   const doDeleteOrder = async (id) => {
-    store.deleteOrderFromShipping(id);
+    store.deleteOrderFromShipping(id)
   }
 
   const setNewOrder = (order) => {
-    store.addOrderToShippingList(order);
+    store.addOrderToShippingList(order)
   }
-
 
   const doUpdateShippingList = async (payload) => {
     try {
@@ -80,10 +79,20 @@ export const shippingListContent = () => {
     }
   }
 
+  const loadShippingPdf = async (id) => {
+    try {
+      const { data } = await api.get(`${path}/${id}/print-pdf`)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     setNewOrder,
     doDeleteOrder,
+    loadShippingPdf,
     doUpdateShippingList,
     doFilterShippingList,
     doDeleteShippingList,

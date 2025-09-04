@@ -277,5 +277,6 @@ export default {
   updateShippingList: 'Modificar relación de envío',
   deleteShippingList: 'Borrar relación de envío',
   addOrder: 'Agregar orden',
-  shippingListUpdateSuccess: 'Relación de envío modificada correctamente'
+  shippingListUpdateSuccess: 'Relación de envío modificada correctamente',
+  printPdf: 'Imprimir pdf',
 }

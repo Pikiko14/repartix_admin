@@ -6,6 +6,9 @@
       </h5>
 
       <div class="header-shipping-actions">
+        <q-btn @click="printPdf"
+          v-if="utils.validateRole('list-shipping-list') && !shippingList.is_close" rounded color="green" no-caps
+          unelevated icon-right="document_scanner" :loading="loadingPrinted" :label="t('printPdf')"></q-btn>
         <q-btn @click="openModal"
           v-if="utils.validateRole('update-shipping-list') && !shippingList.is_close" rounded color="primary" no-caps
           unelevated :label="t('addOrder')"></q-btn>
@@ -160,6 +163,7 @@ const route = useRoute();
 const utils = new Utils();
 const loading = ref(false);
 const authStore = useAuthStore();
+const loadingPrinted = ref(false);
 const store = useShippingListStore();
 const openModalAddOrder = ref(false);
 const content = shippingListContent();
@@ -244,6 +248,18 @@ const openModal = () => {
   openModalAddOrder.value = !openModalAddOrder.value;
 }
 
+const printPdf = async () => {
+  loadingPrinted.value = true;
+  try {
+    const data = await content.loadShippingPdf(shippingList.value._id);
+    if (data.success) {
+      window.open(data.pdf, '_blank');
+    }
+  } finally {
+    loadingPrinted.value = false;
+  }
+}
+
 // hook
 if (route.params.id && !store.getShipping._id) {
   loadShippingData(route.params.id);
@@ -307,9 +323,29 @@ if (route.params.id && !store.getShipping._id) {
   }
 }
 
+.header-shipping-actions {
+  display: flex;
+  gap: 1rem;
+
+  @media(width < 768px) {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .q-btn {
+    @media(width < 768px) {
+      width: 100%;
+    }
+  }
+}
+
 .header-shipping {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+  @media(width < 768px) {
+    flex-direction: column;
+  }
 }
 </style>

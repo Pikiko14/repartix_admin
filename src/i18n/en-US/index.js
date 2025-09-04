@@ -276,5 +276,6 @@ export default {
   createShippingList: 'Create shipping list',
   updateShippingList: 'Update shipping list',
   deleteShippingList: 'Delete shipping list',
-  addOrder: 'Add order'
+  addOrder: 'Add order',
+  printPdf: 'Print pdf',
 }

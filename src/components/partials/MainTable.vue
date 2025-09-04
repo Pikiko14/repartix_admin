@@ -143,7 +143,7 @@ const props = defineProps({
 });
 
 // emits
-const emit = defineEmits(['edit', 'delete', 'handler-selected']);
+const emit = defineEmits(['edit', 'delete', 'handler-selected', 'show-order']);
 
 // references
 const { t } = useI18n();

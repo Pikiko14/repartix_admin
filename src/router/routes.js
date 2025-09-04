@@ -56,6 +56,11 @@ const routes = [
         component: () => import('src/pages/dashboard/shipping-list/ShippingListPage.vue'),
         name: 'shipping-list',
       },
+      {
+        path: 'shipping-list/:id/show',
+        component: () => import('src/pages/dashboard/shipping-list/ShippingListPage.vue'),
+        name: 'shipping-list-show',
+      },
     ],
     meta: {
       auth: true,

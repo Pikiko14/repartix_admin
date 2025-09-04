@@ -2,10 +2,12 @@ import { defineStore } from 'pinia'
 
 export const useShippingListStore = defineStore('shippingList', {
   state: () => ({
+    shipping: {},
     shippings: [],
     totalItems: 1,
   }),
   getters: {
+    getShipping: (state) => state.shipping,
     getShippings: (state) => state.shippings,
     getTotalItems: (state) => state.totalItems,
   },
@@ -26,6 +28,9 @@ export const useShippingListStore = defineStore('shippingList', {
     },
     getIndex(id) {
       return this.shippings.findIndex((el) => el._id === id)
+    },
+    setShipping(payload) {
+      this.shipping = payload
     },
   },
 })

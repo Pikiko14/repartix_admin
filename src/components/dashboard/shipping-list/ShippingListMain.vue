@@ -25,7 +25,7 @@
 
 <script setup>
 // imports
-import { useQuasar } from 'quasar';
+import { Loading, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -163,8 +163,19 @@ const handlerDeleteShipping = async (id) => {
   }
 }
 
-const showShipping = (id) => {
-  alert(id);
+const showShipping = async (id) => {
+  Loading.show();
+  try {
+    await content.doFilterShippingList(id);
+    router.push({
+      name: 'shipping-list-show',
+      params: {
+        id,
+      },
+    });
+  } finally {
+    Loading.hide();
+  }
 }
 
 //const setTotalItems = () => {

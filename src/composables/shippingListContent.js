@@ -43,8 +43,21 @@ export const shippingListContent = () => {
     }
   }
 
+  const doFilterShippingList = async (id) => {
+    try {
+      const { data } = await api.get(`${path}/${id}`)
+      if (data) {
+        store.setShipping(data.shippingList)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
+    doFilterShippingList,
     doDeleteShippingList,
     doCreateShippingList,
     doListShippingMethods,

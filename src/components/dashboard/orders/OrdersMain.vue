@@ -309,7 +309,7 @@ const doHandlerSearch = (search) => {
 
 const handlerFilterByDate = (date) => {
   const query = {
-    page: route.query.page || 1,
+    page: 1,
     perPage: route.query.perPage || 10,
     search: route.query.search || '',
     from: date?.from,

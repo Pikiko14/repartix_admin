@@ -68,13 +68,20 @@
             {{ t('guide') }}
           </q-tooltip>
         </q-btn>
+        <q-btn size="10pt" @click="emit('show-guide', props.row._id)"
+          v-if="utils.validateRole(showOrderScope) && props.row.courier" icon="document_scanner" flat dense rounded
+          color="green">
+          <q-tooltip class="bg-green">
+            {{ t('guide') }}
+          </q-tooltip>
+        </q-btn>
         <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)"
           v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded color="blue">
           <q-tooltip class="bg-blue">
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn :disabled="props.row.status && props.row.status !== 'pending'" @click="emit('delete', props.row._id)"
+        <q-btn :disabled="props.row.status && props.row.status !== 'pending' || props.row.is_close" @click="emit('delete', props.row._id)"
           v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}

@@ -6,7 +6,7 @@
     <!--End header-->
 
     <!--Table-->
-    <MainTable class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
+    <MainTable @show-guide="printPdf" class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
       :columns="columns" :rows="shippingList" edit-scope="none" show-order-scope="list-shipping-list"
       delete-scope="delete-shipping-list" @show-order="showShipping" @edit="handlerUpdateShippingList" @delete="doDeleteShippingList" />
     <!--End table-->
@@ -173,6 +173,18 @@ const showShipping = async (id) => {
         id,
       },
     });
+  } finally {
+    Loading.hide();
+  }
+}
+
+const printPdf = async (id) => {
+  Loading.show();
+  try {
+    const data = await content.loadShippingPdf(id);
+    if (data.success) {
+      window.open(data.pdf, '_blank');
+    }
   } finally {
     Loading.hide();
   }

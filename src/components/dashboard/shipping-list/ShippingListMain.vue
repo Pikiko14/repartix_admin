@@ -9,7 +9,7 @@
     <MainTable @show-guide="printPdf" class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page"
       :pagination="pagination" :columns="columns" :rows="shippingList" edit-scope="none"
       show-order-scope="list-shipping-list" delete-scope="delete-shipping-list" @show-order="showShipping"
-      @edit="handlerUpdateShippingList" @delete="doDeleteShippingList" />
+      @edit="handlerUpdateShippingList" @delete="doDeleteShippingList" @close-shipping="closeShipping" />
     <!--End table-->
 
     <!--Modal shipping-->
@@ -151,8 +151,8 @@ const doDeleteShippingList = (id) => {
 
 const handlerDeleteShipping = async (id) => {
   const data = await content.doDeleteShippingList(id);
-  if (data?.success) {
-    notification('success', t('sendersDeleted'), 'primary');
+  if (data?.succes) {
+    notification('success', t('shippingDeleted'), 'primary');
     pagination.value.rowsNumber = store.getTotalItems;
   }
 
@@ -208,6 +208,31 @@ const handlerFilterByDate = (date) => {
     name: route.name,
     query,
   });
+}
+
+const closeShipping = async (id) => {
+  const description = t('closeShippingDescription');
+  q.dialog({
+    title: t('closeShipping'),
+    message: description,
+    cancel: true,
+  }).onOk(() => {
+    handlerCloseShipping(id);
+  });
+}
+
+const handlerCloseShipping = async (id) => {
+  Loading.show();
+  try {
+    const data = await content.doCloseShippingById(id);
+
+    if (data.success) {
+      notification('success', t('shippingListCloseSuccess'), 'primary');
+    }
+  } finally {
+    content.clearShipping();
+    Loading.hide();
+  }
 }
 
 // hook

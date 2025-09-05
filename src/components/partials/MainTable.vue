@@ -69,10 +69,17 @@
           </q-tooltip>
         </q-btn>
         <q-btn size="10pt" @click="emit('show-guide', props.row._id)"
-          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0" icon="document_scanner" flat dense rounded
-          color="green">
+          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0"
+          icon="document_scanner" flat dense rounded color="green">
           <q-tooltip class="bg-green">
             {{ t('guide') }}
+          </q-tooltip>
+        </q-btn>
+        <q-btn size="10pt" @click="emit('close-shipping', props.row._id)"
+          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0 && !props.row.is_close"
+          icon="close" flat dense rounded color="orange">
+          <q-tooltip class="bg-orange">
+            {{ t('close') }}
           </q-tooltip>
         </q-btn>
         <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)"
@@ -81,8 +88,9 @@
             {{ t('edit') }}
           </q-tooltip>
         </q-btn>
-        <q-btn :disabled="props.row.status && props.row.status !== 'pending' || props.row.is_close" @click="emit('delete', props.row._id)"
-          v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded color="red">
+        <q-btn :disabled="props.row.status && props.row.status !== 'pending' || props.row.is_close"
+          @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded
+          color="red">
           <q-tooltip class="bg-red">
             {{ t('delete') }}
           </q-tooltip>
@@ -94,15 +102,8 @@
     <!--relation delivered-->
     <template v-slot:body-cell-orderResume="props">
       <q-td :props="props">
-        <q-slider
-          disable
-          v-model="props.row.orders_delivered"
-          :min="0"
-          :max="props?.row?.order_total"
-          :step="props?.row?.orders_delivered"
-          marker-labels
-          color="primary"
-        />
+        <q-slider disable v-model="props.row.orders_delivered" :min="0" :max="props?.row?.order_total"
+          :step="props?.row?.orders_delivered" marker-labels color="primary" />
       </q-td>
     </template>
     <!--End relation delivered-->
@@ -150,7 +151,14 @@ const props = defineProps({
 });
 
 // emits
-const emit = defineEmits(['edit', 'delete', 'handler-selected', 'show-order', 'show-guide']);
+const emit = defineEmits([
+  'edit',
+  'delete',
+  'handler-selected',
+  'show-order',
+  'show-guide',
+  'close-shipping'
+]);
 
 // references
 const { t } = useI18n();

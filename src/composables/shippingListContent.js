@@ -80,6 +80,19 @@ export const shippingListContent = () => {
     }
   }
 
+  const doCloseOrder = async (payload) => {
+    try {
+      const params = JSON.parse(JSON.stringify(payload))
+      const { data } = await api.put(`${path}/${payload._id}/close`, params)
+      if (data && data.shippingList) {
+        store.updateShipping(data.shippingList)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const loadShippingPdf = async (id) => {
     try {
       const { data } = await api.get(`${path}/${id}/print-pdf`)
@@ -94,12 +107,25 @@ export const shippingListContent = () => {
     return await doUpdateShippingList(store.getShipping)
   }
 
+  const doCloseShippingById = async (id) => {
+    store.closeShippingById(id)
+    const params = store.getShipping
+    delete params.orders
+    return await doCloseOrder(params)
+  }
+
+  const clearShipping = () => {
+    store.clearShipping()
+  }
+
   // return
   return {
     setNewOrder,
     doDeleteOrder,
+    clearShipping,
     loadShippingPdf,
     doCloseShipping,
+    doCloseShippingById,
     doUpdateShippingList,
     doFilterShippingList,
     doDeleteShippingList,

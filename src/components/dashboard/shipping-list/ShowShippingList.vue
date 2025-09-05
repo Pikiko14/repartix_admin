@@ -285,7 +285,6 @@ const handlerCloseShipping = async () => {
   } finally {
     loadingClose.value = false;
   }
-
 }
 
 // hook

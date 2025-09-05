@@ -55,6 +55,15 @@ export const useShippingListStore = defineStore('shippingList', {
       this.shipping.is_close = true
       this.enableEdit = false
     },
+    closeShippingById(id) {
+      const idx = this.getIndex(id)
+      const shipping = this.shippings[idx]
+      this.shipping = shipping
+      this.shippings[idx].is_close = true
+    },
+    clearShipping() {
+      this.shipping = {}
+    },
     validateSocketData(payload) {
       if (payload.pdf) window.open(payload.pdf, '__blank');
     }

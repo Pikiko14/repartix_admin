@@ -64,11 +64,11 @@ import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from 'src/stores/authStore';
-import { computed, onBeforeMount, ref, watch } from 'vue';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
 import ProfileCard from 'src/components/layout/ProfileCard.vue';
 import NotificationList from 'src/components/layout/NotificationList.vue';
+import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
 
 // references
 const q = useQuasar();
@@ -79,6 +79,8 @@ const authStore = useAuthStore();
 const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
 const showProfileModal = ref(false);
+const { appContext } = getCurrentInstance();
+const socket = appContext.config.globalProperties.$socket;
 
 // computed
 const user = computed(() => authStore.getUser);
@@ -106,6 +108,13 @@ const closePlanModal = () => {
   authStore.openModalPlan(false);
 }
 
+const handleLeaveRoom = () => {
+  if (user.value?._id) {
+    socket.emit('leaveRoom', `${user.value?._id}`);
+    socket.disconnect();
+  }
+}
+
 // hook
 onBeforeMount(() => {
   if (
@@ -114,5 +123,25 @@ onBeforeMount(() => {
   ) {
     showPlanModal.value = true;
   };
+
+  // escuchamos las notificaciones
+  socket.on('notification', (data) => {
+    console.log(data);
+  });
+
+  // join  user room
+  setTimeout(() => {
+    socket.emit('joinRoom', user.value.parent_id || user.value._id);
+  }, 500);
+  window.addEventListener('beforeunload', handleLeaveRoom);
+});
+
+onUnmounted(() => {
+  socket.off('notification');
+  window.removeEventListener('beforeunload', handleLeaveRoom);
+});
+
+onBeforeUnmount(() => {
+  socket.emit('leaveRoom', `${user.value.id}`);
 });
 </script>

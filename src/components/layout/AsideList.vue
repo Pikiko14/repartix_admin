@@ -24,7 +24,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item v-if="utils.validateRole('list-shipping-list')" clickable v-ripple to="/dashboard/shipping-list?page=1&perPage=10&search=">
+      <q-item v-if="utils.validateRole('list-shipping-list')" clickable v-ripple
+        to="/dashboard/shipping-list?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('shippingList') }}
@@ -46,7 +47,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item v-if="utils.validateRole('list-sender')" clickable v-ripple to="/dashboard/senders?page=1&perPage=10&search=">
+      <q-item v-if="utils.validateRole('list-sender')" clickable v-ripple
+        to="/dashboard/senders?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('sender') }}
@@ -57,7 +59,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-if="utils.validateRole('list-couriers')" v-ripple to="/dashboard/couriers?page=1&perPage=10&search=">
+      <q-item clickable v-if="utils.validateRole('list-couriers')" v-ripple
+        to="/dashboard/couriers?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('delivery') }}
@@ -68,7 +71,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable to="/dashboard/clients?page=1&perPage=10&search=" v-if="utils.validateRole('list-client') && user.type_user !== 'sender'" v-ripple>
+      <q-item clickable to="/dashboard/clients?page=1&perPage=10&search="
+        v-if="utils.validateRole('list-client') && user.type_user !== 'sender'" v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('client') }}
@@ -79,7 +83,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-if="utils.validateRole('list-city')" v-ripple to="/dashboard/cities-and-zones?page=1&perPage=10&search=">
+      <q-item clickable v-if="utils.validateRole('list-city')" v-ripple
+        to="/dashboard/cities-and-zones?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('cityAndZones') }}
@@ -90,7 +95,8 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple to="/dashboard/users?page=1&perPage=10&search=" v-if="utils.validateRole('list-user') && utils.validateUsability('create_user')">
+      <q-item clickable v-ripple to="/dashboard/users?page=1&perPage=10&search="
+        v-if="utils.validateRole('list-user') && utils.validateUsability('create_user')">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('user') }}
@@ -101,7 +107,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple >
+      <q-item clickable v-ripple>
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('reports') }}
@@ -134,11 +140,11 @@
 
 <script setup>
 // imports
-import { computed } from 'vue';
 import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { Utils } from 'src/utils/utils';
+import { computed, getCurrentInstance } from 'vue';
 import { useAuthStore } from 'src/stores/authStore';
 
 // references
@@ -147,6 +153,8 @@ const { t } = useI18n();
 const utils = new Utils();
 const router = useRouter();
 const authStore = useAuthStore();
+const { appContext } = getCurrentInstance();
+const socket = appContext.config.globalProperties.$socket;
 
 // computed
 const user = computed(() => authStore.getUser);
@@ -158,6 +166,7 @@ const handlerLogout = () => {
     message: t('sureCloseSesion'),
     cancel: true,
   }).onOk(() => {
+    socket.emit('leaveRoom', `${user.value._id}`);
     authStore.doLogout();
     router.push('/');
   });

@@ -6,7 +6,7 @@ const store = useAuthStore()
 export class Utils {
   validateRole = (role) => {
     const user = store.getUser
-    return user.scopes.includes(role)
+    return user.scopes?.includes(role)
   }
 
   validateUsability = (usability) => {

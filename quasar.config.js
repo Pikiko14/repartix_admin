@@ -20,6 +20,7 @@ export default defineConfig((ctx) => {
     boot: [
       'i18n',
       'axios',
+      'socket',
       'routeGuard',
       'notification',
       'counterNumber',

@@ -114,10 +114,10 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
-import { onBeforeMount, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { notification } from 'src/boot/notification';
 import { authContent } from 'src/composables/authContent';
+import { onBeforeMount, ref, getCurrentInstance } from 'vue';
 
 // references
 const login = ref({
@@ -139,6 +139,8 @@ const loading = ref(false);
 const router = useRouter();
 const loadingLogin = ref(false);
 const recoveryPassword = ref(false);
+const { appContext } = getCurrentInstance();
+const socket = appContext.config.globalProperties.$socket;
 const { doLogin, doRecoveryPassword, doChangePassword } = authContent();
 
 // methods
@@ -147,6 +149,9 @@ const handlerDoLogin = async () => {
   try {
     const response = await doLogin(login.value);
     if (response?.user) {
+      setTimeout(() => {
+        socket.emit('joinRoom', response?.user.parent_id || response?.user._id);
+      }, 500);
       router.push('/dashboard');
     }
   } finally {

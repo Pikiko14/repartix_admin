@@ -188,7 +188,7 @@ const printPdf = async (id) => {
   try {
     const data = await content.loadShippingPdf(id);
     if (data.success) {
-      window.open(data.pdf, '_blank');
+      notification('success', t('documentGenerated'), 'primary');
     }
   } finally {
     Loading.hide();

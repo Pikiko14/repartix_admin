@@ -67,6 +67,7 @@ import { useAuthStore } from 'src/stores/authStore';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
 import ProfileCard from 'src/components/layout/ProfileCard.vue';
+import { useShippingListStore } from 'src/stores/shippingListStore';
 import NotificationList from 'src/components/layout/NotificationList.vue';
 import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
 
@@ -80,6 +81,7 @@ const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
 const showProfileModal = ref(false);
 const { appContext } = getCurrentInstance();
+const shippingStore = useShippingListStore();
 const socket = appContext.config.globalProperties.$socket;
 
 // computed
@@ -125,8 +127,19 @@ onBeforeMount(() => {
   };
 
   // escuchamos las notificaciones
-  socket.on('notification', (data) => {
-    console.log(data);
+  socket.on('notification', (payload) => {
+    if (payload.success) {
+      const { data, model } = payload;
+
+      switch (model) {
+        case 'shipping_list':
+          shippingStore.validateSocketData(data);
+          break;
+
+        default:
+          break;
+      }
+    }
   });
 
   // join  user room

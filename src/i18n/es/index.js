@@ -282,4 +282,5 @@ export default {
   closeShipping: 'Cerrar relación de envío',
   closeShippingDescription: '¿Estas seguro de querer cerrar esta relación de envío?',
   shippingListCloseSuccess: 'Relación de envío cerrada correctamente',
+  documentGenerated: 'Documento generado correctamente',
 }

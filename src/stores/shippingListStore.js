@@ -55,5 +55,10 @@ export const useShippingListStore = defineStore('shippingList', {
       this.shipping.is_close = true
       this.enableEdit = false
     },
+    validateSocketData(payload) {
+      if (this.shippings.find((el) => el._id === payload.model_id)) {
+        if (payload.pdf) window.open(payload.pdf, '__blank');
+      }
+    }
   },
 })

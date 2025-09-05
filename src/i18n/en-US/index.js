@@ -281,4 +281,5 @@ export default {
   closeShipping: 'Close shipping',
   closeShippingDescription: '¿Are you sure you want to close this shipping list?',
   shippingListCloseSuccess: 'Shipping list close successfully',
+  documentGenerated: 'Document generated successfully',
 }

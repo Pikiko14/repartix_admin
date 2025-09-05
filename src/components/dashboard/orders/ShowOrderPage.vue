@@ -432,7 +432,6 @@ import { Loading } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
-import { computed, onBeforeMount, ref } from 'vue';
 import { GoogleMap, Marker } from 'vue3-google-map';
 import { useAuthStore } from 'src/stores/authStore';
 import { notification } from 'src/boot/notification';
@@ -440,13 +439,14 @@ import { useOrdersStore } from 'src/stores/ordersStore';
 import ModalCard from 'src/components/partials/ModalCard.vue';
 import { ordersContent } from 'src/composables/ordersContent';
 import { guidesContent } from 'src/composables/guidesContent';
+import { computed, onBeforeMount, onUnmounted, ref } from 'vue';
 import OrderPaymentForm from './components/OrderPaymentForm.vue';
 
 // references
-const tab = ref('products');
 const { t } = useI18n();
 const route = useRoute();
 const utils = new Utils();
+const tab = ref('products');
 const store = useOrdersStore();
 const authStore = useAuthStore();
 const contentOrder = ordersContent();
@@ -586,7 +586,11 @@ onBeforeMount(() => {
   if (route.params.id && !order.value._id) {
     contentOrder.doShowOrder(route.params.id);
   }
-})
+});
+
+onUnmounted(() => {
+  store.clearOrder();
+});
 </script>
 
 <style scoped lang="scss">

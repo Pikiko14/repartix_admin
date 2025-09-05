@@ -147,7 +147,7 @@
 <script setup>
 // imports
 import { useI18n } from 'vue-i18n';
-import { computed, ref } from 'vue';
+import { computed, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
 import { Loading, useQuasar } from 'quasar';
@@ -256,7 +256,7 @@ const printPdf = async () => {
   try {
     const data = await content.loadShippingPdf(shippingList.value._id);
     if (data.success) {
-      window.open(data.pdf, '_blank');
+      notification('success', t('documentGenerated'), 'primary');
     }
   } finally {
     loadingPrinted.value = false;
@@ -291,6 +291,10 @@ const handlerCloseShipping = async () => {
 if (route.params.id && !store.getShipping._id) {
   loadShippingData(route.params.id);
 }
+
+onUnmounted(() => {
+  store.clearShipping();
+});
 </script>
 
 <style scoped lang="scss">

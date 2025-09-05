@@ -49,6 +49,9 @@ export const useOrdersStore = defineStore('ordersStore', {
     },
     validateSocketData(payload) {
       if (payload.pdf) window.open(payload.pdf, '__blank');
+    },
+    clearOrder() {
+      this.order = {}
     }
   },
 })

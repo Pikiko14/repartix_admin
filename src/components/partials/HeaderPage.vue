@@ -10,7 +10,7 @@
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
             <q-popup-proxy ref="dateReference" cover transition-show="scale" transition-hide="scale">
-              <q-date range v-model="date">
+              <q-date @update:model-value="setDate" range v-model="date">
                 <div class="row items-center justify-end">
                   <q-btn @click="clearDate" v-close-popup flat dense color="red" :label="t('close')">
                     <q-tooltip class="bg-red">
@@ -115,7 +115,7 @@
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
-import { onBeforeMount, ref, watch } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 // references
 const route = useRoute();
@@ -157,7 +157,7 @@ const props = defineProps({
 });
 
 // emits
-const emit = defineEmits(['add-new', 'do-search', 'filter-by-date', 'do-filter', 'set-action']);
+const emit = defineEmits(['add-new', 'do-search', 'filter-by-date', 'do-filter', 'set-action', 'clear-filter']);
 
 // references
 const search = ref('');
@@ -165,16 +165,6 @@ const { t } = useI18n();
 const dateLabel = ref('');
 const actionsMenu = ref(false);
 const date = ref({ from: '', to: '' });
-
-
-// watch
-watch(() => date.value, (val) => {
-  if (!val) return;
-  dateLabel.value = `${val?.from} - ${val?.to}`;
-  if (dateReference.value) dateReference.value?.hide();
-  emit('filter-by-date', val);
-});
-
 
 // methos
 const handlerAddNew = () => {
@@ -201,6 +191,13 @@ const doFilter = (key, value) => {
 const clearFilter = () => {
   filtersSelected.value = {};
   emit('clear-filter');
+}
+
+const setDate = (val) => {
+  if (!val) return;
+  dateLabel.value = `${val?.from} - ${val?.to}`;
+  if (dateReference.value) dateReference.value?.hide();
+  emit('filter-by-date', val);
 }
 
 // hooks

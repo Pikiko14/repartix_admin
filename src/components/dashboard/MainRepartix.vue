@@ -16,7 +16,7 @@
     </div>
 
     <!--Card metrics-->
-    <CardDashboard />
+    <CardDashboard v-if="render" />
     <!--Card metrics-->
 
     <!--Mapa-->
@@ -37,25 +37,30 @@ import { dashboardContent } from 'src/composables/dashboardContent';
 // references
 const now = new Date();
 const { t } = useI18n();
-const dateSelected = ref('');
 const updateProxy = ref();
+const render = ref(true);
+const dateSelected = ref('');
 const content = dashboardContent();
 
 // methods
-const loadfashboardData = async () => {
+const loadDashboardData = async () => {
   const from = dateSelected.value || date.formatDate(now, 'YYYY/MM/DD');
   const to = dateSelected.value || date.formatDate(now, 'YYYY/MM/DD');
   if (updateProxy.value) updateProxy.value.hide();
   await content.doListDashboardData(`from=${from}&to=${to}`);
+  render.value = false;
+  setTimeout(() => 
+    render.value = true, 
+  0)
 }
 
 const filterByDate = (e) => {
   dateSelected.value = e;
-  loadfashboardData();
+  loadDashboardData();
 }
 
 // hook
-loadfashboardData();
+loadDashboardData();
 </script>
 
 <style lang="scss" scoped>

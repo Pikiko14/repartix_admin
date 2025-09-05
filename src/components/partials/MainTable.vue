@@ -213,6 +213,10 @@ const handlerPagination = (e) => {
     query.to = route.query.to;
   }
 
+  if (route.query.filters) {
+    query.filters = route.query.filters;
+  }
+
   router.push({
     name: route.name,
     query

@@ -144,7 +144,7 @@ onBeforeMount(() => {
 
   // join  user room
   setTimeout(() => {
-    socket.emit('joinRoom', user.value.parent_id || user.value._id);
+    socket.emit('joinRoom', `${user.value._id}-${user.value.parent_id || user.value._id}`);
   }, 500);
   window.addEventListener('beforeunload', handleLeaveRoom);
 });

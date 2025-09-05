@@ -150,7 +150,7 @@ const handlerDoLogin = async () => {
     const response = await doLogin(login.value);
     if (response?.user) {
       setTimeout(() => {
-        socket.emit('joinRoom', response?.user.parent_id || response?.user._id);
+        socket.emit('joinRoom', `${response?.user._id}-${response?.user.parent_id || response?.user._id}`);
       }, 500);
       router.push('/dashboard');
     }

@@ -46,6 +46,9 @@ export const useOrdersStore = defineStore('ordersStore', {
     clearOrders() {
       this.orders = []
       this.totalItems = 0
+    },
+    validateSocketData(payload) {
+      if (payload.pdf) window.open(payload.pdf, '__blank');
     }
   },
 })

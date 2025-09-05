@@ -70,6 +70,7 @@ import ProfileCard from 'src/components/layout/ProfileCard.vue';
 import { useShippingListStore } from 'src/stores/shippingListStore';
 import NotificationList from 'src/components/layout/NotificationList.vue';
 import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
+import { useOrdersStore } from 'src/stores/ordersStore';
 
 // references
 const q = useQuasar();
@@ -80,6 +81,7 @@ const authStore = useAuthStore();
 const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
 const showProfileModal = ref(false);
+const orderStore = useOrdersStore();
 const { appContext } = getCurrentInstance();
 const shippingStore = useShippingListStore();
 const socket = appContext.config.globalProperties.$socket;
@@ -134,6 +136,10 @@ onBeforeMount(() => {
       switch (model) {
         case 'shipping_list':
           shippingStore.validateSocketData(data);
+          break;
+        
+        case 'orders':
+          orderStore.validateSocketData(data);
           break;
 
         default:

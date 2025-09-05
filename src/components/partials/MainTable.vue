@@ -69,7 +69,7 @@
           </q-tooltip>
         </q-btn>
         <q-btn size="10pt" @click="emit('show-guide', props.row._id)"
-          v-if="utils.validateRole(showOrderScope) && props.row.courier" icon="document_scanner" flat dense rounded
+          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0" icon="document_scanner" flat dense rounded
           color="green">
           <q-tooltip class="bg-green">
             {{ t('guide') }}

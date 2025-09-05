@@ -1,14 +1,15 @@
 <template>
   <section class="shipping-list-main">
     <!--Header-->
-    <HeaderPage @do-search="doHandlerSearch" @add-new="showAddButton" :scope="'create-sender'"
-      :title="t('shippingList')" />
+    <HeaderPage show-date-picker @filter-by-date="handlerFilterByDate" @do-search="doHandlerSearch"
+      @add-new="showAddButton" :scope="'create-sender'" :title="t('shippingList')" />
     <!--End header-->
 
     <!--Table-->
-    <MainTable @show-guide="printPdf" class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page" :pagination="pagination"
-      :columns="columns" :rows="shippingList" edit-scope="none" show-order-scope="list-shipping-list"
-      delete-scope="delete-shipping-list" @show-order="showShipping" @edit="handlerUpdateShippingList" @delete="doDeleteShippingList" />
+    <MainTable @show-guide="printPdf" class="q-mt-lg" :key="pagination.rowsNumber + '-' + pagination.page"
+      :pagination="pagination" :columns="columns" :rows="shippingList" edit-scope="none"
+      show-order-scope="list-shipping-list" delete-scope="delete-shipping-list" @show-order="showShipping"
+      @edit="handlerUpdateShippingList" @delete="doDeleteShippingList" />
     <!--End table-->
 
     <!--Modal shipping-->
@@ -108,7 +109,11 @@ const handlerListShipping = async () => {
   const search = route.query.search || '';
   const perPage = route.query.perPage || 10;
 
-  const query = `page=${page}&perPage=${perPage}&search=${search}`;
+  let query = `page=${page}&perPage=${perPage}&search=${search}`;
+
+  if (route.query.from && route.query.to) {
+    query += `&from=${route.query.from}&to=${route.query.to}`;
+  }
 
   await content.doListShippingMethods(query);
   pagination.value.rowsNumber = store.getTotalItems;
@@ -190,9 +195,20 @@ const printPdf = async (id) => {
   }
 }
 
-//const setTotalItems = () => {
-//  pagination.value.rowsNumber = store.getTotalItems;
-//}
+const handlerFilterByDate = (date) => {
+  const query = {
+    page: 1,
+    perPage: route.query.perPage || 10,
+    search: route.query.search || '',
+    from: date?.from,
+    to: date?.to,
+  }
+
+  router.push({
+    name: route.name,
+    query,
+  });
+}
 
 // hook
 if (route.query.page) {

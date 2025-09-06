@@ -55,45 +55,26 @@
     <!--Option td-->
     <template v-slot:body-cell-options="props">
       <q-td :props="props">
-        <q-btn @click="emit('show-order', props.row._id)" v-if="utils.validateRole(showOrderScope)" icon="visibility"
-          flat dense rounded color="primary">
-          <q-tooltip class="bg-primary">
-            {{ t('showOrder') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn size="10pt" @click="emit('show-guide', props.row.reference)"
-          v-if="utils.validateRole(showOrderScope) && props.row.print_guide" icon="document_scanner" flat dense rounded
-          color="green">
-          <q-tooltip class="bg-green">
-            {{ t('guide') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn size="10pt" @click="emit('show-guide', props.row._id)"
-          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0"
-          icon="document_scanner" flat dense rounded color="green">
-          <q-tooltip class="bg-green">
-            {{ t('guide') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn size="10pt" @click="emit('close-shipping', props.row._id)"
-          v-if="utils.validateRole(showOrderScope) && props.row.courier && props.row.orders_delivered >= 0 && !props.row.is_close"
-          icon="close" flat dense rounded color="orange">
-          <q-tooltip class="bg-orange">
-            {{ t('close') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn :disable="props.row.status && props.row.status === 'delivered'" @click="emit('edit', props.row._id)"
-          v-if="utils.validateRole(editScope)" icon="edit" flat dense rounded color="blue">
-          <q-tooltip class="bg-blue">
-            {{ t('edit') }}
-          </q-tooltip>
-        </q-btn>
-        <q-btn :disabled="props.row.status && props.row.status !== 'pending' || props.row.is_close"
-          @click="emit('delete', props.row._id)" v-if="utils.validateRole(deleteScope)" icon="delete" flat dense rounded
-          color="red">
-          <q-tooltip class="bg-red">
-            {{ t('delete') }}
-          </q-tooltip>
+        <q-btn icon="apps" color="primary" rounded flat dense>
+          <q-menu>
+            <q-list bordered dense class="rounded-borders">
+              <q-item :disable="typeof action.disable === 'function' ? action.disable(props.row) : false" v-close-popup v-for="(action, index) in actions" :key="index" v-show="action.condition(props.row)" clickable
+                @click="action.emit(props.row)">
+                <q-item-section class="text-bold text-primary">
+                  {{ t(action.tooltip) }}
+                </q-item-section>
+
+                <q-item-section side>
+                  <q-btn flat dense round :icon="action.icon" :color="action.color" :size="action.size || undefined">
+                    <q-tooltip :class="`bg-${action.color}`">
+                      {{ t(action.tooltip) }}
+                    </q-tooltip>
+                  </q-btn>
+                </q-item-section>
+              </q-item>
+            </q-list>
+
+          </q-menu>
         </q-btn>
       </q-td>
     </template>
@@ -192,6 +173,61 @@ const statusColor = {
   'guide-printed': 'bg-green',
   guide_news: 'bg-warning',
 }
+
+const actions = [
+  {
+    icon: 'visibility',
+    color: 'primary',
+    tooltip: 'showOrder',
+    condition: () => utils.validateRole(props.showOrderScope),
+    emit: (row) => emit('show-order', row._id)
+  },
+  {
+    icon: 'document_scanner',
+    color: 'green',
+    tooltip: 'guide',
+    size: '10pt',
+    condition: (row) => utils.validateRole(props.showOrderScope) && row.print_guide,
+    emit: (row) => emit('show-guide', row.reference)
+  },
+  {
+    icon: 'document_scanner',
+    color: 'green',
+    tooltip: 'guide',
+    size: '10pt',
+    condition: (row) =>
+      utils.validateRole(props.showOrderScope) && row.courier && row.orders_delivered >= 0,
+    emit: (row) => emit('show-guide', row._id)
+  },
+  {
+    icon: 'close',
+    color: 'orange',
+    tooltip: 'close',
+    size: '10pt',
+    condition: (row) =>
+      utils.validateRole(props.showOrderScope) &&
+      row.courier &&
+      row.orders_delivered >= 0 &&
+      !row.is_close,
+    emit: (row) => emit('close-shipping', row._id)
+  },
+  {
+    icon: 'edit',
+    color: 'blue',
+    tooltip: 'edit',
+    disable: (row) => row.status && row.status === 'delivered',
+    condition: () => utils.validateRole(props.editScope),
+    emit: (row) => emit('edit', row._id)
+  },
+  {
+    icon: 'delete',
+    color: 'red',
+    tooltip: 'delete',
+    disable: (row) => (row.status && row.status !== 'pending') || row.is_close,
+    condition: () => utils.validateRole(props.deleteScope),
+    emit: (row) => emit('delete', row._id)
+  }
+]
 
 // watch
 watch(() => selecteds.value, (newVal) => {

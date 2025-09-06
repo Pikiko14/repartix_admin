@@ -216,6 +216,10 @@ const scopes = [
     label: t('deleteShippingList'),
     value: 'delete-shipping-list',
   },
+  {
+    label: t('listReports'),
+    value: 'list-reports',
+  },
 ];
 const tab = ref('profile');
 const loading = ref(false);

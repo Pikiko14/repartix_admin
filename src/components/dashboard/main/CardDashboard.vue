@@ -3,7 +3,7 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Domicilios:
+          {{ t('orders') }}:
         </p>
         <p class="value">
           <AnimatedCounter v-if="counters.totalOrders" :value="counters.totalOrders || 0" :duration="500" class="counter"/>
@@ -15,7 +15,7 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Entregados:
+          {{ t('delivered') }}s:
         </p>
         <p class="value">
           <AnimatedCounter v-if="counters.delivered" :value="counters.delivered || 0" :duration="500" class="counter"/>
@@ -27,7 +27,7 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Pendientes:
+          {{ t('pending') }}s:
         </p>
         <p class="value">
           <AnimatedCounter v-if="counters.pending" :value="counters.pending || 0" :duration="500" class="counter"/>
@@ -39,7 +39,7 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Cancelados:
+          {{ t('cancelled') }}s:
         </p>
         <p class="value">
           <AnimatedCounter v-if="counters.cancelled" :value="counters.cancelled || 0" :duration="500" class="counter"/>
@@ -51,7 +51,7 @@
     <q-card class="shadow-0">
       <q-card-section class="grid">
         <p class="title text-primary">
-          Novedades:
+          {{ t('guide_news') }}:
         </p>
         <p class="value">
           <AnimatedCounter v-if="counters.news" :value="counters.news || 0" :duration="500" class="counter"/>
@@ -65,9 +65,11 @@
 <script setup>
 // imports
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useDashboardStore } from 'src/stores/dashboardStore.js';
 
 // references
+const { t } = useI18n();
 const store = useDashboardStore();
 
 // computed

@@ -4,7 +4,8 @@
       <h2 class="text-h6">
         {{ t('titleDashboard') }} {{ dateSelected || date.formatDate(now, 'DD/MM/YYYY') }}
         <q-btn icon="calendar_month" flat dense rounded color="primary">
-          <q-popup-proxy ref="updateProxy" @before-show="updateProxy" cover transition-show="scale" transition-hide="scale">
+          <q-popup-proxy ref="updateProxy" @before-show="updateProxy" cover transition-show="scale"
+            transition-hide="scale">
             <q-date @update:model-value="filterByDate" v-model="dateSelected">
             </q-date>
           </q-popup-proxy>
@@ -27,9 +28,9 @@
 
 <script setup>
 // imports
-import { ref } from 'vue';
 import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { ref, nextTick } from 'vue';
 import MapDashboard from './main/MapDashboard.vue';
 import CardDashboard from './main/CardDashboard.vue';
 import { dashboardContent } from 'src/composables/dashboardContent';
@@ -49,9 +50,9 @@ const loadDashboardData = async () => {
   if (updateProxy.value) updateProxy.value.hide();
   await content.doListDashboardData(`from=${from}&to=${to}`);
   render.value = false;
-  setTimeout(() => 
-    render.value = true, 
-  0)
+  nextTick(() => {
+    render.value = true;
+  });
 }
 
 const filterByDate = (e) => {

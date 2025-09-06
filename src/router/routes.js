@@ -61,6 +61,16 @@ const routes = [
         component: () => import('src/pages/dashboard/shipping-list/ShowShippingList.vue'),
         name: 'shipping-list-show',
       },
+      {
+        path: 'reports',
+        component: () => import('src/pages/dashboard/reports/ReportsPage.vue'),
+        name: 'reports',
+      },
+      {
+        path: 'reports/diary-order',
+        component: () => import('src/pages/dashboard/reports/ReportsResumePage.vue'),
+        name: 'diaryOrder',
+      },
     ],
     meta: {
       auth: true,

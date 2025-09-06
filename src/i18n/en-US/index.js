@@ -287,4 +287,9 @@ export default {
   liquidateOrders: 'Liquidate orders',
   liquidateOrdersDescription: '¿Are you sure you want to liquidate these orders',
   ordersLiquidated: 'Orders liquidated successfully',
+  listReports: 'List reports',
+  diaryOder: 'Diary orders',
+  printed: 'Printeds',
+  noOrders: 'No orders',
+  diaryOderByCouriers: 'Diary order by courier',
 }

@@ -288,4 +288,9 @@ export default {
   liquidateOrders: 'Liquidar ordenes',
   liquidateOrdersDescription: '¿Estas seguro de querer liquidar estas ordenes',
   ordersLiquidated: 'Ordenes liquidadas correctamente',
+  listReports: 'Listar reportes',
+  diaryOder: 'Ordenes diarias',
+  printed: 'Impresas',
+  noOrders: 'No hay ordenes',
+  diaryOderByCouriers: 'Ordenes diarias por repartidor',
 }

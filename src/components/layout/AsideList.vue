@@ -107,7 +107,7 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple to="/dashboard/reports" v-if="utils.validateRole('list-reports')">
         <q-item-section>
           <q-item-label class="text-primary">
             {{ t('reports') }}

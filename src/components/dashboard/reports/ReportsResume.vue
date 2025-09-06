@@ -10,7 +10,11 @@
       <section class="filters">
         <!--Courier filter-->
         <q-input debounce="1500" @update:model-value="filterByCourier" placeholder="Jhon Doe" outlined round dense v-model="courier"
-          v-if="route.query.type && route.query.type === 'courier'"></q-input>
+          v-if="route.query.type && route.query.type === 'courier'">
+          <template #append>
+            <q-icon name="search"></q-icon>
+          </template>
+        </q-input>
         <!--End courier filter-->
 
         <!--Date filter-->

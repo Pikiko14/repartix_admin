@@ -284,4 +284,8 @@ export default {
   shippingListCloseSuccess: 'Relación de envío cerrada correctamente',
   documentGenerated: 'Documento generado correctamente',
   shippingDeleted: 'Lista de envío eliminada correctamente',
+  liquidate: 'Liquidar dinero',
+  liquidateOrders: 'Liquidar ordenes',
+  liquidateOrdersDescription: '¿Estas seguro de querer liquidar estas ordenes',
+  ordersLiquidated: 'Ordenes liquidadas correctamente',
 }

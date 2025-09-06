@@ -283,4 +283,8 @@ export default {
   shippingListCloseSuccess: 'Shipping list close successfully',
   documentGenerated: 'Document generated successfully',
   shippingDeleted: 'Shipping list deleted success',
+  liquidate: 'Settle money',
+  liquidateOrders: 'Liquidate orders',
+  liquidateOrdersDescription: '¿Are you sure you want to liquidate these orders',
+  ordersLiquidated: 'Orders liquidated successfully',
 }

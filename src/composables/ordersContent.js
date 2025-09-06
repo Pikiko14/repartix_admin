@@ -106,6 +106,18 @@ export const ordersContent = () => {
     }
   }
 
+  const doLiquidateOrders = async (payload) => {
+    try {
+      const { data } = await api.put(`${path}/liquidate/money`, payload)
+      if (data && data.orders) {
+        store.liquidate(payload)
+      }
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doShowOrder,
@@ -114,6 +126,7 @@ export const ordersContent = () => {
     doCreateOrder,
     doDeleteOrder,
     doCreatePayment,
+    doLiquidateOrders,
     doUpdateOrderStatus,
   }
 }

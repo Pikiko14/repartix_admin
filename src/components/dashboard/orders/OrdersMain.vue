@@ -256,6 +256,11 @@ const actionsItems = [
     icon: 'receipt_long',
     value: 'shipping_list'
   },
+  {
+    label: t('liquidate'),
+    icon: 'attach_money',
+    value: 'liquidate_orders',
+  },
 ];
 
 // methods
@@ -269,6 +274,7 @@ const handlerListOrders = async () => {
   const perPage = route.query.perPage || 10;
   const from = route.query.from || null;
   const to = route.query.to || null;
+  store.clearOrders();
 
   let query = `page=${page}&perPage=${perPage}&search=${search}`;
 
@@ -466,7 +472,34 @@ const handlerAction = async (e) => {
       break;
   
     default:
+      actionSelected.value = e;
+      handlerLiquidateOrders();
       break;
+  }
+}
+
+const handlerLiquidateOrders = () => {
+  q.dialog({
+    title: t('liquidateOrders'),
+    message: t('liquidateOrdersDescription'),
+    cancel: true,
+  }).onOk(async () => {
+    await liquidateOrders();
+  });
+}
+
+const liquidateOrders = async () => {
+  Loading.show();
+  try {
+    const params = {
+      ordersIds: selectedItems.value,
+    }
+    const data = await content.doLiquidateOrders(params);
+    if (data.success) {
+      notification('success', t('ordersLiquidated'), 'primary');
+    }
+  } finally {
+    Loading.hide();
   }
 }
 

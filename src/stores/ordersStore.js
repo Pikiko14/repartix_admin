@@ -48,10 +48,18 @@ export const useOrdersStore = defineStore('ordersStore', {
       this.totalItems = 0
     },
     validateSocketData(payload) {
-      if (payload.pdf) window.open(payload.pdf, '__blank');
+      if (payload.pdf) window.open(payload.pdf, '__blank')
     },
     clearOrder() {
       this.order = {}
-    }
+    },
+    liquidate(payload) {
+      console.log(payload.ordersIds)
+      const { ordersIds } = payload
+      ordersIds.forEach((id) => {
+        const idx = this.getIndex(id)
+        this.orders[idx].settled_to_sender = true
+      })
+    },
   },
 })

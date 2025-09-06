@@ -152,18 +152,21 @@
 // imports
 import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
 import { nextTick, onBeforeMount, ref } from 'vue';
 import { reportsContent } from 'src/composables/reportsContent';
 // props
 const props = defineProps({
   dateNow: String,
+  courier: String,
 });
 
 //references
 const report = ref({});
 const { t } = useI18n();
 const render = ref(true);
+const route = useRoute();
 const utils = new Utils();
 const content = reportsContent();
 
@@ -189,7 +192,14 @@ const statusColor = {
 
 // methods
 const loadDiaryReport = async () => {
-  const query = `date=${date.formatDate(props.dateNow, 'YYYY/MM/DD')}`;
+  if (route.query.type && route.query.type === 'courier' && !props.courier) return; 
+
+  let query = `date=${date.formatDate(props.dateNow, 'YYYY/MM/DD')}`;
+
+  if (props.courier) {
+    query += `&courier=${props.courier}`;
+  }
+
   try {
     const { data } = await content.doGetDiaryReport(query);
     if (data) {

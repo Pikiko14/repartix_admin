@@ -9,7 +9,8 @@
     <div class="col-md-7">
       <section class="filters">
         <!--Courier filter-->
-        <q-input placeholder="Jhon Doe" outlined round dense v-model="courier" v-if="route.query.type && route.query.type === 'courier'"></q-input>
+        <q-input debounce="1500" @update:model-value="filterByCourier" placeholder="Jhon Doe" outlined round dense v-model="courier"
+          v-if="route.query.type && route.query.type === 'courier'"></q-input>
         <!--End courier filter-->
 
         <!--Date filter-->
@@ -30,8 +31,9 @@
     <!--End header-->
 
     <!--body-->
-    <DiaryReport :date-now="dateNow" v-if="route.path === '/dashboard/reports/diary-order' && render" />
-    <!--end body-->    
+    <DiaryReport :courier="courier" :date-now="dateNow"
+      v-if="route.path === '/dashboard/reports/diary-order' && render" />
+    <!--end body-->
   </section>
 </template>
 
@@ -57,6 +59,13 @@ const filterByDate = async (val) => {
   dateNow.value = val;
   dateReference.value?.hide();
   dateLabel.value = `${val}`;
+  render.value = false;
+  await nextTick();
+  render.value = true;
+}
+
+const filterByCourier = async (val) => {
+  courier.value = val;
   render.value = false;
   await nextTick();
   render.value = true;

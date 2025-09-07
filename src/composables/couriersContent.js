@@ -64,6 +64,14 @@ export const couriersContent = () => {
     }
   }
 
+  const doListCourierForSelect = async () => {
+    try {
+      const { data } = await api.get(`${path}/for/select`)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   // return
   return {
@@ -71,5 +79,6 @@ export const couriersContent = () => {
     doUpdateCourier,
     doCreateCourier,
     doDeleteCouriers,
+    doListCourierForSelect,
   }
 }

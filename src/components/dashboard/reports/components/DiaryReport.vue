@@ -155,6 +155,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
 import { nextTick, onBeforeMount, ref } from 'vue';
+import { notification } from 'src/boot/notification';
 import { reportsContent } from 'src/composables/reportsContent';
 // props
 const props = defineProps({
@@ -192,7 +193,10 @@ const statusColor = {
 
 // methods
 const loadDiaryReport = async () => {
-  if (route.query.type && route.query.type === 'courier' && !props.courier) return; 
+  if (route.query.type && route.query.type === 'courier' && !props.courier) {
+    notification('negative', t('courierRequired'), 'red');
+    return;
+  }; 
 
   let query = `date=${date.formatDate(props.dateNow, 'YYYY/MM/DD')}`;
 

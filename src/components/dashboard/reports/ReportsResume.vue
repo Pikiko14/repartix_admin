@@ -10,7 +10,7 @@
       <section class="filters">
         <!--Courier filter-->
         <div class="filters__item" v-if="route.query.type && route.query.type === 'courier'">
-          <q-select @update:model-value="filterByCourier" :label="t('selectOneOption')" outlined round dense
+          <q-select clearable map-options emit-value @update:model-value="filterByCourier" :label="t('selectOneOption')" outlined round dense
             v-model="courier" :options="couriersOptions">
           </q-select>
         </div>
@@ -88,7 +88,7 @@ onBeforeMount(async () => {
       couriersOptions.value = data.couriers.map((el) => {
         return {
           label: el.name,
-          value: el._id,
+          value: el.name,
         }
       });
     }

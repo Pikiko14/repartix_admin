@@ -292,4 +292,5 @@ export default {
   printed: 'Printeds',
   noOrders: 'No orders',
   diaryOderByCouriers: 'Diary order by courier',
+  courierRequired: 'Select one courier first.',
 }

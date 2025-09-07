@@ -293,4 +293,5 @@ export default {
   printed: 'Impresas',
   noOrders: 'No hay ordenes',
   diaryOderByCouriers: 'Ordenes diarias por repartidor',
+  courierRequired: 'Selecciona un repartidor primero.',
 }

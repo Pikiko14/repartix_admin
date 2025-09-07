@@ -189,10 +189,8 @@
               </q-chip>
             </td>
           </tr>
-          <div class="text-center" v-if="report.orders?.length === 0">
-            <td class="text-center">
-              {{ t('noOrders') }}...
-            </td>
+          <div class="text-center q-pa-sm" v-if="report.orders?.length === 0">
+            {{ t('noOrders') }}...
           </div>
         </tbody>
       </q-markup-table>

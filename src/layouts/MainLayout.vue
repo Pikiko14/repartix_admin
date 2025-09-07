@@ -9,6 +9,28 @@
           RepartiX
         </q-toolbar-title>
 
+        <!--lenguage-->
+        <q-btn :label="locale === 'es' ? '🇪🇸' : '🇺🇸'" icon="language" flat dense rounded>
+          <q-menu>
+            <q-list style="min-width: 120px">
+              <q-item clickable v-ripple @click="switchTo('es')">
+                <q-item-section>
+                  <q-item-label class="text-bold">
+                    🇪🇸
+                    Español
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-ripple @click="switchTo('en')">
+                <q-item-section class="text-bold">
+                  🇺🇸 English</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <!--End lenguage-->
+
         <!--Notifications-->
         <q-btn icon="notifications" flat dense rounded color="white" class="q-mr-sm">
           <q-menu transition-show="rotate" transition-hide="rotate" class="border-rounded">
@@ -60,23 +82,23 @@
 
 <script setup>
 // imports
-import { useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
+import { LocalStorage, useQuasar } from 'quasar';
 import { useAuthStore } from 'src/stores/authStore';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
 import ProfileCard from 'src/components/layout/ProfileCard.vue';
 import { useShippingListStore } from 'src/stores/shippingListStore';
 import NotificationList from 'src/components/layout/NotificationList.vue';
-import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
 import { useOrdersStore } from 'src/stores/ordersStore';
+import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
 
 // references
 const q = useQuasar();
-const { t } = useI18n();
 const route = useRoute();
 const miniMode = ref(true);
+const { t, locale } = useI18n();
 const authStore = useAuthStore();
 const showPlanModal = ref(false);
 const leftDrawerOpen = ref(false);
@@ -119,8 +141,20 @@ const handleLeaveRoom = () => {
   }
 }
 
+const switchTo = (lang) => {
+  locale.value = lang;
+  LocalStorage.set('lang', lang);
+  q.lang.set(lang);
+  window.location.reload();
+}
+
 // hook
 onBeforeMount(() => {
+  // validate lang
+  const lang = LocalStorage.getItem('lang') || 'es';
+  locale.value = lang;
+
+  // valdiate plans
   if (
     route.path.includes('/dashboard') && !user.value.subscription ||
     route.path.includes('/dashboard') && user.value.subscription && !user.value.subscription.is_active
@@ -137,7 +171,7 @@ onBeforeMount(() => {
         case 'shipping_list':
           shippingStore.validateSocketData(data);
           break;
-        
+
         case 'orders':
           orderStore.validateSocketData(data);
           break;

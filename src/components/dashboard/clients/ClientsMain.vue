@@ -49,7 +49,7 @@ const columns = [
     name: 'dni',
     required: true,
     label: `${t('dni')}`,
-    align: 'center',
+    align: 'left',
     field: row => row.dni,
     sortable: false
   },

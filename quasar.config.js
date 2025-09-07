@@ -21,6 +21,7 @@ export default defineConfig((ctx) => {
       'i18n',
       'axios',
       'socket',
+      'apexChart',
       'routeGuard',
       'notification',
       'counterNumber',

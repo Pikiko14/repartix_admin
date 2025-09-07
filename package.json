@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "apexcharts": "^5.3.5",
     "axios": "^1.2.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
@@ -29,6 +30,7 @@
     "vue-animated-counter": "^0.3.0",
     "vue-i18n": "^11.0.0",
     "vue-router": "^4.0.0",
+    "vue3-apexcharts": "^1.8.0",
     "vue3-google-map": "^0.23.0"
   },
   "devDependencies": {

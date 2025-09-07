@@ -292,6 +292,9 @@ export default {
   diaryOder: 'Ordenes diarias',
   printed: 'Impresas',
   noOrders: 'No hay ordenes',
-  diaryOderByCouriers: 'Ordenes diarias por repartidor',
+  diaryOderByCouriers: 'Ordenes diarias',
   courierRequired: 'Selecciona un repartidor primero.',
+  effectivenessRatio: 'Relacion  de efectividad',
+  relationDeliveredPending: 'Relación entrega - pendiente',
+  relationStatus: 'Relación estado',
 }

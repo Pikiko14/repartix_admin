@@ -103,7 +103,7 @@ onBeforeMount(async () => {
   gap: 1rem;
 
   &__item {
-    flex: 1;
+    width: 25%;
   }
 }
 </style>

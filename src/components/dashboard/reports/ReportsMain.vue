@@ -26,7 +26,11 @@ const { t } = useI18n();
 const ordersReports = [
   {
     label: t('diaryOder'),
-    to: '/dashboard/reports/diary-order'
+    to: '/dashboard/reports/diary-order',
+  },
+  {
+    label: t('effectivenessRatio'),
+    to: '/dashboard/reports/diary-order?methods=effectiveness-ratio',
   },
 ];
 
@@ -34,7 +38,11 @@ const ordersReports = [
 const couriersReports = [
   {
     label: t('diaryOderByCouriers'),
-    to: '/dashboard/reports/diary-order?type=courier'
+    to: '/dashboard/reports/diary-order?type=courier',
+  },
+  {
+    label: t('effectivenessRatio'),
+    to: '/dashboard/reports/diary-order?type=courier&methods=effectiveness-ratio',
   },
 ];
 </script>

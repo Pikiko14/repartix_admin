@@ -77,6 +77,26 @@
     </div>
     <!--End counter-->
 
+    <!--efectiveness ratio-->
+    <div class="col-12 q-mt-lg"
+      v-if="route.query.methods && route.query.methods === 'effectiveness-ratio' && renderChart">
+      <q-card class="shadow-0">
+        <q-card-section>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <span class="title">{{ t('relationDelivered') }}</span>
+              <apexchart width="100%" height="350px" type="pie" :options="options" :series="series"></apexchart>
+            </div>
+            <div class="col-12 col-md-6">
+              <span class="title">{{ t('relationStatus') }}</span>
+              <apexchart width="100%" height="350px" type="pie" :options="optionsRelationStatus" :series="seriesRelationStatus"></apexchart>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <!--End efectiveness ratio-->
+
     <!--table-->
     <div class="col-12 q-mt-lg">
       <q-markup-table flat class="shadow-0">
@@ -136,11 +156,11 @@
               </q-chip>
             </td>
           </tr>
-          <col-12 class="text-center" v-if="report.orders?.length === 0">
+          <div class="text-center" v-if="report.orders?.length === 0">
             <td class="text-center">
               {{ t('noOrders') }}...
             </td>
-          </col-12>
+          </div>
         </tbody>
       </q-markup-table>
     </div>
@@ -169,7 +189,18 @@ const { t } = useI18n();
 const render = ref(true);
 const route = useRoute();
 const utils = new Utils();
+const renderChart = ref(false);
 const content = reportsContent();
+
+const options = ref({
+  labels: [t('delivered'), t('pending')],
+});
+const series = ref([0, 0]);
+
+const optionsRelationStatus = ref({
+  labels: [t('delivered'), t('pending'), t('cancelled'), t('guide_news'), t('printed')],
+});
+const seriesRelationStatus = ref([0, 0]);
 
 const status = {
   pending: t('pending'),
@@ -196,7 +227,7 @@ const loadDiaryReport = async () => {
   if (route.query.type && route.query.type === 'courier' && !props.courier) {
     notification('negative', t('courierRequired'), 'red');
     return;
-  }; 
+  };
 
   let query = `date=${date.formatDate(props.dateNow, 'YYYY/MM/DD')}`;
 
@@ -209,8 +240,18 @@ const loadDiaryReport = async () => {
     if (data) {
       report.value = data;
       render.value = false;
+      if (route.query.methods && route.query.methods === 'effectiveness-ratio')  renderChart.value = false;
+
       nextTick(() => {
         render.value = false;
+        console.log(data)
+
+        // validate efectivenes ratio
+        if (route.query.methods && route.query.methods === 'effectiveness-ratio' && data.orders.length > 0) {;
+          series.value = [report.value.delivared, (data.totalOrders -data.delivared )];
+          seriesRelationStatus.value = [report.value.delivared, report.value.pending, report.value.cancelled, report.value.news, report.value.printed];
+          renderChart.value = true;
+        };
       });
     }
   } catch (error) {

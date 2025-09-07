@@ -293,4 +293,7 @@ export default {
   noOrders: 'No orders',
   diaryOderByCouriers: 'Diary order by courier',
   courierRequired: 'Select one courier first.',
+  effectivenessRatio: 'Effectiveness ratio',
+  relationDeliveredPending: 'Relation delivered - pending',
+  relationStatus: 'Relation status',
 }

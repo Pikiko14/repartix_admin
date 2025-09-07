@@ -5,7 +5,7 @@
         {{ title }}
       </h4>
     </header>
-    <body class="row">
+    <section class="row">
       <div class="col-12 col-md-6">
         <q-list dense>
           <q-item class="q-pa-none" clickable v-ripple v-for="(item, idx) in reportList" :key="idx" :to="item.to">
@@ -17,7 +17,7 @@
           </q-item>
         </q-list>
       </div>
-    </body>
+    </section>
   </article>
 </template>
 

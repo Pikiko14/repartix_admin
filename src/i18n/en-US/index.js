@@ -298,4 +298,5 @@ export default {
   relationStatus: 'Relation status',
   totalCashAmount: 'Total cash for collection',
   totalCashCollected: 'Total collected',
+  comissionPorcent: 'Comission collection',
 }

@@ -71,12 +71,23 @@
             </q-input>
           </div>
 
-          <div class="col-12">
+          <div class="col-12 col-md-6" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
             <label class="text-dark" for="discount">{{ t('discount') }}</label>
             <q-input dense id="discount" mask="##" :rules="[
               (val) => !!val || t('requiredField'),
 
             ]" outlined v-model="sender.sender_info.discount_porcent" placeholder="10%">
+              <template #append>
+                %
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12 col-md-6" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+            <label class="text-dark" for="comissionPorcent">{{ t('comissionPorcent') }}</label>
+            <q-input dense id="comissionPorcent" mask="##" :rules="[
+              (val) => !!val || t('requiredField'),
+
+            ]" outlined v-model="sender.sender_info.comission_porcent" placeholder="10%">
               <template #append>
                 %
               </template>
@@ -244,6 +255,7 @@ const handlerSaveSender = async () => {
   }
 
   sender.value.sender_info.discount_porcent = parseInt(sender.value.sender_info.discount_porcent || 0);
+  sender.value.sender_info.comission_porcent = parseInt(sender.value.sender_info.comission_porcent || 0);
 
   loading.value = true;
   if (sender.value._id) {

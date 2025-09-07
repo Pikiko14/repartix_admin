@@ -299,4 +299,5 @@ export default {
   relationStatus: 'Relación estado',
   totalCashAmount: 'Total por recaudar',
   totalCashCollected: 'Total recaudado',
+  comissionPorcent: 'Comisión recaudo',
 }

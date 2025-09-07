@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12">
+  <div class="col-12 row">
     <!--Counter-->
     <div class="repartix-dashboard__cards">
       <q-card class="shadow-0">
@@ -77,6 +77,33 @@
     </div>
     <!--End counter-->
 
+    <!--collection amounts-->
+    <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
+      <q-card class="shadow-0">
+        <q-card-section class="grid">
+          <span class="title text-primary">
+            {{ t('totalCashAmount') }}:
+          </span>
+          <p class="value-amount">
+            {{ utils.formatPrice(report.totalCashAmount || 0) }}
+          </p>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
+      <q-card class="shadow-0">
+        <q-card-section class="grid">
+          <span class="title text-primary">
+            {{ t('totalCashCollected') }}:
+          </span>
+          <p class="value-amount">
+            {{ utils.formatPrice(report.totalCollected || 0) }}
+          </p>
+        </q-card-section>
+      </q-card>
+    </div>
+    <!--End collections-->
+
     <!--efectiveness ratio-->
     <div class="col-12 q-mt-lg"
       v-if="route.query.methods && route.query.methods === 'effectiveness-ratio' && renderChart">
@@ -118,6 +145,9 @@
               {{ t('cashAmount') }}
             </th>
             <th class="text-right">
+              {{ t('totalCashCollected') }}
+            </th>
+            <th class="text-right">
               {{ t('priceDelivery') }}
             </th>
             <th class="text-center">
@@ -143,6 +173,9 @@
             </td>
             <td class="text-right">
               {{ utils.formatPrice(parseFloat(order.cash_amount.replace('.', ''))) }}
+            </td>
+            <td class="text-right">
+              {{ utils.formatPrice(parseFloat(order.collected)) }}
             </td>
             <td class="text-right">
               {{ utils.formatPrice(order.order_price) }}
@@ -311,5 +344,13 @@ onBeforeMount(async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.value-amount {
+  padding: .8rem;
+  background: $primary;
+  border-radius: .8rem;
+  color: white;
+  font-weight: 600;
 }
 </style>

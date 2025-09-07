@@ -296,4 +296,6 @@ export default {
   effectivenessRatio: 'Effectiveness ratio',
   relationDeliveredPending: 'Relation delivered - pending',
   relationStatus: 'Relation status',
+  totalCashAmount: 'Total cash for collection',
+  totalCashCollected: 'Total collected',
 }

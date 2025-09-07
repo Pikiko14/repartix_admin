@@ -297,4 +297,6 @@ export default {
   effectivenessRatio: 'Relacion  de efectividad',
   relationDeliveredPending: 'Relación entrega - pendiente',
   relationStatus: 'Relación estado',
+  totalCashAmount: 'Total por recaudar',
+  totalCashCollected: 'Total recaudado',
 }

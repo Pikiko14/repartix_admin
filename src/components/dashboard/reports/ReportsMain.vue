@@ -12,6 +12,9 @@
     <div class="col-12 col-md-6" :class="{ 'q-pl-md': $q.screen.gt.sm }">
       <CardReport :title="t('courier')" :reportList="couriersReports" />
     </div>
+    <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pr-md': $q.screen.gt.sm }">
+      <CardReport :title="t('liquidations')" :reportList="ordersReports" />
+    </div>
   </section>
 </template>
 

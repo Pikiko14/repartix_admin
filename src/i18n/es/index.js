@@ -300,4 +300,6 @@ export default {
   totalCashAmount: 'Total por recaudar',
   totalCashCollected: 'Total recaudado',
   comissionPorcent: 'Comisión recaudo',
+  liquidations: 'Liquidaciónes',
+  securance: 'Porcentage Seguro',
 }

@@ -23,6 +23,16 @@
         (val) => !!val || t('requiredField'),
       ]" outlined v-model="configuration.price_by_km" placeholder="7500.00"></q-input>
     </div>
+    <div class="col-12" v-if="configuration.route_price_by_km">
+      <label class="text-dark" for="securance">{{ t('securance') }}</label>
+      <q-input type="text" :readonly="!edit" dense id="securance" :rules="[
+        (val) => !!val || t('requiredField'),
+      ]" outlined v-model="configuration.insurance_percentage" placeholder="10" mask="##">
+        <template #append>
+          %
+        </template>
+      </q-input>
+    </div>
     <div class="col-12 text-right q-mt-md">
       <q-btn v-if="edit" :loading="loading" unelevated size="md" type="submit" no-caps rounded :label="t('save')"
         color="primary"></q-btn>
@@ -63,6 +73,11 @@ const handlerSaveConfig = async () => {
   } else {
     params.price_by_km = parseFloat(oldValue.value) || 0;
   }
+
+  if (params.insurance_percentage) {
+    params.insurance_percentage = parseInt(params.insurance_percentage) || 0;
+  }
+
   try {
     const response = await authApi.doUpdateBrandConfiguration(params);
     if (response && response.success) {

@@ -299,4 +299,6 @@ export default {
   totalCashAmount: 'Total cash for collection',
   totalCashCollected: 'Total collected',
   comissionPorcent: 'Comission collection',
+  liquidations: 'Liquidations',
+  securance: 'Insurance porcentage',
 }

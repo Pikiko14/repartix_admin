@@ -13,7 +13,7 @@
       <CardReport :title="t('courier')" :reportList="couriersReports" />
     </div>
     <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pr-md': $q.screen.gt.sm }">
-      <CardReport :title="t('liquidations')" :reportList="ordersReports" />
+      <CardReport :title="t('liquidations')" :reportList="liquidationReports" />
     </div>
   </section>
 </template>
@@ -46,6 +46,14 @@ const couriersReports = [
   {
     label: t('effectivenessRatio'),
     to: '/dashboard/reports/diary-order?type=courier&methods=effectiveness-ratio',
+  },
+];
+
+// liquidation reports
+const liquidationReports = [
+  {
+    label: t('liquidationOrder'),
+    to: '/dashboard/reports/order-liquidation',
   },
 ];
 </script>

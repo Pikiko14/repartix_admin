@@ -71,6 +71,11 @@ const routes = [
         component: () => import('src/pages/dashboard/reports/ReportsResumePage.vue'),
         name: 'diaryOrder',
       },
+      {
+        path: 'reports/order-liquidation',
+        component: () => import('src/pages/dashboard/reports/ReportsResumePage.vue'),
+        name: 'orderLiquidation',
+      },
     ],
     meta: {
       auth: true,

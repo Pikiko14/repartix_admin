@@ -301,4 +301,11 @@ export default {
   comissionPorcent: 'Comission collection',
   liquidations: 'Liquidations',
   securance: 'Insurance porcentage',
+  liquidationOrder: 'Order liquidation',
+  senderRequired: 'Select one sender first.',
+  comission: 'Comission',
+  totalToLiquidate: 'Total to liquidate',
+  toLiquidate: 'Liquidated',
+  noLiquidate: 'No liquidated',
+  totalAmountLiquidate: 'Total a liquidar',
 }

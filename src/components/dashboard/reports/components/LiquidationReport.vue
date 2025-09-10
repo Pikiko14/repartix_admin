@@ -1,15 +1,15 @@
 <template>
-  <div class="col-12 row">
+  <section class="row full-width" :class="{ 'q-mt-lg': $q.screen.lt.lg }">
     <!--Counter-->
     <div class="repartix-dashboard__cards">
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <p class="title text-primary">
-            {{ t('orders') }}:
+            {{ t('toLiquidate') }}:
           </p>
           <p class="value">
-            <AnimatedCounter v-if="report.totalOrders" :value="report.totalOrders || 0" :duration="500"
-              class="counter" />
+            <AnimatedCounter v-if="report.totalOrdersLiquidated" :value="report.totalOrdersLiquidated || 0"
+              :duration="500" class="counter" />
             <span v-else>0</span>
           </p>
         </q-card-section>
@@ -18,10 +18,11 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <p class="title text-primary">
-            {{ t('delivered') }}s:
+            {{ t('noLiquidate') }}:
           </p>
           <p class="value">
-            <AnimatedCounter v-if="report.delivared" :value="report.delivared || 0" :duration="500" class="counter" />
+            <AnimatedCounter v-if="report.ordersNoSettled" :value="report.ordersNoSettled || 0"
+              :duration="500" class="counter" />
             <span v-else>0</span>
           </p>
         </q-card-section>
@@ -30,23 +31,10 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <p class="title text-primary">
-            {{ t('printed') }}:
+            {{ t('collection') }}:
           </p>
-          <p class="value">
-            <AnimatedCounter v-if="report.printed" :value="report.printed || 0" :duration="500" class="counter" />
-            <span v-else>0</span>
-          </p>
-        </q-card-section>
-      </q-card>
-
-      <q-card class="shadow-0">
-        <q-card-section class="grid">
-          <p class="title text-primary">
-            {{ t('pending') }}s:
-          </p>
-          <p class="value">
-            <AnimatedCounter v-if="report.pending" :value="report.pending || 0" :duration="500" class="counter" />
-            <span v-else>0</span>
+          <p class="value-amount">
+            {{ utils.formatPrice(report.totalCollection || 0) || 0 }}
           </p>
         </q-card-section>
       </q-card>
@@ -54,11 +42,10 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <p class="title text-primary">
-            {{ t('cancelled') }}s:
+            {{ t('totalAmountLiquidate') }}:
           </p>
-          <p class="value">
-            <AnimatedCounter v-if="report.cancelled" :value="report.cancelled || 0" :duration="500" class="counter" />
-            <span v-else>0</span>
+          <p class="value-amount">
+            {{ utils.formatPrice(report.totalLiquidate || 0) || 0 }}
           </p>
         </q-card-section>
       </q-card>
@@ -66,63 +53,15 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <p class="title text-primary">
-            {{ t('guide_news') }}:
+            {{ t('comission') }}:
           </p>
-          <p class="value">
-            <AnimatedCounter v-if="report.news" :value="report.news || 0" :duration="500" class="counter" />
-            <span v-else>0</span>
+          <p class="value-amount">
+            {{ utils.formatPrice(report.totalComission || 0) || 0 }}
           </p>
         </q-card-section>
       </q-card>
     </div>
     <!--End counter-->
-
-    <!--collection amounts-->
-    <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pr-sm': $q.screen.gt.sm }">
-      <q-card class="shadow-0">
-        <q-card-section class="grid">
-          <span class="title text-primary">
-            {{ t('totalCashAmount') }}:
-          </span>
-          <p class="value-amount">
-            {{ utils.formatPrice(report.totalCashAmount || 0) }}
-          </p>
-        </q-card-section>
-      </q-card>
-    </div>
-    <div class="col-12 col-md-6 q-mt-lg" :class="{ 'q-pl-sm': $q.screen.gt.sm }">
-      <q-card class="shadow-0">
-        <q-card-section class="grid">
-          <span class="title text-primary">
-            {{ t('totalCashCollected') }}:
-          </span>
-          <p class="value-amount">
-            {{ utils.formatPrice(report.totalCollected || 0) }}
-          </p>
-        </q-card-section>
-      </q-card>
-    </div>
-    <!--End collections-->
-
-    <!--efectiveness ratio-->
-    <div class="col-12 q-mt-lg"
-      v-if="route.query.methods && route.query.methods === 'effectiveness-ratio' && renderChart">
-      <q-card class="shadow-0">
-        <q-card-section>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <span class="title">{{ t('relationDelivered') }}</span>
-              <apexchart width="100%" height="350px" type="pie" :options="options" :series="series"></apexchart>
-            </div>
-            <div class="col-12 col-md-6">
-              <span class="title">{{ t('relationStatus') }}</span>
-              <apexchart width="100%" height="350px" type="pie" :options="optionsRelationStatus" :series="seriesRelationStatus"></apexchart>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <!--End efectiveness ratio-->
 
     <!--table-->
     <div class="col-12 q-mt-lg">
@@ -150,13 +89,19 @@
             <th class="text-right">
               {{ t('priceDelivery') }}
             </th>
+            <th class="text-right">
+              {{ t('comission') }}
+            </th>
+            <th class="text-right">
+              {{ t('totalToLiquidate') }}
+            </th>
             <th class="text-center">
               {{ t('status') }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(order, idx) in report.orders" :key="idx">
+          <tr class="cursor-pointer" v-for="(order, idx) in report.orders" :key="idx" @click="routerPush(order._id)">
             <td>
               {{ order.reference }}
             </td>
@@ -180,6 +125,12 @@
             <td class="text-right">
               {{ utils.formatPrice(order.order_price) }}
             </td>
+            <td class="text-right text-red">
+              {{ utils.formatPrice(order.comission) }}
+            </td>
+            <td class="text-right text-green">
+              {{ utils.formatPrice(order.total_to_liquidate) }}
+            </td>
             <td class="text-center">
               <q-chip square size="8pt" class="primary text-white text-bold chip-status"
                 :class="[statusColor[order.status] || 'bg-purple-10']">
@@ -196,42 +147,32 @@
       </q-markup-table>
     </div>
     <!--End table-->
-  </div>
+  </section>
 </template>
 
 <script setup>
 // imports
 import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { Utils } from 'src/utils/utils';
-import { nextTick, onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { notification } from 'src/boot/notification';
 import { reportsContent } from 'src/composables/reportsContent';
+import { useSendersStore } from 'src/stores/sendersStore';
 // props
 const props = defineProps({
+  sender: String,
   dateNow: String,
-  courier: String,
 });
 
-//references
+// references
 const report = ref({});
 const { t } = useI18n();
-const render = ref(true);
-const route = useRoute();
 const utils = new Utils();
-const renderChart = ref(false);
+const router = useRouter();
 const content = reportsContent();
-
-const options = ref({
-  labels: [t('delivered'), t('pending')],
-});
-const series = ref([0, 0]);
-
-const optionsRelationStatus = ref({
-  labels: [t('delivered'), t('pending'), t('cancelled'), t('guide_news'), t('printed')],
-});
-const seriesRelationStatus = ref([0, 0]);
+const sendersStore = useSendersStore();
 
 const status = {
   pending: t('pending'),
@@ -254,52 +195,48 @@ const statusColor = {
 }
 
 // methods
-const loadDiaryReport = async () => {
-  if (route.query.type && route.query.type === 'courier' && !props.courier) {
-    notification('negative', t('courierRequired'), 'red');
+const loadLiquidationReport = async () => {
+  if (!props.sender) {
+    notification('negative', t('senderRequired'), 'red');
     return;
   };
 
-  let query = `date=${date.formatDate(props.dateNow, 'YYYY/MM/DD')}`;
+  let query = `from=${date.formatDate(props.dateNow.from || props.dateNow, 'YYYY/MM/DD')}&to=${date.formatDate(props.dateNow.to || props.dateNow, 'YYYY/MM/DD')}`;
 
-  if (props.courier) {
-    query += `&courier=${props.courier}`;
+  if (props.sender) {
+    query += `&sender=${props.sender}`;
   }
 
   try {
-    const { data } = await content.doGetDiaryReport(query);
+    const { data } = await content.doLiquidateReport(query);
     if (data) {
       report.value = data;
-      render.value = false;
-      if (route.query.methods && route.query.methods === 'effectiveness-ratio')  renderChart.value = false;
-
-      nextTick(() => {
-        render.value = false;
-        console.log(data)
-
-        // validate efectivenes ratio
-        if (route.query.methods && route.query.methods === 'effectiveness-ratio' && data.orders.length > 0) {;
-          series.value = [report.value.delivared, (data.totalOrders -data.delivared )];
-          seriesRelationStatus.value = [report.value.delivared, report.value.pending, report.value.cancelled, report.value.news, report.value.printed];
-          renderChart.value = true;
-        };
-      });
     }
   } catch (error) {
     console.error(error);
   }
 };
 
+const routerPush = (e) => {
+  router.push({
+    path: `/dashboard/show/${e}/orders`
+  });
+}
+
 // hook
 onBeforeMount(async () => {
-  await loadDiaryReport();
+  await loadLiquidationReport();
+});
+
+onBeforeMount(() => {
+  sendersStore.clearSenders();
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .repartix-dashboard__cards {
   display: grid !important;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   width: 100%;
 

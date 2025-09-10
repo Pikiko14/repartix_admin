@@ -302,4 +302,11 @@ export default {
   comissionPorcent: 'Comisión recaudo',
   liquidations: 'Liquidaciónes',
   securance: 'Porcentage Seguro',
+  liquidationOrder: 'Liquidación de ordenes',
+  senderRequired: 'Selecciona un remitente primero.',
+  comission: 'Comision',
+  totalToLiquidate: 'Total a liquidar',
+  toLiquidate: 'Liquidadas',
+  noLiquidate: 'No liquidadas',
+  totalAmountLiquidate: 'Liquidar'
 }

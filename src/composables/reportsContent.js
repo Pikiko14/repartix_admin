@@ -15,8 +15,18 @@ export const reportsContent = () => {
     }
   }
 
+  const doLiquidateReport = async (query) => {
+    try {
+      const { data } = await api.get(`${pathOrders}/report/liquidation?${query}`)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doGetDiaryReport,
+    doLiquidateReport,
   }
 }

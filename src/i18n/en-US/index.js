@@ -308,4 +308,5 @@ export default {
   toLiquidate: 'Liquidated',
   noLiquidate: 'No liquidated',
   totalAmountLiquidate: 'Total a liquidar',
+  liquidated: 'Liquidation complete',
 }

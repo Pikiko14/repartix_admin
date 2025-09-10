@@ -47,7 +47,12 @@
       <q-td :props="props">
         <q-chip square size="8pt" class="primary text-bold text-white"
           :class="props.row.cash_on_delivery ? 'bg-green' : 'bg-red-5'">{{ props.row.cash_on_delivery ? t('yes') :
-            t('no') }}</q-chip>
+            t('no') }}</q-chip><br />
+          <q-icon color="primary" size="1.5rem" name="currency_exchange" v-if="props.row.cash_on_delivery && props.row.settled_to_sender">
+            <q-tooltip class="bg-primary">
+              {{ t('liquidated') }}<br />
+            </q-tooltip>
+          </q-icon>
       </q-td>
     </template>
     <!--End cash on deliver td-->

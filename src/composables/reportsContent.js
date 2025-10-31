@@ -24,9 +24,20 @@ export const reportsContent = () => {
     }
   }
 
+  const doGenerateReportPdf = async (payload) => {
+    try {
+      const { data } = await api.post(`${pathOrders}/report/generate-pdf`, payload)
+      return data
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
   // return
   return {
     doGetDiaryReport,
     doLiquidateReport,
+    doGenerateReportPdf,
   }
 }

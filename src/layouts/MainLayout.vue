@@ -32,14 +32,7 @@
         <!--End lenguage-->
 
         <!--Notifications-->
-        <q-btn icon="notifications" flat dense rounded color="white" class="q-mr-sm">
-          <q-menu transition-show="rotate" transition-hide="rotate" class="border-rounded">
-            <NotificationList />
-          </q-menu>
-          <q-tooltip class="bg-primary">
-            {{ t('notification') }}
-          </q-tooltip>
-        </q-btn>
+        <NotificationBell />
         <!--End notifications-->
 
         <!--Perfil-->
@@ -86,12 +79,12 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { LocalStorage, useQuasar } from 'quasar';
 import { useAuthStore } from 'src/stores/authStore';
+import { useOrdersStore } from 'src/stores/ordersStore';
 import AsideList from 'src/components/layout/AsideList.vue';
 import PlansCard from 'src/components/layout/PlansCard.vue';
 import ProfileCard from 'src/components/layout/ProfileCard.vue';
 import { useShippingListStore } from 'src/stores/shippingListStore';
-import NotificationList from 'src/components/layout/NotificationList.vue';
-import { useOrdersStore } from 'src/stores/ordersStore';
+import NotificationBell from 'src/components/layout/NotificationBell.vue';
 import { computed, onBeforeMount, ref, watch, getCurrentInstance, onUnmounted, onBeforeUnmount } from 'vue';
 
 // references
@@ -164,7 +157,10 @@ onBeforeMount(() => {
 
   // escuchamos las notificaciones
   socket.on('notification', (payload) => {
-    if (payload.success) {
+    // Notificaciones internas tienen campos: _id, type, title, message, parent_id, etc.
+    // Notificaciones de actualización de datos tienen: success, data, model
+    if (payload.success && payload.model) {
+      // Es una notificación de actualización de datos (shipping_list, orders, etc.)
       const { data, model } = payload;
 
       switch (model) {
@@ -179,12 +175,31 @@ onBeforeMount(() => {
         default:
           break;
       }
+    } else if (payload.type && payload.parent_id) {
+      // Es una notificación interna (order_status_updated, order_news_created, etc.)
+      // Esta notificación será procesada por NotificationBell.vue
+      console.log('📨 Notificación interna recibida:', {
+        type: payload.type,
+        title: payload.title,
+        parent_id: payload.parent_id
+      });
     }
   });
 
   // join  user room
+  // Para el admin principal, siempre usar su propio _id
+  // Para usuarios secundarios, usar su parent_id (que es el ID del admin principal)
+  const adminId = user.value.parent_id && user.value.parent_id !== user.value._id 
+    ? user.value.parent_id 
+    : user.value._id;
+  
   setTimeout(() => {
     socket.emit('joinRoom', `${user.value._id}-${user.value.parent_id || user.value._id}`);
+    socket.emit('joinRoom', `admin-${adminId}`);
+    console.log(`🔔 Usuario ${user.value._id} unido a rooms:`, {
+      personal: `${user.value._id}-${user.value.parent_id || user.value._id}`,
+      admin: `admin-${adminId}`
+    });
   }, 500);
   window.addEventListener('beforeunload', handleLeaveRoom);
 });

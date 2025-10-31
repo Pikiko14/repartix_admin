@@ -74,6 +74,18 @@
           </p>
         </q-card-section>
       </q-card>
+
+      <q-card class="shadow-0">
+        <q-card-section class="grid">
+          <p class="title text-primary">
+            {{ t('in_progress') }}:
+          </p>
+          <p class="value">
+            <AnimatedCounter v-if="report.in_progress" :value="report.in_progress || 0" :duration="500" class="counter" />
+            <span v-else>0</span>
+          </p>
+        </q-card-section>
+      </q-card>
     </div>
     <!--End counter-->
 
@@ -82,7 +94,7 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <span class="title text-primary">
-            {{ t('totalCashAmount') }}:
+            {{ t('totalCashAmount') || 'Total a recaudar' }}:
           </span>
           <p class="value-amount">
             {{ utils.formatPrice(report.totalCashAmount || 0) }}
@@ -94,7 +106,7 @@
       <q-card class="shadow-0">
         <q-card-section class="grid">
           <span class="title text-primary">
-            {{ t('totalCashCollected') }}:
+            {{ t('totalCashCollected') || 'Total recaudado' }}:
           </span>
           <p class="value-amount">
             {{ utils.formatPrice(report.totalCollected || 0) }}
@@ -142,10 +154,10 @@
               {{ t('cashOnDelivery') }}
             </th>
             <th class="text-right">
-              {{ t('cashAmount') }}
+              {{ t('totalToCollect') || 'A recaudar' }}
             </th>
             <th class="text-right">
-              {{ t('totalCashCollected') }}
+              {{ t('totalCollected') || 'Total recaudado' }}
             </th>
             <th class="text-right">
               {{ t('priceDelivery') }}
@@ -205,7 +217,7 @@ import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { Utils } from 'src/utils/utils';
-import { nextTick, onBeforeMount, ref } from 'vue';
+import { computed, nextTick, onBeforeMount, ref } from 'vue';
 import { notification } from 'src/boot/notification';
 import { reportsContent } from 'src/composables/reportsContent';
 // props
@@ -223,15 +235,87 @@ const utils = new Utils();
 const renderChart = ref(false);
 const content = reportsContent();
 
-const options = ref({
+const options = computed(() => ({
   labels: [t('delivered'), t('pending')],
-});
+  dataLabels: {
+    enabled: true,
+    formatter: function (val, opts) {
+      if (!opts || !opts.w || !opts.w.globals) {
+        return val.toFixed(1) + '%';
+      }
+      const seriesData = opts.w.globals.series || [];
+      const value = seriesData[opts.seriesIndex] || 0;
+      return value + ' (' + val.toFixed(1) + '%)';
+    }
+  },
+  tooltip: {
+    y: {
+      formatter: function (val, opts) {
+        if (!opts || !opts.w || !opts.w.globals) {
+          return val + ' (' + val.toFixed(1) + '%)';
+        }
+        const seriesData = opts.w.globals.series || [];
+        const total = seriesData.reduce((a, b) => a + b, 0);
+        const percentage = total > 0 ? ((val / total) * 100).toFixed(1) : '0';
+        return val + ' (' + percentage + '%)';
+      }
+    }
+  },
+  legend: {
+    formatter: function (seriesName, opts) {
+      if (!opts || !opts.w || !opts.w.globals) {
+        return seriesName;
+      }
+      const seriesData = opts.w.globals.series || [];
+      const total = seriesData.reduce((a, b) => a + b, 0);
+      const value = seriesData[opts.seriesIndex] || 0;
+      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
+      return seriesName + ': ' + value + ' (' + percentage + '%)';
+    }
+  }
+}));
 const series = ref([0, 0]);
 
-const optionsRelationStatus = ref({
-  labels: [t('delivered'), t('pending'), t('cancelled'), t('guide_news'), t('printed')],
-});
-const seriesRelationStatus = ref([0, 0]);
+const optionsRelationStatus = computed(() => ({
+  labels: [t('delivered'), t('pending'), t('in_progress'), t('cancelled'), t('guide_news'), t('printed')],
+  dataLabels: {
+    enabled: true,
+    formatter: function (val, opts) {
+      if (!opts || !opts.w || !opts.w.globals) {
+        return val.toFixed(1) + '%';
+      }
+      const seriesData = opts.w.globals.series || [];
+      const value = seriesData[opts.seriesIndex] || 0;
+      return value + ' (' + val.toFixed(1) + '%)';
+    }
+  },
+  tooltip: {
+    y: {
+      formatter: function (val, opts) {
+        if (!opts || !opts.w || !opts.w.globals) {
+          return val + ' (' + val.toFixed(1) + '%)';
+        }
+        const seriesData = opts.w.globals.series || [];
+        const total = seriesData.reduce((a, b) => a + b, 0);
+        const percentage = total > 0 ? ((val / total) * 100).toFixed(1) : '0';
+        return val + ' (' + percentage + '%)';
+      }
+    }
+  },
+  legend: {
+    formatter: function (seriesName, opts) {
+      if (!opts || !opts.w || !opts.w.globals) {
+        return seriesName;
+      }
+      const seriesData = opts.w.globals.series || [];
+      const total = seriesData.reduce((a, b) => a + b, 0);
+      const value = seriesData[opts.seriesIndex] || 0;
+      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
+      return seriesName + ': ' + value + ' (' + percentage + '%)';
+    }
+  }
+}));
+const seriesRelationStatus = ref([0, 0, 0, 0, 0, 0]);
 
 const status = {
   pending: t('pending'),
@@ -280,7 +364,7 @@ const loadDiaryReport = async () => {
         // validate efectivenes ratio
         if (route.query.methods && route.query.methods === 'effectiveness-ratio' && data.orders.length > 0) {;
           series.value = [report.value.delivared, (data.totalOrders -data.delivared )];
-          seriesRelationStatus.value = [report.value.delivared, report.value.pending, report.value.cancelled, report.value.news, report.value.printed];
+          seriesRelationStatus.value = [report.value.delivared, report.value.pending, report.value.in_progress || 0, report.value.cancelled, report.value.news, report.value.printed];
           renderChart.value = true;
         };
       });
@@ -299,9 +383,13 @@ onBeforeMount(async () => {
 <style lang="scss" scoped>
 .repartix-dashboard__cards {
   display: grid !important;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 1rem;
   width: 100%;
+
+  @media(width < 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
   @media(width < 992px) {
     grid-template-columns: repeat(3, 1fr);

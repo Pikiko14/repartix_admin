@@ -43,7 +43,7 @@
         <!--End sender filter-->
 
         <!--Date filter-->
-        <div class="filters__item">
+        <div class="filters__item date-filter-container">
           <q-input @click="dateReference.toggle()" placeholder="####/##/##" outlined dense
             v-model="dateLabel">
             <template v-slot:append>
@@ -55,7 +55,18 @@
               </q-icon>
             </template>
           </q-input>
-
+        </div>
+        <!--Generate PDF Button-->
+        <div class="filters__item pdf-button-container">
+          <q-btn 
+            unelevated
+            rounded
+            color="primary" 
+            icon="picture_as_pdf" 
+            :label="t('generatePdf')"
+            :loading="generatingPdf"
+            @click="handleGeneratePdf"
+          />
         </div>
         <!--End date filter-->
       </section>
@@ -82,6 +93,8 @@ import { sendersContent } from 'src/composables/sendersContent';
 import { couriersContent } from 'src/composables/couriersContent';
 import LiquidationReport from './components/LiquidationReport.vue';
 import { useSendersStore } from 'src/stores/sendersStore';
+import { reportsContent } from 'src/composables/reportsContent';
+import { notification } from 'src/boot/notification';
 
 // references
 const sender = ref(null);
@@ -97,7 +110,9 @@ const couriersOptions = ref([]);
 const sendersStore = useSendersStore();
 const senderContent = sendersContent();
 const courierContent = couriersContent();
+const reportsContentService = reportsContent();
 const dateNow = ref(date.formatDate(new Date(), 'YYYY/MM/DD'));
+const generatingPdf = ref(false);
 
 // computed
 const senders = computed(() => {
@@ -148,6 +163,62 @@ const setSender = async (e) => {
   render.value = true;
 }
 
+const handleGeneratePdf = async () => {
+  generatingPdf.value = true;
+  try {
+    let payload = {};
+
+    if (route.path === '/dashboard/reports/diary-order') {
+      // Validar que se tenga la fecha
+      if (!dateNow.value) {
+        notification('negative', t('dateRequired'), 'red');
+        generatingPdf.value = false;
+        return;
+      }
+
+      payload = {
+        report_type: 'diary',
+        date: dateNow.value,
+      };
+
+      if (route.query.type && route.query.type === 'courier' && courier.value) {
+        payload.courier = courier.value;
+      }
+    } else if (route.path === '/dashboard/reports/order-liquidation') {
+      // Validar que se tenga el sender
+      if (!sender.value) {
+        notification('negative', t('senderRequired'), 'red');
+        generatingPdf.value = false;
+        return;
+      }
+
+      payload = {
+        report_type: 'liquidation',
+        sender: sender.value,
+        from: dateNow.value?.from || dateNow.value,
+        to: dateNow.value?.to || dateNow.value,
+      };
+    } else {
+      notification('negative', t('invalidReportType'), 'red');
+      generatingPdf.value = false;
+      return;
+    }
+
+    const response = await reportsContentService.doGenerateReportPdf(payload);
+    
+    if (response && response.success) {
+      notification('positive', t('pdfGenerationStarted'), 'primary');
+    } else {
+      notification('negative', t('errorGeneratingPdf'), 'red');
+    }
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    notification('negative', t('errorGeneratingPdf'), 'red');
+  } finally {
+    generatingPdf.value = false;
+  }
+};
+
 // hook
 onBeforeMount(async () => {
   if (route.query.type && route.query.type === 'courier') {
@@ -168,10 +239,21 @@ onBeforeMount(async () => {
 .filters {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 1rem;
 
   &__item {
     width: 25%;
+
+    &.date-filter-container {
+      width: auto;
+      min-width: 200px;
+    }
+
+    &.pdf-button-container {
+      width: auto;
+      flex-shrink: 0;
+    }
   }
 }
 </style>

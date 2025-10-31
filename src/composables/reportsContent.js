@@ -34,10 +34,23 @@ export const reportsContent = () => {
     }
   }
 
+  const doGetPerformanceReport = async (query) => {
+    try {
+      const url = query ? `${pathOrders}/report/performance?${query}` : `${pathOrders}/report/performance`;
+      const { data } = await api.get(url);
+      console.log('API Response:', data);
+      return data;
+    } catch (error) {
+      console.error('Error in doGetPerformanceReport:', error);
+      throw error;
+    }
+  }
+
   // return
   return {
     doGetDiaryReport,
     doLiquidateReport,
     doGenerateReportPdf,
+    doGetPerformanceReport,
   }
 }

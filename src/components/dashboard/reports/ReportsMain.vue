@@ -35,6 +35,10 @@ const ordersReports = [
     label: t('effectivenessRatio'),
     to: '/dashboard/reports/diary-order?methods=effectiveness-ratio',
   },
+  {
+    label: t('performanceReport') || 'Reporte de Rendimiento',
+    to: '/dashboard/reports/performance',
+  },
 ];
 
 // couriers reports
@@ -46,6 +50,10 @@ const couriersReports = [
   {
     label: t('effectivenessRatio'),
     to: '/dashboard/reports/diary-order?type=courier&methods=effectiveness-ratio',
+  },
+  {
+    label: t('performanceReportByCourier') || 'Reporte de Rendimiento por Repartidor',
+    to: '/dashboard/reports/performance?type=courier',
   },
 ];
 

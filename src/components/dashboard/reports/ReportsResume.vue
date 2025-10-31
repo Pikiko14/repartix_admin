@@ -5,13 +5,14 @@
       <h2 class="text-primary page-title">
         <span v-if="$route.path === '/dashboard/reports/diary-order'">{{ t('diaryOder') }}</span>
         <span v-if="$route.path === '/dashboard/reports/order-liquidation'">{{ t('liquidationOrder') }}</span>
+        <span v-if="$route.path === '/dashboard/reports/performance'">{{ t('performanceReport') || 'Reporte de Rendimiento' }}</span>
       </h2>
     </div>
     <div class="col-md-7">
       <section class="filters">
         <!--Courier filter-->
         <div class="filters__item"
-          v-if="route.path === '/dashboard/reports/diary-order' && route.query.type && route.query.type === 'courier'">
+          v-if="(route.path === '/dashboard/reports/diary-order' || route.path === '/dashboard/reports/performance') && route.query.type && route.query.type === 'courier'">
           <q-select clearable map-options emit-value @update:model-value="filterByCourier" :label="t('selectOneOption')"
             outlined round dense v-model="courier" :options="couriersOptions">
           </q-select>
@@ -49,7 +50,7 @@
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="dateReference" cover transition-show="scale" transition-hide="scale">
-                  <q-date :range="route.path === '/dashboard/reports/order-liquidation'" @update:model-value="filterByDate" v-model="dateNow">
+                  <q-date :range="route.path === '/dashboard/reports/order-liquidation' || route.path === '/dashboard/reports/performance'" @update:model-value="filterByDate" v-model="dateNow">
                   </q-date>
                 </q-popup-proxy>
               </q-icon>
@@ -78,6 +79,8 @@
       v-if="route.path === '/dashboard/reports/diary-order' && render" />
     <LiquidationReport :dateNow="dateNow" :sender="sender"
       v-if="route.path === '/dashboard/reports/order-liquidation' && render" />
+    <PerformanceReport :date-now="dateNow" :courier="courier"
+      v-if="route.path === '/dashboard/reports/performance' && render" />
     <!--end body-->
   </section>
 </template>
@@ -92,6 +95,7 @@ import DiaryReport from './components/DiaryReport.vue';
 import { sendersContent } from 'src/composables/sendersContent';
 import { couriersContent } from 'src/composables/couriersContent';
 import LiquidationReport from './components/LiquidationReport.vue';
+import PerformanceReport from './components/PerformanceReport.vue';
 import { useSendersStore } from 'src/stores/sendersStore';
 import { reportsContent } from 'src/composables/reportsContent';
 import { notification } from 'src/boot/notification';
@@ -184,6 +188,29 @@ const handleGeneratePdf = async () => {
       if (route.query.type && route.query.type === 'courier' && courier.value) {
         payload.courier = courier.value;
       }
+    } else if (route.path === '/dashboard/reports/performance') {
+      // Validar que se tenga la fecha
+      if (!dateNow.value) {
+        notification('negative', t('dateRequired'), 'red');
+        generatingPdf.value = false;
+        return;
+      }
+
+      payload = {
+        report_type: 'performance',
+      };
+
+      if (typeof dateNow.value === 'object' && dateNow.value.from && dateNow.value.to) {
+        payload.from = dateNow.value.from;
+        payload.to = dateNow.value.to;
+      } else {
+        payload.from = dateNow.value;
+        payload.to = dateNow.value;
+      }
+
+      if (route.query.type && route.query.type === 'courier' && courier.value) {
+        payload.courier = courier.value;
+      }
     } else if (route.path === '/dashboard/reports/order-liquidation') {
       // Validar que se tenga el sender
       if (!sender.value) {
@@ -221,7 +248,7 @@ const handleGeneratePdf = async () => {
 
 // hook
 onBeforeMount(async () => {
-  if (route.query.type && route.query.type === 'courier') {
+  if (route.query.type && route.query.type === 'courier' && (route.path === '/dashboard/reports/diary-order' || route.path === '/dashboard/reports/performance')) {
     const data = await courierContent.doListCourierForSelect();
     if (data && data.success) {
       couriersOptions.value = data.couriers.map((el) => {

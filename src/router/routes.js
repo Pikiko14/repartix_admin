@@ -76,6 +76,11 @@ const routes = [
         component: () => import('src/pages/dashboard/reports/ReportsResumePage.vue'),
         name: 'orderLiquidation',
       },
+      {
+        path: 'reports/performance',
+        component: () => import('src/pages/dashboard/reports/ReportsResumePage.vue'),
+        name: 'performanceReport',
+      },
     ],
     meta: {
       auth: true,

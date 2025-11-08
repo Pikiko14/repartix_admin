@@ -345,4 +345,5 @@ export default {
     performance: 'Performance',
     deliveries: 'Deliveries',
     performanceReportByCourier: 'Performance Report by Courier',
+    optimizeRoute: 'Optimize route',
 }

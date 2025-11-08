@@ -345,4 +345,5 @@ export default {
     performance: 'Rendimiento',
     deliveries: 'Domicilios',
     performanceReportByCourier: 'Reporte de Rendimiento por Repartidor',
+    optimizeRoute: 'Optimizar ruta',
 }

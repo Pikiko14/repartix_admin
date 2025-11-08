@@ -220,6 +220,10 @@ const scopes = [
     label: t('listReports'),
     value: 'list-reports',
   },
+  {
+    label: t('optimizeRoute'),
+    value: 'optimize-route',
+  }
 ];
 const tab = ref('profile');
 const loading = ref(false);

@@ -92,12 +92,12 @@
                   size="sm"
                   @click.stop="handleDelete(notification._id)"
                 >
-                  <q-tooltip>{{ t('delete') }}</q-tooltip>
+                  <q-tooltip class="bg-primary">{{ t('delete') }}</q-tooltip>
                 </q-btn>
 
                 <!-- Botón de descarga para PDFs -->
                 <q-btn
-                  v-if="notification.type === 'report_pdf_generated' && notification.metadata?.pdf_url"
+                  v-if="(notification.type === 'report_pdf_generated' || notification.type === 'invoice_pdf_generated') && notification.metadata?.pdf_url"
                   flat
                   round
                   dense
@@ -106,7 +106,7 @@
                   color="primary"
                   @click.stop="handleDownloadPdf(notification.metadata.pdf_url)"
                 >
-                  <q-tooltip>{{ t('downloadPdf') || 'Descargar PDF' }}</q-tooltip>
+                  <q-tooltip class="bg-primary">{{ t('downloadPdf') || 'Descargar PDF' }}</q-tooltip>
                 </q-btn>
                 
                 <q-icon 
@@ -281,7 +281,7 @@ const handleNotificationClick = async (notification) => {
   showMenu.value = false;
 
   // Manejar notificaciones de PDF generado
-  if (notification.type === 'report_pdf_generated' && notification.metadata?.pdf_url) {
+  if ((notification.type === 'report_pdf_generated' || notification.type === 'invoice_pdf_generated') && notification.metadata?.pdf_url) {
     // Abrir PDF en nueva pestaña
     window.open(notification.metadata.pdf_url, '_blank');
     return;
@@ -403,7 +403,8 @@ const getNotificationIcon = (type) => {
     order_status_updated: 'sync',
     order_news_created: 'warning',
     order_payment_created: 'payments',
-    report_pdf_generated: 'picture_as_pdf'
+    report_pdf_generated: 'picture_as_pdf',
+    invoice_pdf_generated: 'receipt'
   };
   return icons[type] || 'notifications';
 };

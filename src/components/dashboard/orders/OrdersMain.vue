@@ -10,7 +10,8 @@
     <!--Table-->
     <MainTable class="q-mt-lg" enable-selected :key="pagination.rowsNumber + '-' + pagination.page"
       :pagination="pagination" :columns="columns" :rows="orders" show-order-scope="list-order" edit-scopecope
-      edit-scope="update-order" delete-scope="delete-order" @edit="handlerUpdateOrder" @delete="doDeleteOrder"
+      edit-scope="update-order" delete-scope="delete-order" :selected-ids="selectedItems"
+      @edit="handlerUpdateOrder" @delete="doDeleteOrder"
       @show-guide="showGuide" @show-order="showOrder" @handler-selected="handlerSelectedItems" />
     <!--End table-->
 
@@ -261,6 +262,11 @@ const actionsItems = [
     icon: 'attach_money',
     value: 'liquidate_orders',
   },
+  {
+    label: t('generateInvoices'),
+    icon: 'receipt',
+    value: 'generate_invoices',
+  },
 ];
 
 // methods
@@ -462,6 +468,7 @@ const showOrder = async (id) => {
 
 const handlerSelectedItems = (items) => {
   selectedItems.value = items.map((el) => el._id);
+  store.setSelectedItems(selectedItems.value);
 }
 
 const handlerAction = async (e) => {
@@ -470,7 +477,10 @@ const handlerAction = async (e) => {
       actionSelected.value = e;
       openModalAction();
       break;
-  
+    case 'generate_invoices':
+      actionSelected.value = e;
+      handlerGenerateInvoices();
+      break;
     default:
       actionSelected.value = e;
       handlerLiquidateOrders();
@@ -524,12 +534,39 @@ const createShippingList = async (e) => {
     if (data?.success) {
       notification('success', t('shippingListCreated'), 'primary');
       openModalAction();
-      selectedItems.value = false;
+      selectedItems.value = [];
+      store.clearSelectedItems();
     }
   } finally {
     Loading.hide();
   }
 }
+
+const handlerGenerateInvoices = () => {
+  q.dialog({
+    title: t('generateInvoices'),
+    message: t('generateInvoicesDescription'),
+    cancel: true,
+  }).onOk(async () => {
+    await generateInvoices();
+  });
+}
+
+const generateInvoices = async () => {
+  Loading.show();
+  try {
+    const params = {
+      ordersIds: selectedItems.value,
+    }
+    const data = await content.doGenerateInvoices(params);
+    if (data.success) {
+      notification('success', t('invoicesGenerationStarted'), 'primary');
+    }
+  } finally {
+    Loading.hide();
+  }
+}
+
 
 // hook
 if (route.query.page) {
@@ -539,5 +576,7 @@ if (route.query.page) {
 if (route.query.perPage) {
   pagination.value.rowsPerPage = parseInt(route.query.perPage);
 }
+
+selectedItems.value = store.getSelectedItems;
 handlerListOrders();
 </script>

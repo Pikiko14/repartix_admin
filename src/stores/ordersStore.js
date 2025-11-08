@@ -5,11 +5,13 @@ export const useOrdersStore = defineStore('ordersStore', {
     orders: [],
     totalItems: 1,
     order: {},
+    selectedItems: [],
   }),
   getters: {
     getOrder: (state) => state.order,
     getOrders: (state) => state.orders,
     getTotalItems: (state) => state.totalItems,
+    getSelectedItems: (state) => state.selectedItems,
   },
   actions: {
     setOrders(payload) {
@@ -60,6 +62,12 @@ export const useOrdersStore = defineStore('ordersStore', {
         const idx = this.getIndex(id)
         this.orders[idx].settled_to_sender = true
       })
+    },
+    setSelectedItems(payload) {
+      this.selectedItems = payload
+    },
+    clearSelectedItems() {
+      this.selectedItems = []
     },
   },
 })

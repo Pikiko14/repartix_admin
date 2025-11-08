@@ -118,6 +118,15 @@ export const ordersContent = () => {
     }
   }
 
+  const doGenerateInvoices = async (payload) => {
+    try {
+      const { data } = await api.post(`${path}/generate-invoices`, payload)
+      return data
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // return
   return {
     doShowOrder,
@@ -128,5 +137,6 @@ export const ordersContent = () => {
     doCreatePayment,
     doLiquidateOrders,
     doUpdateOrderStatus,
+    doGenerateInvoices,
   }
 }

@@ -134,6 +134,10 @@ const props = defineProps({
   enableSelected: {
     type: Boolean,
     default: false,
+  },
+  selectedIds: {
+    type: Array,
+    default: () => [],
   }
 });
 
@@ -247,6 +251,15 @@ const actions = [
 watch(() => selecteds.value, (newVal) => {
   emit('handler-selected', newVal);
 });
+
+watch(() => props.rows, (newRows) => {
+  if (props.enableSelected && props.selectedIds.length > 0 && newRows.length > 0) {
+    const rowsToSelect = newRows.filter(row => props.selectedIds.includes(row._id));
+    if (rowsToSelect.length > 0) {
+      selecteds.value = rowsToSelect;
+    }
+  }
+}, { immediate: true });
 
 // methods
 const handlerPagination = (e) => {

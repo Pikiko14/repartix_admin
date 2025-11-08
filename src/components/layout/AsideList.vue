@@ -36,10 +36,10 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple to="/dashboard/routes?page=1&perPage=10&search=">
         <q-item-section>
           <q-item-label class="text-primary">
-            {{ t('track') }}
+            {{ t('routes') }}
           </q-item-label>
         </q-item-section>
         <q-item-section avatar>

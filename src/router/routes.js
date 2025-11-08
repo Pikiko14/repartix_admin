@@ -62,6 +62,11 @@ const routes = [
         name: 'shipping-list-show',
       },
       {
+        path: 'routes',
+        component: () => import('src/pages/dashboard/routes/RoutesPage.vue'),
+        name: 'routes',
+      },
+      {
         path: 'reports',
         component: () => import('src/pages/dashboard/reports/ReportsPage.vue'),
         name: 'reports',

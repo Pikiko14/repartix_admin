@@ -223,7 +223,15 @@ const scopes = [
   {
     label: t('optimizeRoute'),
     value: 'optimize-route',
-  }
+  },
+  {
+    label: t('listOptimizedRoute'),
+    value: 'list-optimized-route',
+  },
+  {
+    label: t('viewOptimizedRoute'),
+    value: 'view-optimized-route',
+  },
 ];
 const tab = ref('profile');
 const loading = ref(false);

@@ -126,6 +126,7 @@ const props = defineProps({
   editScope: String,
   deleteScope: String,
   showOrderScope: String,
+  showRouteScope: String,
   pagination: {
     type: Object,
     default: () => { }
@@ -142,6 +143,7 @@ const emit = defineEmits([
   'delete',
   'handler-selected',
   'show-order',
+  'show-route',
   'show-guide',
   'close-shipping'
 ]);
@@ -186,6 +188,13 @@ const actions = [
     tooltip: 'showOrder',
     condition: () => utils.validateRole(props.showOrderScope),
     emit: (row) => emit('show-order', row._id)
+  },
+  {
+    icon: 'map',
+    color: 'primary',
+    tooltip: 'viewRoute',
+    condition: () => utils.validateRole(props.showRouteScope),
+    emit: (row) => emit('show-route', row._id)
   },
   {
     icon: 'document_scanner',
